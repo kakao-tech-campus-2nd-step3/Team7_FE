@@ -16,7 +16,7 @@ const initInstance = (config: AxiosRequestConfig): AxiosInstance => {
   return instance;
 };
 
-export const BASE_URL = 'http://localhost:8080';
+export const BASE_URL = 'https://api.inplace.my';
 export const fetchInstance = initInstance({
   baseURL: BASE_URL,
 });

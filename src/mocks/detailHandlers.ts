@@ -1,6 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { BASE_URL } from '@/api/instance';
-import { getPlaceInfoPath, getReviewPath } from '@/api/hooks/useGetDetail';
+import { getPlaceInfoPath } from '@/api/hooks/useGetPlaceInfo';
+import { getReviewPath } from '@/api/hooks/useGetReview';
 
 export const detailHandlers = [
   http.get(`${BASE_URL}${getPlaceInfoPath('1')}`, () => {
@@ -18,39 +19,39 @@ export const detailHandlers = [
       latitude: '135.11',
       likes: true,
       facilityInfo: {
-        wifi: true,
-        pet: true,
-        parking: true,
-        forDisabled: true,
-        nursery: true,
-        smokingRoom: true,
+        wifi: 'Y',
+        pet: 'N',
+        parking: 'Y',
+        forDisabled: 'N',
+        nursery: 'Y',
+        smokingRoom: 'N',
       },
       menuInfos: {
         menuImgUrls: [
           'https://via.placeholder.com/500',
-          'https://via.placeholder.com/500',
+          'https://via.placeholder.com/600',
           'https://via.placeholder.com/700',
         ],
         menuList: [
           {
-            price: 14000,
+            price: '14000',
             recommend: false,
             menu: '국내산 돼지 안심을 료코만의',
           },
           {
-            price: 3000,
+            price: '3000',
             recommend: false,
             menu: '리조또',
           },
           {
-            price: 14000,
+            price: '14000',
             recommend: false,
             menu: '국내산 돼지 안심을 료코만의 방식으로 숙성 및 조리하여 육즙과 부드러움의 특징을 살린 메뉴',
           },
           {
-            price: 3000,
+            price: '3020',
             recommend: false,
-            menu: '리조또',
+            menu: '리또',
           },
         ],
         timeExp: new Date('2024-10-01T12:00:00Z'),

@@ -1,21 +1,21 @@
-import React from 'react';
+import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
-
 import styled from 'styled-components';
-
 import DropdownItem from './DropdownItem';
 import useDetectClose from '@/hooks/useDetectClose';
 
 interface Option {
   label: string;
+  lat?: number;
+  lng?: number;
   subOptions?: Option[];
 }
 
 interface DropdownMenuProps {
   options: Option[];
   multiLevel?: boolean;
-  onChange: (value: string) => void;
+  onChange: (value: { main: string; sub?: string; lat?: number; lng?: number }) => void;
   placeholder?: string;
   type: 'location' | 'influencer';
 }
@@ -27,28 +27,36 @@ export default function DropdownMenu({
   placeholder = '',
   type,
 }: DropdownMenuProps) {
-  const { isOpen, setIsOpen, ref } = useDetectClose();
-  const [selectedMainOption, setSelectedMainOption] = React.useState<Option | null>(null);
-  const [selectedSubOption, setSelectedSubOption] = React.useState<Option | null>(null);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useDetectClose({ onDetected: () => setIsOpen(false) });
+  const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(null);
+  const [selectedSubOption, setSelectedSubOption] = useState<Option | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(searchTerm.toLowerCase()));
 
   const handleMainOptionClick = (option: Option) => {
     setSelectedMainOption(option);
     setSelectedSubOption(null);
-
+    onChange({ main: option.label, lat: option.lat, lng: option.lng });
     if (!multiLevel || !option.subOptions) {
-      onChange(option.label);
       setIsOpen(false);
     }
   };
 
   const handleSubOptionClick = (subOption: Option) => {
     setSelectedSubOption(subOption);
-    const fullPath = `${selectedMainOption?.label} ${subOption.label}`;
-    onChange(fullPath);
+    onChange({
+      main: selectedMainOption!.label,
+      sub: subOption.label,
+      lat: subOption.lat,
+      lng: subOption.lng,
+    });
     setIsOpen(false);
+  };
+
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
   };
 
   const renderMainOptions = () => {
@@ -76,7 +84,7 @@ export default function DropdownMenu({
   };
 
   const displayValue = selectedSubOption
-    ? `${selectedMainOption?.label} ${selectedSubOption.label}`
+    ? `${selectedMainOption?.label} ${selectedSubOption?.label}`
     : selectedMainOption?.label || placeholder;
 
   return (
@@ -88,7 +96,7 @@ export default function DropdownMenu({
       {isOpen && (
         <DropdownMenuContainer multiLevel={multiLevel} hasSubOptions={!!selectedMainOption?.subOptions}>
           <SearchInputContainer>
-            <SearchInput placeholder="검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <SearchInput placeholder="검색" value={searchTerm} onChange={handleSearchInputChange} />
             <SearchIcon />
           </SearchInputContainer>
           <OptionsContainer multiLevel={multiLevel} hasSubOptions={!!selectedMainOption?.subOptions}>
@@ -139,8 +147,6 @@ const DropdownMenuContainer = styled.div<{ multiLevel: boolean; hasSubOptions: b
   border-radius: 8px;
   margin-top: 4px;
   max-height: 300px;
-  overflow-x: hidden;
-  overflow-y: auto;
   z-index: 1000;
 `;
 
@@ -172,14 +178,18 @@ const SearchIcon = styled(FaSearch)`
 const OptionsContainer = styled.div<{ multiLevel: boolean; hasSubOptions: boolean }>`
   display: flex;
   max-height: 250px;
-  overflow: hidden;
+  overflow-y: auto;
 `;
 
 const MainOptions = styled.div`
   flex: 1;
+  max-height: 250px;
+  overflow-y: auto;
 `;
 
 const SubOptions = styled.div`
   flex: 1;
   border-left: 1px solid rgba(0, 0, 0, 0.1);
+  max-height: 250px;
+  overflow-y: auto;
 `;

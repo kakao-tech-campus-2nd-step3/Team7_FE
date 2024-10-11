@@ -8,7 +8,7 @@ export default function OpenHour({ openHour }: { openHour: OpenHourData }) {
   return (
     <Wrapper>
       {openHour.periodList.map((list) => (
-        <HourItem>
+        <HourItem key={list.dayOfWeek}>
           <Text size="xs" weight="bold" variant="white">
             {list.dayOfWeek} :
           </Text>
@@ -18,7 +18,7 @@ export default function OpenHour({ openHour }: { openHour: OpenHourData }) {
         </HourItem>
       ))}
       {openHour.offdayList.map((list) => (
-        <OffItem>
+        <OffItem key={list.weekAndDay}>
           <Text size="xs" weight="normal" variant="white">
             {list.holidayName}
           </Text>

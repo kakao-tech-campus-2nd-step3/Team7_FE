@@ -21,7 +21,7 @@ export default function MainLayout() {
 }
 
 const Wrapper = styled.div`
-  width: 1100px;
+  width: 960px;
   margin: 0 auto;
   position: relative;
 `;
@@ -31,5 +31,5 @@ const InnerWrapper = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  margin-top: ${HEADER_HEIGHT}px;
+  margin-top: calc(${HEADER_HEIGHT}px + 26px);
 `;

@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+import { RiKakaoTalkFill } from 'react-icons/ri';
+import { FaInstagram, FaGithub } from 'react-icons/fa';
 import { Text } from '@/components/common/typography/Text';
 
 export default function Footer() {
@@ -55,21 +57,21 @@ export default function Footer() {
           </CompanyInfo>
           <SocialLinks>
             <SocialNavItem href="https://kakao.com" target="_blank" rel="noopener noreferrer">
-              <SocialIcon src="src/assets/images/kakao-icon.svg" alt="카카오톡" />
+              <RiKakaoTalkFill size={16} color="white" />
               <Text size="xxs" weight="normal" variant="white">
                 카카오톡
               </Text>
             </SocialNavItem>
             <SocialNavItem href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <SocialIcon src="src/assets/images/insta-icon.svg" alt="인스타그램" />
+              <FaInstagram size={16} color="white" />
               <Text size="xxs" weight="normal" variant="white">
                 인스타그램
               </Text>
             </SocialNavItem>
-            <SocialNavItem href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-              <SocialIcon src="src/assets/images/facebook-icon.svg" alt="페이스북" />
+            <SocialNavItem href="https://github.com" target="_blank" rel="noopener noreferrer">
+              <FaGithub size={16} color="white" />
               <Text size="xxs" weight="normal" variant="white">
-                페이스북
+                깃허브
               </Text>
             </SocialNavItem>
           </SocialLinks>
@@ -80,9 +82,6 @@ export default function Footer() {
 }
 
 const FooterContainer = styled.div`
-  // display: flex;
-  // flex-direction: column;
-  // align-items: flex-start;
   background: #2f2f2f;
   width: 100%;
   padding: 30px;
@@ -119,15 +118,6 @@ const SocialLinks = styled.div`
   gap: 20px;
 `;
 
-const SocialIcon = styled.img`
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  position: relative;
-  top: 4px;
-  flex-shrink: 0;
-`;
-
 const NavItem = styled(Link)`
   font-family: 'Merriweather', sans-serif;
   line-height: 24px;
@@ -135,7 +125,9 @@ const NavItem = styled(Link)`
 `;
 
 const SocialNavItem = styled.a`
-  font-family: 'Merriweather', sans-serif;
   line-height: 24px;
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 `;

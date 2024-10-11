@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
 
 import styled from 'styled-components';
@@ -28,17 +28,17 @@ export default function LoginModal({ children, currentPath }: LoginModalProps) {
   };
 
   if (!isOpen) {
-    return children(openModal);
+    return <>{children(openModal)}</>;
   }
 
   return ReactDOM.createPortal(
     <ModalOverlay>
       <ModalContainer>
         <CloseButton onClick={closeModal}>X</CloseButton>
-        <LogoImage src={Logo} alt="인플레이스 로고" />
         <TitleWrapper>
+          <LogoImage src={Logo} alt="인플레이스 로고" />
           <Paragraph size="l" weight="bold">
-            인 플레이스
+            인플레이스
           </Paragraph>
         </TitleWrapper>
         <KakaoLoginButton onClick={handleKakaoLogin}>
@@ -63,15 +63,21 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 `;
 
 const ModalContainer = styled.div`
   position: relative;
-  width: 426px;
-  height: 540px;
-  background: #ffffff;
+  width: 500px;
+  height: 600px;
+  background-color: white;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 100px;
 `;
 
 const CloseButton = styled.button`
@@ -87,27 +93,19 @@ const CloseButton = styled.button`
 `;
 
 const LogoImage = styled.img`
-  position: absolute;
-  top: 22%;
-  left: 50%;
-  transform: translateX(-50%);
   height: 100px;
 `;
 
 const TitleWrapper = styled.div`
-  position: absolute;
-  left: 30%;
-  right: 30%;
-  top: 46%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const KakaoLoginButton = styled.button`
-  position: absolute;
-  left: 4%;
-  right: 4%;
-  top: 68%;
-  bottom: 20%;
+  width: 80%;
+  height: 60px;
   background: #fee500;
   border: none;
   border-radius: 12px;

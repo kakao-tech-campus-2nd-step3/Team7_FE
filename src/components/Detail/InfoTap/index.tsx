@@ -9,6 +9,7 @@ import MenuList from './MenuList';
 import MenuModal from './MenuModal';
 import OpenHour from './OpenHour';
 import { FacilityInfo, Menu, OpenHourData } from '@/types';
+import { Text } from '@/components/common/typography/Text';
 
 type Props = {
   facilityInfo: FacilityInfo;
@@ -25,22 +26,27 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos }: Props) {
     <Wrapper>
       <FacilitySign facilityInfo={facilityInfo} />
       <PeriodWrapper>
-        <Paragraph size="m" weight="bold" variant="white">
+        <Paragraph size="s" weight="bold" variant="white">
           운영 시간
         </Paragraph>
         <OpenHour openHour={openHour} />
       </PeriodWrapper>
       <MenuWrapper>
-        <Paragraph size="m" weight="bold" variant="white">
-          메뉴
-        </Paragraph>
+        <TitleContainer>
+          <Text size="s" weight="bold" variant="white">
+            메뉴
+          </Text>
+          <Text size="xxs" weight="normal" variant="grey">
+            업데이트 {new Date(menuInfos.timeExp).toLocaleDateString()}
+          </Text>
+        </TitleContainer>
         <MenuContainer>
           <MenuModal images={menuInfos.menuImgUrls} />
           <MenuList lists={menuInfos.menuList.slice(0, moreMenu ? menuInfos.menuList.length : 4)} />
           <MoreMenuBtn onClick={() => setMoreMenu(!moreMenu)}>{moreMenu ? '메뉴 접기' : '메뉴 더보기'}</MoreMenuBtn>
         </MenuContainer>
       </MenuWrapper>
-      <Paragraph size="m" weight="bold" variant="white">
+      <Paragraph size="s" weight="bold" variant="white">
         지도 보기
       </Paragraph>
       {/* todo - <Map /> */}
@@ -70,4 +76,9 @@ const MoreMenuBtn = styled.button`
   &:hover {
     text-decoration: underline;
   }
+`;
+const TitleContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
 `;
