@@ -144,3 +144,22 @@ export type RequestPlaceLike = {
   placeId: number;
   likes: boolean;
 };
+export type UserReviewData = {
+  reviewId: number;
+  userNickname: string;
+  place: {
+    placeId: number;
+    imgUrl: string;
+    address: {
+      address1: string;
+      address2: string;
+      address3: string;
+    };
+  };
+  likes: boolean;
+  comment: string;
+  createdDate: Date;
+};
+export type UserReviewResponse = {
+  reviews: [UserReviewData];
+};

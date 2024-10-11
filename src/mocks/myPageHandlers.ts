@@ -3,6 +3,7 @@ import { BASE_URL } from '@/api/instance';
 import { getUserInfoPath } from '@/api/hooks/useGetUserInfo';
 import { getUserInfluencerPath } from '@/api/hooks/useGetUserInfluencer';
 import { getUserPlacePath } from '@/api/hooks/useGetUserPlace';
+import { getUserReviewPath } from '@/api/hooks/useGetUserReview';
 
 export const myHandlers = [
   http.get(`${BASE_URL}${getUserInfoPath()}`, () => {
@@ -64,6 +65,44 @@ export const myHandlers = [
           placeName: '풍자또가',
           imageUrl: 'https://via.placeholder.com/100',
           influencer: '풍자',
+        },
+      ],
+    });
+  }),
+  http.get(`${BASE_URL}${getUserReviewPath()}`, () => {
+    return HttpResponse.json({
+      reviews: [
+        {
+          reviewId: 1,
+          userNickname: '랄라스윗칩',
+          place: {
+            placeId: '1',
+            imgUrl: 'https://via.placeholder.com/100',
+            address: {
+              address1: '대구광역시',
+              address2: '북구',
+              address3: '대현로',
+            },
+          },
+          likes: true,
+          comment: '료무라이스 맛있어요~~ 다시 가고 시퍼요',
+          createdDate: new Date('2024-10-01T12:00:00Z'),
+        },
+        {
+          reviewId: 2,
+          userNickname: '선장님',
+          place: {
+            placeId: '2',
+            imgUrl: 'https://via.placeholder.com/100',
+            address: {
+              address1: '경상북도',
+              address2: '경주시',
+              address3: '황리단길',
+            },
+          },
+          likes: false,
+          comment: '느끼하고 양 적어요 우우 ㅜㅜ',
+          createdDate: new Date('2024-10-02T12:00:00Z'),
         },
       ],
     });
