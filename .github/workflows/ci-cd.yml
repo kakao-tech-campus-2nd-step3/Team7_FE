@@ -59,7 +59,9 @@ jobs:
           if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
             echo "Deploying to QA environment..."
             aws s3 sync dist/ s3://inplace.my --delete
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
           elif [ "${{ github.ref }}" == "refs/heads//Master" ]; then
             echo "Deploying to Production environment..."
             aws s3 sync dist/ s3://inplace.my --delete
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
           fi
