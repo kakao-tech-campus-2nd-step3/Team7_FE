@@ -25,6 +25,34 @@ export type SpotData = {
     placeName: string;
   };
 };
+export type PageableData = {
+  totalPages: 0;
+  totalElements: 0;
+  size: 0;
+  content: [SpotData];
+  number: 0;
+  sort: {
+    empty: true;
+    sorted: true;
+    unsorted: true;
+  };
+  numberOfElements: 0;
+  pageable: {
+    offset: 0;
+    sort: {
+      empty: true;
+      sorted: true;
+      unsorted: true;
+    };
+    paged: true;
+    pageNumber: 0;
+    pageSize: 0;
+    unpaged: true;
+  };
+  first: true;
+  last: true;
+  empty: true;
+};
 
 export type AddressData = {
   address1: string;
@@ -108,7 +136,6 @@ export type ReviewData = {
 };
 
 export type OpenHourData = {
-  periodName: string;
   periodList: {
     timeName: string;
     timeSE: string;

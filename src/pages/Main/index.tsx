@@ -56,8 +56,8 @@ export default function MainPage() {
         SubText=" 가 방문한 장소를 찾아볼까요?"
         items={influencersData.influencers}
       />
-      <BaseLayout type="spot" prevSubText="지금 " mainText="쿨" SubText=" 한 그곳!" items={coolVideoData} />
-      <BaseLayout type="spot" mainText="새로" SubText=" 등록된 그곳!" items={newVideoData} />
+      <BaseLayout type="spot" prevSubText="지금 " mainText="쿨" SubText=" 한 그곳!" items={coolVideoData.content} />
+      <BaseLayout type="spot" mainText="새로" SubText=" 등록된 그곳!" items={newVideoData.content} />
     </Wrapper>
   );
 }
