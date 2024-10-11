@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-import * as Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import styled from 'styled-components';
 
 import LoginModal from '@/components/common/modals/LoginModal';
