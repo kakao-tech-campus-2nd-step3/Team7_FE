@@ -5,13 +5,15 @@ export type BannerData = {
   bannerImg: string;
   title: string;
 };
-
+export type BannerResponse = {
+  banners: [BannerData];
+};
 export type InfluencerData = {
   influencerId: number;
   influencerName: string;
   influencerImgUrl: string;
   influencerJob: string;
-  likes: boolean;
+  likes?: boolean;
 };
 
 export type SpotData = {
@@ -121,4 +123,19 @@ export type OpenHourData = {
 export type RequestInfluencerLike = {
   influencerId: number;
   likes: boolean;
+};
+export type UserInfoData = {
+  nickname: string;
+};
+export type InfluencerResponse = {
+  influencers: [InfluencerData];
+};
+export type UserPlaceData = {
+  placeId: number;
+  placeName: string;
+  imageUrl: string;
+  influencer: string;
+};
+export type UserPlaceResponse = {
+  places: [UserPlaceData];
 };
