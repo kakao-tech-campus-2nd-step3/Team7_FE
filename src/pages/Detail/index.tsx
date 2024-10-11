@@ -7,9 +7,9 @@ import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import { Text } from '@/components/common/typography/Text';
-import InfoTap from '@/components/features/Detail/InfoTap';
-import ReviewTap from '@/components/features/Detail/ReviewTap';
-import VisitModal from '@/components/features/Detail/VisitModal';
+import InfoTap from '@/components/Detail/InfoTap';
+import ReviewTap from '@/components/Detail/ReviewTap';
+import VisitModal from '@/components/Detail/VisitModal';
 
 import useExtractYoutubeVideoId from '@/libs/youtube/useExtractYoutube';
 import { useGetPlaceInfo } from '@/api/hooks/useGetPlaceInfo';

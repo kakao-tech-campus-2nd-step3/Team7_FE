@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import ReactDOM from 'react-dom';
+import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
 
 import styled from 'styled-components';
@@ -28,7 +28,7 @@ export default function LoginModal({ children, currentPath }: LoginModalProps) {
   };
 
   if (!isOpen) {
-    return children(openModal);
+    return <>{children(openModal)}</>;
   }
 
   return ReactDOM.createPortal(
