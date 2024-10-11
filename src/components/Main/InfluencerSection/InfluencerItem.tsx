@@ -4,7 +4,7 @@ import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
 import styled from 'styled-components';
 
 import { MdLocationOn } from 'react-icons/md';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import backCard from '@/assets/images/back-card.png';
 import { InfluencerData } from '@/types';
@@ -19,24 +19,28 @@ export default function InfluencerItem({
 }: InfluencerData) {
   const [isLike, setIsLike] = useState(likes);
   const { mutate: postLike } = usePostInfluencerLike();
-  const handleClickLike = (event: React.MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    event.preventDefault();
-    const newLikeStatus = !isLike;
-    setIsLike(newLikeStatus);
-    console.log('New like status:', newLikeStatus);
-    postLike(
-      { influencerId, likes: newLikeStatus },
-      {
-        onSuccess: () => {
-          console.log('성공');
+  const handleClickLike = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const newLikeStatus = !isLike;
+      setIsLike(newLikeStatus);
+      console.log('New like status:', newLikeStatus);
+      postLike(
+        { influencerId, likes: newLikeStatus },
+        {
+          onSuccess: () => {
+            console.log('성공');
+          },
+          onError: (error) => {
+            console.error('Error:', error);
+          },
         },
-        onError: (error) => {
-          console.error('Error:', error);
-        },
-      },
-    );
-  };
+      );
+    },
+    [isLike, influencerId, postLike],
+  );
+
   return (
     <Wrapper to={`/influencer/${influencerId}`}>
       <ImageContainer>
