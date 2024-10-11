@@ -135,7 +135,12 @@ export type UserPlaceData = {
   placeName: string;
   imageUrl: string;
   influencer: string;
+  likes: boolean;
 };
 export type UserPlaceResponse = {
   places: [UserPlaceData];
+};
+export type RequestPlaceLike = {
+  placeId: number;
+  likes: boolean;
 };
