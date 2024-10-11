@@ -1,7 +1,7 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
-import { BannerData, InfluencerData, SpotData } from '@/types';
+import { BannerResponse, InfluencerResponse, SpotData } from '@/types';
 
 export const getBannerPath = () => `/banners`;
 export const getInfluencerPath = () => `/influencers`;
@@ -9,11 +9,11 @@ export const getCoolVideoPath = () => `/videos/cool`;
 export const getNewVideoPath = () => `/videos/new`;
 
 export const getBanner = async () => {
-  const response = await fetchInstance.get<BannerData[]>(getBannerPath());
+  const response = await fetchInstance.get<BannerResponse>(getBannerPath());
   return response.data;
 };
 export const getInfluencer = async () => {
-  const response = await fetchInstance.get<InfluencerData[]>(getInfluencerPath());
+  const response = await fetchInstance.get<InfluencerResponse>(getInfluencerPath());
   return response.data;
 };
 export const getCoolVideo = async () => {
