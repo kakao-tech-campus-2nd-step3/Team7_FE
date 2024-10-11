@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 type Props = {
-  theme?: 'kakao' | 'outline' | 'white' | 'mint' | 'visit' | 'blackOutline';
+  variant?: 'kakao' | 'outline' | 'white' | 'mint' | 'visit' | 'blackOutline';
   size?: 'large' | 'small' | 'responsive';
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
@@ -41,12 +41,12 @@ const sizeStyles = (size: Props['size'] = 'responsive') => {
 
   return {
     ...smallStyle,
-    [`@media screen and (min-width:1100px)`]: largeStyle,
+    [`@media screen and (min-width:960px)`]: largeStyle,
   };
 };
 
-const themeStyles = (theme: Props['theme'] = 'mint') => {
-  if (theme === 'outline') {
+const variantStyles = (variant: Props['variant'] = 'mint') => {
+  if (variant === 'outline') {
     return {
       boxShadow: '0 0 0 1px #ffffff inset',
       color: '#ffffff',
@@ -57,7 +57,7 @@ const themeStyles = (theme: Props['theme'] = 'mint') => {
       },
     };
   }
-  if (theme === 'blackOutline') {
+  if (variant === 'blackOutline') {
     return {
       boxShadow: '0 0 0 1px #000000 inset',
       color: '#000000',
@@ -69,7 +69,7 @@ const themeStyles = (theme: Props['theme'] = 'mint') => {
     };
   }
 
-  if (theme === 'white') {
+  if (variant === 'white') {
     return {
       color: '#000',
       backgroundColor: '#fff',
@@ -80,7 +80,7 @@ const themeStyles = (theme: Props['theme'] = 'mint') => {
     };
   }
 
-  if (theme === 'kakao') {
+  if (variant === 'kakao') {
     return {
       color: '#111',
       backgroundColor: '#fee500',
@@ -91,7 +91,7 @@ const themeStyles = (theme: Props['theme'] = 'mint') => {
     };
   }
 
-  if (theme === 'visit') {
+  if (variant === 'visit') {
     return {
       color: '#55EBFF',
       boxShadow: '0 0 0 1px #55EBFF inset',
@@ -112,8 +112,8 @@ const themeStyles = (theme: Props['theme'] = 'mint') => {
   };
 };
 
-const Wrapper = styled.button<Pick<Props, 'theme' | 'size'>>(
+const Wrapper = styled.button<Pick<Props, 'variant' | 'size'>>(
   baseButtonStyle,
   ({ size }) => sizeStyles(size),
-  ({ theme }) => themeStyles(theme),
+  ({ variant }) => variantStyles(variant),
 );

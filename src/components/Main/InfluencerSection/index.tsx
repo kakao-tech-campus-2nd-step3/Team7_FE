@@ -14,6 +14,7 @@ export default function InfluencerSection({ items }: { items: InfluencerData[] }
             influencerName={influencer.influencerName}
             influencerImgUrl={influencer.influencerImgUrl}
             influencerJob={influencer.influencerJob}
+            likes={influencer.likes}
           />
         );
       })}
