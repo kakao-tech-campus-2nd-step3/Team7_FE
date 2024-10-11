@@ -1,6 +1,10 @@
 # Team7_FE
 인플레이스
 
+### Installation
+현재 프로젝트는 Kakao 지도 API를 사용해서 환경 변수 설정이 필요합니다. 아래 명령어를 실행하고, 키값을 입력해야 합니다.<br/>
+`cp .env.example .env`
+
 ### 폴더 구조 설명
 ```bash
 .root
