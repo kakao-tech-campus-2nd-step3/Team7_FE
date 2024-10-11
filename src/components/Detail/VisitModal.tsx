@@ -6,12 +6,12 @@ import Button from '@/components/common/Button';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 
 export default function VisitModal({ placeName, onClose }: { placeName: string; onClose: () => void }) {
-  const handleModalClick = (event: React.MouseEvent) => {
+  const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
   return (
     <Overlay onClick={() => onClose()}>
-      <Wrapper onClick={(e) => handleModalClick(e)}>
+      <Wrapper onClick={handleModalClick}>
         <DescriptionSection>
           <FcInfo size={180} />
           <Paragraph size="l" weight="normal">

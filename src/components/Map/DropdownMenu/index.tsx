@@ -55,6 +55,10 @@ export default function DropdownMenu({
     setIsOpen(false);
   };
 
+  const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(event.target.value);
+  };
+
   const renderMainOptions = () => {
     return filteredOptions.map((option) => (
       <DropdownItem
@@ -92,7 +96,7 @@ export default function DropdownMenu({
       {isOpen && (
         <DropdownMenuContainer multiLevel={multiLevel} hasSubOptions={!!selectedMainOption?.subOptions}>
           <SearchInputContainer>
-            <SearchInput placeholder="검색" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+            <SearchInput placeholder="검색" value={searchTerm} onChange={handleSearchInputChange} />
             <SearchIcon />
           </SearchInputContainer>
           <OptionsContainer multiLevel={multiLevel} hasSubOptions={!!selectedMainOption?.subOptions}>
