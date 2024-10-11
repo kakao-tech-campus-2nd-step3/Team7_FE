@@ -6,12 +6,11 @@ import { PlaceInfo } from '@/types';
 interface PlaceItemProps extends PlaceInfo {
   onClick: () => void;
 }
+const getFullAddress = (addr: PlaceInfo['address']) => {
+  return [addr.address1, addr.address2, addr.address3].filter(Boolean).join(' ');
+};
 
 export default function PlaceItem({ placeId, placeName, address, influencerName, likes, onClick }: PlaceItemProps) {
-  const getFullAddress = (addr: PlaceInfo['address']) => {
-    return [addr.address1, addr.address2, addr.address3].filter(Boolean).join(' ');
-  };
-
   return (
     <PlaceCard key={placeId} onClick={onClick}>
       <PlaceImage src="https://via.placeholder.com/100" alt={placeName} />

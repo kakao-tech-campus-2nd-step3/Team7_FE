@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import styled from 'styled-components';
@@ -27,10 +27,11 @@ export default function DropdownMenu({
   placeholder = '',
   type,
 }: DropdownMenuProps) {
-  const { isOpen, setIsOpen, ref } = useDetectClose();
-  const [selectedMainOption, setSelectedMainOption] = React.useState<Option | null>(null);
-  const [selectedSubOption, setSelectedSubOption] = React.useState<Option | null>(null);
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useDetectClose({ onDetected: () => setIsOpen(false) });
+  const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(null);
+  const [selectedSubOption, setSelectedSubOption] = useState<Option | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(searchTerm.toLowerCase()));
 

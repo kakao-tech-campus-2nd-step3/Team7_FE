@@ -7,7 +7,7 @@ import ToggleButton from '@/components/Map/ToggleButton';
 import { Text } from '@/components/common/typography/Text';
 import locationOptions from '@/utils/constants/LocationOptions';
 import influencerOptions from '@/utils/constants/InfluencerOptions';
-import { LocationData } from '@/types';
+import { LocationData, PlaceInfo } from '@/types';
 import Loading from '@/components/common/layouts/Loading';
 
 export default function MapPage() {
@@ -16,6 +16,8 @@ export default function MapPage() {
     main: '',
   });
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<PlaceInfo[]>([]);
+
   const [mapBounds, setMapBounds] = useState<LocationData>({
     topLeftLatitude: 0,
     topLeftLongitude: 0,
@@ -27,12 +29,13 @@ export default function MapPage() {
     () => ({
       categories: selectedCategories,
       influencers: selectedInfluencer ? [selectedInfluencer] : [],
+      location: selectedLocation,
     }),
-    [selectedCategories, selectedInfluencer],
+    [selectedCategories, selectedInfluencer, selectedLocation],
   );
 
-  const handleInfluencerChange = (value: string) => {
-    setSelectedInfluencer(value);
+  const handleInfluencerChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
+    setSelectedInfluencer(value.main);
   };
 
   const handleLocationChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
@@ -46,6 +49,10 @@ export default function MapPage() {
   const handleBoundsChange = useCallback((bounds: LocationData) => {
     setMapBounds(bounds);
   }, []);
+
+  const handlePlacesUpdate = (updatedPlaces: PlaceInfo[]) => {
+    setFilteredPlaces(updatedPlaces);
+  };
 
   const mapCenter = useMemo(
     () => ({
@@ -70,15 +77,15 @@ export default function MapPage() {
         />
         <DropdownMenu
           options={influencerOptions}
-          onChange={(value) => handleInfluencerChange(value.main)}
+          onChange={handleInfluencerChange}
           placeholder="인플루언서"
           type="influencer"
         />
       </DropdownContainer>
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
-      <MapWindow onBoundsChange={handleBoundsChange} center={mapCenter} />
+      <MapWindow onBoundsChange={handleBoundsChange} center={mapCenter} places={filteredPlaces} />
       <Suspense fallback={<Loading size={50} />}>
-        <PlaceSection mapBounds={mapBounds} filters={filters} />
+        <PlaceSection mapBounds={mapBounds} filters={filters} onPlacesUpdate={handlePlacesUpdate} />
       </Suspense>
     </PageContainer>
   );

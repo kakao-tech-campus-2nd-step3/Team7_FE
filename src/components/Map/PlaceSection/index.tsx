@@ -10,21 +10,36 @@ interface PlaceSectionProps {
   filters: {
     categories: string[];
     influencers: string[];
+    location: { main: string; sub?: string };
   };
+  onPlacesUpdate: (places: PlaceInfo[]) => void;
 }
 
-export default function PlaceSection({ mapBounds, filters }: PlaceSectionProps) {
+export default function PlaceSection({ mapBounds, filters, onPlacesUpdate }: PlaceSectionProps) {
   const navigate = useNavigate();
   const { data: placeList } = useGetPlaceList(mapBounds, filters);
 
   const filteredPlaces = useMemo(() => {
     if (!placeList) return [];
-    return placeList.places.filter((place: PlaceInfo) => {
+    const filtered = placeList.places.filter((place: PlaceInfo) => {
       const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
       const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
-      return categoryMatch && influencerMatch;
+      const locationMatch = (() => {
+        if (!filters.location.main) return true;
+        const mainMatch =
+          place.address.address1.includes(filters.location.main) ||
+          place.address.address2.includes(filters.location.main);
+        const subMatch = filters.location.sub
+          ? place.address.address2.includes(filters.location.sub) ||
+            (place.address.address3 && place.address.address3.includes(filters.location.sub))
+          : true;
+        return mainMatch && subMatch;
+      })();
+      return categoryMatch && influencerMatch && locationMatch;
     });
-  }, [placeList, filters]);
+    onPlacesUpdate(filtered);
+    return filtered;
+  }, [placeList, filters, onPlacesUpdate]);
 
   const handlePlaceClick = (placeId: number) => {
     navigate(`/detail/${placeId}`);
