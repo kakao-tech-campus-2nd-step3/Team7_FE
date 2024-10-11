@@ -46,66 +46,120 @@ export const mainHandlers = [
     });
   }),
   http.get(`${BASE_URL}${getCoolVideoPath()}`, () => {
-    return HttpResponse.json([
-      {
-        videoId: 1,
-        videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
-        videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
-        place: {
-          placeId: 1,
-          placeName: '이선장네',
+    return HttpResponse.json({
+      totalPages: 0,
+      totalElements: 0,
+      size: 0,
+      content: [
+        {
+          videoId: 1,
+          videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
+          videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+          place: {
+            placeId: 1,
+            placeName: '이선장네',
+          },
         },
-      },
-      {
-        videoId: 2,
-        videoAlias: '풍자가 기절한 바로 그곳',
-        videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-        place: {
-          placeId: 2,
-          placeName: '풍자또가',
+        {
+          videoId: 2,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
+          },
         },
-      },
-      {
-        videoId: 3,
-        videoAlias: '히밥이 다 못먹은 가성비 그곳',
-        videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
-        place: {
-          placeId: 3,
-          placeName: '가성비집',
+        {
+          videoId: 3,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
         },
+      ],
+      number: 0,
+      sort: {
+        empty: true,
+        sorted: true,
+        unsorted: true,
       },
-    ]);
+      numberOfElements: 0,
+      pageable: {
+        offset: 0,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        paged: true,
+        pageNumber: 0,
+        pageSize: 0,
+        unpaged: true,
+      },
+      first: true,
+      last: true,
+      empty: true,
+    });
   }),
   http.get(`${BASE_URL}${getNewVideoPath()}`, () => {
-    return HttpResponse.json([
-      {
-        videoId: 1,
-        videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
-        videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
-        place: {
-          placeId: 1,
-          placeName: '이선장네',
+    return HttpResponse.json({
+      totalPages: 0,
+      totalElements: 0,
+      size: 0,
+      content: [
+        {
+          videoId: 1,
+          videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
+          videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+          place: {
+            placeId: 1,
+            placeName: '이선장네',
+          },
         },
-      },
-      {
-        videoId: 2,
-        videoAlias: '풍자가 기절한 바로 그곳',
-        videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-        place: {
-          placeId: 2,
-          placeName: '참조은식당',
+        {
+          videoId: 2,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
+          },
         },
-      },
-      {
-        videoId: 3,
-        videoAlias: '히밥이 다 못먹은 가성비 그곳',
-        videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
-        place: {
-          placeId: 3,
-          placeName: '많이줘',
+        {
+          videoId: 3,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
         },
+      ],
+      number: 0,
+      sort: {
+        empty: true,
+        sorted: true,
+        unsorted: true,
       },
-    ]);
+      numberOfElements: 0,
+      pageable: {
+        offset: 0,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        paged: true,
+        pageNumber: 0,
+        pageSize: 0,
+        unpaged: true,
+      },
+      first: true,
+      last: true,
+      empty: true,
+    });
   }),
   http.get(`${BASE_URL}${getInfluencerVideoPath()}`, () => {
     return HttpResponse.json([
