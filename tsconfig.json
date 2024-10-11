@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    
     "target": "ES2022",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
@@ -24,7 +25,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    }
+    },
+
+    "allowSyntheticDefaultImports": true,
+
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -40,7 +40,7 @@ export default function InfluencerItem({
   return (
     <Wrapper to={`/influencer/${influencerId}`}>
       <ImageContainer>
-        <LikeIcon onClick={(e) => handleClickLike(e)}>
+        <LikeIcon onClick={handleClickLike}>
           {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
         </LikeIcon>
         <FrontImage src={influencerImgUrl} alt={influencerName} />
