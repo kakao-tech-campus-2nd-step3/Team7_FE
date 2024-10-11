@@ -9,10 +9,10 @@ export default function BarGraph({ like, dislike }: PlaceLikes) {
   return (
     <GraphContainer>
       <Bar color="#FE7373" percentage={likePercentage}>
-        <Label $like>{like}</Label>
+        <Label $isLike>{like}</Label>
       </Bar>
       <Bar color="#6f6cff" percentage={dislikePercentage}>
-        <Label $like={false}>{dislike}</Label>
+        <Label $isLike={false}>{dislike}</Label>
       </Bar>
     </GraphContainer>
   );
@@ -34,10 +34,10 @@ const Bar = styled.div<{ color: string; percentage: number }>`
   width: ${(props) => props.percentage}%;
 `;
 
-const Label = styled.div<{ $like: boolean }>`
+const Label = styled.div<{ $isLike: boolean }>`
   position: absolute;
   top: 0;
-  ${($like) => ($like ? 'left: 20px;' : 'right: 20px;')};
+  ${({ $isLike }) => ($isLike ? 'left: 20px;' : 'right: 20px;')};
   line-height: 40px;
 
   font-size: 18px;

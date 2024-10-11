@@ -1,24 +1,17 @@
-import { Link } from 'react-router-dom';
 import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-import { MdLocationOn } from 'react-icons/md';
 import { useCallback, useState } from 'react';
 import { Paragraph } from '@/components/common/typography/Paragraph';
-import backCard from '@/assets/images/back-card.png';
-import { InfluencerData } from '@/types';
-import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 
-export default function InfluencerItem({
-  influencerId,
-  influencerName,
-  influencerImgUrl,
-  influencerJob,
-  likes,
-}: InfluencerData) {
+import { UserPlaceData } from '@/types';
+import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
+
+export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer, likes }: UserPlaceData) {
   const [isLike, setIsLike] = useState(likes);
-  const { mutate: postLike } = usePostInfluencerLike();
+  const { mutate: postLike } = usePostPlaceLike();
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
@@ -27,7 +20,7 @@ export default function InfluencerItem({
       setIsLike(newLikeStatus);
       console.log('New like status:', newLikeStatus);
       postLike(
-        { influencerId, likes: newLikeStatus },
+        { placeId, likes: newLikeStatus },
         {
           onSuccess: () => {
             console.log('성공');
@@ -38,28 +31,21 @@ export default function InfluencerItem({
         },
       );
     },
-    [isLike, influencerId, postLike],
+    [isLike, placeId, postLike],
   );
-
   return (
-    <Wrapper to={`/influencer/${influencerId}`}>
+    <Wrapper to={`/detail/${placeId}`}>
       <ImageContainer>
         <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
           {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
         </LikeIcon>
-        <FrontImage src={influencerImgUrl} alt={influencerName} />
-        <BackImageWrapper>
-          <MdLocationOn size={50} color="#55EBFF" />
-          <Paragraph size="m" variant="white" weight="bold">
-            지도 보기
-          </Paragraph>
-        </BackImageWrapper>
+        <Image src={imageUrl} alt={String(placeId)} />
       </ImageContainer>
       <Paragraph size="m" weight="bold" variant="white">
-        {influencerName}
+        {placeName}
       </Paragraph>
       <Paragraph size="xs" weight="normal" variant="white">
-        {influencerJob}
+        {influencer}
       </Paragraph>
     </Wrapper>
   );
@@ -73,26 +59,14 @@ const Wrapper = styled(Link)`
   text-align: center;
   line-height: 30px;
 `;
-
 const ImageContainer = styled.div`
   width: 168px;
   height: 208px;
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-
-  &:hover {
-    & > div:nth-child(2) {
-      opacity: 0;
-    }
-
-    & > div:last-child {
-      opacity: 1;
-    }
-  }
 `;
-
-const FrontImage = styled.img`
+const Image = styled.img`
   position: absolute;
   top: 0;
   left: 0;
@@ -101,24 +75,6 @@ const FrontImage = styled.img`
   object-fit: cover;
   margin-bottom: 8px;
   border-radius: 6px;
-  transition: opacity 0.6s ease-in-out;
-`;
-
-const BackImageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background-image: url(${backCard});
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
 `;
 const LikeIcon = styled.div`
   position: absolute;
