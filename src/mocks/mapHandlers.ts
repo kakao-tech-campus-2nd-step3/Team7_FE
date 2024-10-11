@@ -36,7 +36,6 @@ const dummyPlaces: PlaceInfo[] = [
       timeExp: new Date('2024-10-01T12:00:00Z'),
     },
     openHour: {
-      periodName: '영업시간',
       periodList: [
         {
           timeName: '영업시간',
@@ -111,7 +110,6 @@ const dummyPlaces: PlaceInfo[] = [
       timeExp: new Date('2023-12-31'),
     },
     openHour: {
-      periodName: '영업시간',
       periodList: [
         {
           timeName: '평일',
@@ -171,7 +169,6 @@ const dummyPlaces: PlaceInfo[] = [
       timeExp: new Date('2023-12-31'),
     },
     openHour: {
-      periodName: '영업시간',
       periodList: [
         {
           timeName: '평일',
