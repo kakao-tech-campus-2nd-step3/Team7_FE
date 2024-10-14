@@ -81,17 +81,17 @@ export default function Footer() {
   );
 }
 
-const FooterContainer = styled.div`
+const FooterContainer = styled.footer`
   background: #2f2f2f;
   width: 100%;
   padding: 30px;
+  box-sizing: border-box;
 `;
 
 const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1080px;
 `;
 
 const FooterNav = styled.div`
