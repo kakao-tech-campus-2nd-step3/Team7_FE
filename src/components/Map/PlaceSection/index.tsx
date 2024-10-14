@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
-import { PlaceInfo, LocationData } from '@/types';
+import { PlaceData, LocationData } from '@/types';
 import { useGetPlaceList } from '@/api/hooks/useGetPlaceList';
 
 interface PlaceSectionProps {
@@ -10,18 +10,20 @@ interface PlaceSectionProps {
   filters: {
     categories: string[];
     influencers: string[];
-    location: { main: string; sub?: string };
+    location: { main: string; sub?: string; lat?: number; lng?: number };
   };
-  onPlacesUpdate: (places: PlaceInfo[]) => void;
+  onPlacesUpdate: (places: PlaceData[]) => void;
+  longitude: string;
+  latitude: string;
 }
 
-export default function PlaceSection({ mapBounds, filters, onPlacesUpdate }: PlaceSectionProps) {
+export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longitude, latitude }: PlaceSectionProps) {
   const navigate = useNavigate();
-  const { data: placeList } = useGetPlaceList(mapBounds, filters);
+  const { data: placeList } = useGetPlaceList(mapBounds, filters, longitude, latitude);
 
   const filteredPlaces = useMemo(() => {
     if (!placeList) return [];
-    const filtered = placeList.places.filter((place: PlaceInfo) => {
+    const filtered = placeList.filter((place: PlaceData) => {
       const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
       const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
       const locationMatch = (() => {
