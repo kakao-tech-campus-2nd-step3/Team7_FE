@@ -1,19 +1,28 @@
 import { FaHeart } from 'react-icons/fa';
 import styled from 'styled-components';
 import { Text } from '@/components/common/typography/Text';
-import { PlaceInfo } from '@/types';
+import { PlaceData } from '@/types';
 
-interface PlaceItemProps extends PlaceInfo {
+interface PlaceItemProps extends PlaceData {
   onClick: () => void;
 }
-const getFullAddress = (addr: PlaceInfo['address']) => {
+
+const getFullAddress = (addr: PlaceData['address']) => {
   return [addr.address1, addr.address2, addr.address3].filter(Boolean).join(' ');
 };
 
-export default function PlaceItem({ placeId, placeName, address, influencerName, likes, onClick }: PlaceItemProps) {
+export default function PlaceItem({
+  placeId,
+  placeName,
+  address,
+  influencerName,
+  likes,
+  menuImgUrl,
+  onClick,
+}: PlaceItemProps) {
   return (
     <PlaceCard key={placeId} onClick={onClick}>
-      <PlaceImage src="https://via.placeholder.com/100" alt={placeName} />
+      <PlaceImage src={menuImgUrl} alt={placeName} />
       <CardContent>
         <PlaceDetails>
           <Text size="l" weight="bold" variant="white">
@@ -30,7 +39,7 @@ export default function PlaceItem({ placeId, placeName, address, influencerName,
             </Text>
           </InfluencerName>
         </PlaceDetails>
-        <HeartIcon $isLiked={likes} />
+        <HeartIcon $isLiked={likes > 0} />
       </CardContent>
     </PlaceCard>
   );

@@ -1,8 +1,8 @@
 import { HttpResponse, http } from 'msw';
 import { BASE_URL } from '@/api/instance';
-import { PlaceList, PlaceInfo } from '@/types';
+import { PlaceData } from '@/types';
 
-const dummyPlaces: PlaceInfo[] = [
+const dummyPlaces: PlaceData[] = [
   {
     placeId: 1,
     placeName: '료코',
@@ -15,67 +15,8 @@ const dummyPlaces: PlaceInfo[] = [
     influencerName: '성시경',
     longitude: '35.123',
     latitude: '135.11',
-    likes: true,
-    facilityInfo: {
-      wifi: 'Y',
-      pet: 'N',
-      parking: 'Y',
-      forDisabled: 'N',
-      nursery: 'Y',
-      smokingRoom: 'N',
-    },
-    menuInfos: {
-      menuImgUrls: ['https://via.placeholder.com/500'],
-      menuList: [
-        {
-          price: '14000',
-          recommend: false,
-          menu: '국내산 돼지 안심을 료코만의',
-        },
-      ],
-      timeExp: new Date('2024-10-01T12:00:00Z'),
-    },
-    openHour: {
-      periodList: [
-        {
-          timeName: '영업시간',
-          timeSE: '10:00 - 22:00',
-          dayOfWeek: '월',
-        },
-        {
-          timeName: '영업시간',
-          timeSE: '10:00 - 22:00',
-          dayOfWeek: '화',
-        },
-        {
-          timeName: '영업시간',
-          timeSE: '10:00 - 22:00',
-          dayOfWeek: '수',
-        },
-        {
-          timeName: '영업시간',
-          timeSE: '10:00 - 22:00',
-          dayOfWeek: '목',
-        },
-        {
-          timeName: '영업시간',
-          timeSE: '10:00 - 22:00',
-          dayOfWeek: '금',
-        },
-      ],
-      offdayList: [
-        {
-          holidayName: '공휴일',
-          weekAndDay: '토',
-          temporaryHolidays: false,
-        },
-      ],
-    },
-    placeLikes: {
-      like: 240,
-      dislike: 100,
-    },
-    videoUrl: 'https://youtube.com/watch?v=abcdefg',
+    likes: 240,
+    menuImgUrl: 'https://via.placeholder.com/500',
   },
   {
     placeId: 2,
@@ -89,52 +30,8 @@ const dummyPlaces: PlaceInfo[] = [
     influencerName: '풍자',
     longitude: '126.9314925',
     latitude: '37.5666478',
-    likes: true,
-    facilityInfo: {
-      wifi: 'Y',
-      pet: 'N',
-      parking: 'Y',
-      forDisabled: 'Y',
-      nursery: 'N',
-      smokingRoom: 'N',
-    },
-    menuInfos: {
-      menuImgUrls: ['https://example.com/menu1.jpg'],
-      menuList: [
-        {
-          price: '15000',
-          recommend: true,
-          menu: '특선 돈가스',
-        },
-      ],
-      timeExp: new Date('2023-12-31'),
-    },
-    openHour: {
-      periodList: [
-        {
-          timeName: '평일',
-          timeSE: '11:00 - 21:00',
-          dayOfWeek: '월,화,수,목,금',
-        },
-        {
-          timeName: '주말',
-          timeSE: '11:00 - 22:00',
-          dayOfWeek: '토,일',
-        },
-      ],
-      offdayList: [
-        {
-          holidayName: '정기휴일',
-          weekAndDay: '매주 월요일',
-          temporaryHolidays: false,
-        },
-      ],
-    },
-    placeLikes: {
-      like: 120,
-      dislike: 5,
-    },
-    videoUrl: 'https://youtube.com/watch?v=abcdefg',
+    likes: 120,
+    menuImgUrl: 'https://example.com/menu1.jpg',
   },
   {
     placeId: 3,
@@ -148,62 +45,14 @@ const dummyPlaces: PlaceInfo[] = [
     influencerName: '풍자',
     longitude: '128.6101069',
     latitude: '35.8857457',
-    likes: true,
-    facilityInfo: {
-      wifi: 'Y',
-      pet: 'N',
-      parking: 'Y',
-      forDisabled: 'Y',
-      nursery: 'N',
-      smokingRoom: 'N',
-    },
-    menuInfos: {
-      menuImgUrls: ['https://example.com/menu1.jpg'],
-      menuList: [
-        {
-          price: '15000',
-          recommend: true,
-          menu: '특선 돈가스',
-        },
-      ],
-      timeExp: new Date('2023-12-31'),
-    },
-    openHour: {
-      periodList: [
-        {
-          timeName: '평일',
-          timeSE: '11:00 - 21:00',
-          dayOfWeek: '월,화,수,목,금',
-        },
-        {
-          timeName: '주말',
-          timeSE: '11:00 - 22:00',
-          dayOfWeek: '토,일',
-        },
-      ],
-      offdayList: [
-        {
-          holidayName: '정기휴일',
-          weekAndDay: '매주 월요일',
-          temporaryHolidays: false,
-        },
-      ],
-    },
-    placeLikes: {
-      like: 120,
-      dislike: 5,
-    },
-    videoUrl: 'https://youtube.com/watch?v=abcdefg',
+    likes: 120,
+    menuImgUrl: 'https://example.com/menu1.jpg',
   },
 ];
 
 export const mapHandlers = [
   http.get(`${BASE_URL}/places`, () => {
-    const response: PlaceList = {
-      places: dummyPlaces,
-    };
-
-    return HttpResponse.json(response);
+    return HttpResponse.json(dummyPlaces);
   }),
 ];
 

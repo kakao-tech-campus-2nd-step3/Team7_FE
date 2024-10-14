@@ -64,11 +64,12 @@ export type PlaceData = {
   placeId: number;
   placeName: string;
   address: AddressData;
-  category?: string;
+  category: string;
   influencerName: string;
-  longitude?: string;
-  latitude?: string;
-  likes: boolean;
+  menuImgUrl: string;
+  longitude: string;
+  latitude: string;
+  likes: number;
 };
 
 export type LocationData = {
@@ -84,7 +85,7 @@ export type FilterParams = {
 };
 
 export type PlaceList = {
-  places: PlaceInfo[];
+  places: PlaceData[];
 };
 
 export type PlaceInfo = {
