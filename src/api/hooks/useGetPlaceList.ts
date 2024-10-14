@@ -17,10 +17,10 @@ export const getPlaceList = async (
     page: '0',
     categories: categories.join(','),
     influencers: influencers.join(','),
+
     longitude: longitude || '',
     latitude: latitude || '',
   });
-  console.log('API Request:', { location, filters });
   const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
   return response.data;
 };
