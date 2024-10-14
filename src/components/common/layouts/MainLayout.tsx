@@ -2,9 +2,9 @@ import { Outlet } from 'react-router-dom';
 import { Suspense } from 'react';
 import styled from 'styled-components';
 
-import Footer from './Footer';
-import Header, { HEADER_HEIGHT } from './Header';
-import Loading from './Loading';
+import Footer from '@/components/common/layouts/Footer';
+import Header, { HEADER_HEIGHT } from '@/components/common/layouts/Header';
+import Loading from '@/components/common/layouts/Loading';
 
 export default function MainLayout() {
   return (
