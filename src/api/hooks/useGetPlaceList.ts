@@ -2,9 +2,12 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
 import { LocationData, FilterParams, PlaceList } from '@/types';
 
-export const getPlaceList = async (location: LocationData, filters: FilterParams) => {
+export const getPlaceList = async (
+  location: LocationData,
+  filters: FilterParams & { longitude?: string; latitude?: string },
+) => {
   const { topLeftLongitude, topLeftLatitude, bottomRightLongitude, bottomRightLatitude } = location;
-  const { categories, influencers } = filters;
+  const { categories, influencers, longitude, latitude } = filters;
 
   const params = new URLSearchParams({
     topLeftLongitude: topLeftLongitude.toString(),
@@ -14,8 +17,10 @@ export const getPlaceList = async (location: LocationData, filters: FilterParams
     page: '0',
     categories: categories.join(','),
     influencers: influencers.join(','),
+    longitude: longitude || '',
+    latitude: latitude || '',
   });
-
+  console.log('API Request:', { location, filters });
   const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
   return response.data;
 };

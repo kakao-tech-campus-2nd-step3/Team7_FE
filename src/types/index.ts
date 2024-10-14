@@ -54,7 +54,7 @@ export type PageableData = {
   empty: true;
 };
 
-export type AddressData = {
+export type AddressInfo = {
   address1: string;
   address2: string;
   address3: string;
@@ -63,7 +63,7 @@ export type AddressData = {
 export type PlaceData = {
   placeId: number;
   placeName: string;
-  address: AddressData;
+  address: AddressInfo;
   category?: string;
   influencerName: string;
   longitude?: string;
@@ -90,21 +90,13 @@ export type PlaceList = {
 export type PlaceInfo = {
   placeId: number;
   placeName: string;
-  address: AddressData;
+  address: AddressInfo;
   category: string;
   influencerName: string;
+  menuImgUrl: [string];
   longitude: string;
   latitude: string;
   likes: boolean;
-  facilityInfo: FacilityInfo;
-  menuInfos: {
-    menuImgUrls: [string];
-    menuList: [Menu];
-    timeExp: Date;
-  };
-  openHour: OpenHourData;
-  placeLikes: PlaceLikes;
-  videoUrl: string;
 };
 
 export type PlaceLikes = {
