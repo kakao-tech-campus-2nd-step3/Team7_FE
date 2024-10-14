@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
-import { LocationData, FilterParams, PlaceData } from '@/types';
+import { LocationData, FilterParams, PlaceList } from '@/types';
 
 export const getPlaceList = async (
   location: LocationData,
@@ -23,7 +23,7 @@ export const getPlaceList = async (
     influencers: influencers.join(','),
   });
 
-  const response = await fetchInstance.get<PlaceData[]>(`/places?${params}`);
+  const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
   console.log('Sending request to /places with params:', params.toString());
 
   return response.data;

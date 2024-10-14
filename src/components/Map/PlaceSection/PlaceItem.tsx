@@ -6,10 +6,6 @@ import { PlaceData } from '@/types';
 interface PlaceItemProps extends PlaceData {
   onClick: () => void;
 }
-const getFullAddress = (addr: PlaceInfo['address']) => {
-  return [addr.address1, addr.address2, addr.address3].filter(Boolean).join(' ');
-};
-
 const getFullAddress = (addr: PlaceData['address']) => {
   return [addr.address1, addr.address2, addr.address3].filter(Boolean).join(' ');
 };
