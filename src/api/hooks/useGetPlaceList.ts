@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
-import { LocationData, FilterParams, PlaceData } from '@/types';
+import { LocationData, FilterParams, PlaceList } from '@/types';
 
 export const getPlaceList = async (
   location: LocationData,

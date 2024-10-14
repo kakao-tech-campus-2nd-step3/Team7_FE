@@ -49,7 +49,7 @@ export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longi
 
   return (
     <ListContainer>
-      {filteredPlaces.map((place) => (
+      {filteredPlaces.map((place: PlaceData) => (
         <PlaceItem key={place.placeId} {...place} onClick={() => handlePlaceClick(place.placeId)} />
       ))}
     </ListContainer>
