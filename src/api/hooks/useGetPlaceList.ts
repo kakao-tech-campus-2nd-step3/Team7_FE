@@ -23,7 +23,7 @@ export const getPlaceList = async (
     influencers: influencers.join(','),
   });
 
-  const response = await fetchInstance.get<PlaceData[]>(`/places?${params}`);
+  const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
   console.log('Sending request to /places with params:', params.toString());
 
   return response.data;

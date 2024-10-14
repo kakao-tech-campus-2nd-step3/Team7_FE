@@ -22,8 +22,8 @@ export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longi
   const { data: placeList } = useGetPlaceList(mapBounds, filters, longitude, latitude);
 
   const filteredPlaces = useMemo(() => {
-    if (!placeList) return [];
-    const filtered = placeList.filter((place: PlaceData) => {
+    if (!placeList.places) return [];
+    const filtered = placeList.places.filter((place: PlaceData) => {
       const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
       const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
       const locationMatch = (() => {

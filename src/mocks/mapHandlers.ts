@@ -52,7 +52,7 @@ const dummyPlaces: PlaceData[] = [
 
 export const mapHandlers = [
   http.get(`${BASE_URL}/places`, () => {
-    return HttpResponse.json(dummyPlaces);
+    return HttpResponse.json({ places: dummyPlaces });
   }),
 ];
 
