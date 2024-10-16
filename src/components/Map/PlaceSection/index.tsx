@@ -57,8 +57,10 @@ export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longi
 }
 
 const ListContainer = styled.div`
+  width: 960px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  padding: 40px 20px;
+  padding: 30px 10px;
+  box-sizing: border-box;
 `;
