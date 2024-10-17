@@ -10,6 +10,8 @@ import influencerOptions from '@/utils/constants/InfluencerOptions';
 import { LocationData, PlaceData } from '@/types';
 
 export default function MapPage() {
+  const [longitude, setLongitude] = useState<string>('');
+  const [latitude, setLatitude] = useState<string>('');
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
     main: '',
@@ -30,8 +32,10 @@ export default function MapPage() {
       categories: selectedCategories,
       influencers: selectedInfluencer ? [selectedInfluencer] : [],
       location: selectedLocation,
+      longitude,
+      latitude,
     }),
-    [selectedCategories, selectedInfluencer, selectedLocation],
+    [selectedCategories, selectedInfluencer, selectedLocation, longitude, latitude],
   );
 
   const handleInfluencerChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
@@ -60,7 +64,7 @@ export default function MapPage() {
   const handlePlacesUpdate = useCallback((updatedPlaces: PlaceData[]) => {
     setFilteredPlaces(updatedPlaces);
   }, []);
-
+  
   const handleSearchNearby = useCallback(() => {
     setShouldFetchPlaces(true);
   }, []);
