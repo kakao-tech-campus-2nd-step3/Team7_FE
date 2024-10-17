@@ -45,28 +45,29 @@ export default function PlaceItem({
 }
 
 const PlaceCard = styled.div`
-  width: 520px;
+  width: 460px;
   height: 160px;
   position: relative;
   display: flex;
+  box-sizing: border-box;
 `;
 
 const PlaceImage = styled.img`
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   left: 10px;
-  top: 20px;
+  top: 30px;
   border-radius: 30px;
   object-fit: cover;
 `;
 
 const CardContent = styled.div`
   position: absolute;
-  width: 350px;
-  height: 120px;
-  left: 160px;
-  top: 20px;
+  width: 320px;
+  height: 100px;
+  left: 130px;
+  top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -90,10 +91,10 @@ const InfluencerName = styled.div`
 
 const HeartIcon = styled(FaHeart)<{ $isLiked: boolean }>`
   position: absolute;
-  width: 32px;
-  height: 30px;
-  left: 314px;
-  top: 4px;
+  width: 24px;
+  height: 24px;
+  right: 10px;
+  top: 10px;
   color: ${(props) => (props.$isLiked ? '#fe7373' : '#9ca3af')};
   cursor: pointer;
   transition: color 0.2s ease-in-out;
