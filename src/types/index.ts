@@ -125,7 +125,9 @@ export type FacilityInfo = {
 export type Menu = {
   price: string;
   recommend: boolean;
-  menu: string;
+  menuName: string;
+  menuImgUrl: string;
+  description: string;
 };
 
 export type ReviewData = {
@@ -145,7 +147,7 @@ export type OpenHourData = {
   offdayList: {
     holidayName: string;
     weekAndDay: string;
-    temporaryHolidays: boolean;
+    temporaryHolidays: string;
   }[];
 };
 export type RequestInfluencerLike = {
