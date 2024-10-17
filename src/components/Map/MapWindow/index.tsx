@@ -7,11 +7,13 @@ import { LocationData, PlaceData } from '@/types';
 
 interface MapWindowProps {
   onBoundsChange: (bounds: LocationData) => void;
+  onCenterChange: (center: { lat: number; lng: number }) => void;
+  onSearchNearby: () => void;
   center: { lat: number; lng: number };
   places: PlaceData[];
 }
 
-export default function MapWindow({ onBoundsChange, center, places }: MapWindowProps) {
+export default function MapWindow({ onBoundsChange, onCenterChange, onSearchNearby, center, places }: MapWindowProps) {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [mapCenter, setMapCenter] = useState(center);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -20,6 +22,7 @@ export default function MapWindow({ onBoundsChange, center, places }: MapWindowP
     if (!mapRef.current) return;
 
     const bounds = mapRef.current.getBounds();
+    const newCenter = mapRef.current.getCenter();
     const newBounds: LocationData = {
       topLeftLatitude: bounds.getNorthEast().getLat(),
       topLeftLongitude: bounds.getSouthWest().getLng(),
@@ -27,11 +30,13 @@ export default function MapWindow({ onBoundsChange, center, places }: MapWindowP
       bottomRightLongitude: bounds.getNorthEast().getLng(),
     };
     onBoundsChange(newBounds);
-  }, [onBoundsChange]);
+    onCenterChange({ lat: newCenter.getLat(), lng: newCenter.getLng() });
+  }, [onBoundsChange, onCenterChange]);
 
   const handleSearchNearby = useCallback(() => {
     updateBounds();
-  }, [updateBounds]);
+    onSearchNearby();
+  }, [updateBounds, onSearchNearby]);
 
   const handleResetCenter = useCallback(() => {
     if (mapRef.current && userLocation) {
@@ -40,13 +45,18 @@ export default function MapWindow({ onBoundsChange, center, places }: MapWindowP
     }
   }, [userLocation, updateBounds]);
 
-  const handleCenterChanged = (map: kakao.maps.Map) => {
-    const newCenter = map.getCenter();
-    setMapCenter({
-      lat: newCenter.getLat(),
-      lng: newCenter.getLng(),
-    });
-  };
+  const handleCenterChanged = useCallback(
+    (map: kakao.maps.Map) => {
+      const newCenter = map.getCenter();
+      const centerData = {
+        lat: newCenter.getLat(),
+        lng: newCenter.getLng(),
+      };
+      setMapCenter(centerData);
+      onCenterChange(centerData);
+    },
+    [onCenterChange],
+  );
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -60,6 +70,7 @@ export default function MapWindow({ onBoundsChange, center, places }: MapWindowP
           setUserLocation(newCenter);
           if (mapRef.current) {
             mapRef.current.setCenter(new kakao.maps.LatLng(newCenter.lat, newCenter.lng));
+            onCenterChange(newCenter);
             updateBounds();
           }
         },
@@ -70,15 +81,16 @@ export default function MapWindow({ onBoundsChange, center, places }: MapWindowP
     } else {
       console.warn('Geolocation is not supported by this browser.');
     }
-  }, [updateBounds]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    setMapCenter(center);
-    if (mapRef.current) {
+    if (mapRef.current && (center.lat !== mapCenter.lat || center.lng !== mapCenter.lng)) {
       mapRef.current.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
+      setMapCenter(center);
       updateBounds();
     }
-  }, [center, updateBounds]);
+  }, [center, mapCenter, updateBounds]);
 
   return (
     <MapContainer>

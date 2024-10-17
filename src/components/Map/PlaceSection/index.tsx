@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
 import { PlaceData, LocationData } from '@/types';
 import { useGetPlaceList } from '@/api/hooks/useGetPlaceList';
+import Loading from '@/components/common/layouts/Loading';
 
 interface PlaceSectionProps {
   mapBounds: LocationData;
@@ -13,17 +14,29 @@ interface PlaceSectionProps {
     location: { main: string; sub?: string; lat?: number; lng?: number };
   };
   onPlacesUpdate: (places: PlaceData[]) => void;
-  longitude: string;
-  latitude: string;
+  center: { lat: number; lng: number };
+  shouldFetchPlaces: boolean;
+  onFetchComplete: () => void;
 }
 
-export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longitude, latitude }: PlaceSectionProps) {
+export default function PlaceSection({
+  mapBounds,
+  filters,
+  onPlacesUpdate,
+  center,
+  shouldFetchPlaces,
+  onFetchComplete,
+}: PlaceSectionProps) {
   const navigate = useNavigate();
-  const { data: placeList } = useGetPlaceList(mapBounds, filters, longitude, latitude);
+  const previousPlacesRef = useRef<PlaceData[]>([]);
+
+  const { data: places, isLoading, isError, error, refetch } = useGetPlaceList(mapBounds, filters, center, false);
 
   const filteredPlaces = useMemo(() => {
-    if (!placeList.places) return [];
-    const filtered = placeList.places.filter((place: PlaceData) => {
+    const currentPlaces = places || previousPlacesRef.current;
+    if (!currentPlaces) return [];
+
+    const filtered = currentPlaces.filter((place: PlaceData) => {
       const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
       const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
       const locationMatch = (() => {
@@ -39,17 +52,35 @@ export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longi
       })();
       return categoryMatch && influencerMatch && locationMatch;
     });
-    onPlacesUpdate(filtered);
+
+    previousPlacesRef.current = filtered;
     return filtered;
-  }, [placeList, filters, onPlacesUpdate]);
+  }, [places, filters]);
+
+  useEffect(() => {
+    if (shouldFetchPlaces) {
+      refetch().then(() => {
+        onFetchComplete();
+      });
+    }
+  }, [shouldFetchPlaces, refetch, onFetchComplete]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      onPlacesUpdate(filteredPlaces);
+    }
+  }, [filteredPlaces, onPlacesUpdate, isLoading]);
 
   const handlePlaceClick = (placeId: number) => {
     navigate(`/detail/${placeId}`);
   };
 
+  if (isLoading) return <Loading size={50} />;
+  if (isError) return <div>Error: {(error as Error).message}</div>;
+
   return (
     <ListContainer>
-      {filteredPlaces.map((place: PlaceData) => (
+      {filteredPlaces.map((place) => (
         <PlaceItem key={place.placeId} {...place} onClick={() => handlePlaceClick(place.placeId)} />
       ))}
     </ListContainer>
@@ -57,10 +88,8 @@ export default function PlaceSection({ mapBounds, filters, onPlacesUpdate, longi
 }
 
 const ListContainer = styled.div`
-  width: 960px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  padding: 30px 10px;
-  box-sizing: border-box;
+  padding: 40px 20px;
 `;
