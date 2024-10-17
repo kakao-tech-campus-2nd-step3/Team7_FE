@@ -7,12 +7,13 @@ import { LocationData, PlaceData } from '@/types';
 
 interface MapWindowProps {
   onBoundsChange: (bounds: LocationData) => void;
-  onCoordinateChange: (lat: string, lng: string) => void;
+  onCenterChange: (center: { lat: number; lng: number }) => void;
+  onSearchNearby: () => void;
   center: { lat: number; lng: number };
   places: PlaceData[];
 }
 
-export default function MapWindow({ onBoundsChange, onCoordinateChange, center, places }: MapWindowProps) {
+export default function MapWindow({ onBoundsChange, onCenterChange, onSearchNearby, center, places }: MapWindowProps) {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [mapCenter, setMapCenter] = useState(center);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -21,6 +22,7 @@ export default function MapWindow({ onBoundsChange, onCoordinateChange, center, 
     if (!mapRef.current) return;
 
     const bounds = mapRef.current.getBounds();
+    const newCenter = mapRef.current.getCenter();
     const newBounds: LocationData = {
       topLeftLatitude: bounds.getNorthEast().getLat(),
       topLeftLongitude: bounds.getSouthWest().getLng(),
@@ -28,11 +30,13 @@ export default function MapWindow({ onBoundsChange, onCoordinateChange, center, 
       bottomRightLongitude: bounds.getNorthEast().getLng(),
     };
     onBoundsChange(newBounds);
-  }, [onBoundsChange]);
+    onCenterChange({ lat: newCenter.getLat(), lng: newCenter.getLng() });
+  }, [onBoundsChange, onCenterChange]);
 
   const handleSearchNearby = useCallback(() => {
     updateBounds();
-  }, [updateBounds]);
+    onSearchNearby();
+  }, [updateBounds, onSearchNearby]);
 
   const handleResetCenter = useCallback(() => {
     if (mapRef.current && userLocation) {
@@ -41,40 +45,52 @@ export default function MapWindow({ onBoundsChange, onCoordinateChange, center, 
     }
   }, [userLocation, updateBounds]);
 
-  const handleCenterChanged = (map: kakao.maps.Map) => {
-    const newCenter = map.getCenter();
-    const newLat = newCenter.getLat();
-    const newLng = newCenter.getLng();
-    setMapCenter({
-      lat: newLat,
-      lng: newLng,
-    });
-    onCoordinateChange(newLat.toString(), newLng.toString());
-  };
+  const handleCenterChanged = useCallback(
+    (map: kakao.maps.Map) => {
+      const newCenter = map.getCenter();
+      const centerData = {
+        lat: newCenter.getLat(),
+        lng: newCenter.getLng(),
+      };
+      setMapCenter(centerData);
+      onCenterChange(centerData);
+    },
+    [onCenterChange],
+  );
 
   useEffect(() => {
-    navigator.geolocation?.getCurrentPosition(
-      (position) => {
-        const newCenter = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        setMapCenter(newCenter);
-        setUserLocation(newCenter);
-        mapRef.current?.setCenter(new kakao.maps.LatLng(newCenter.lat, newCenter.lng));
-        updateBounds();
-      },
-      (err) => console.error('Geolocation error:', err),
-    );
-  }, [updateBounds]);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const newCenter = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          setMapCenter(newCenter);
+          setUserLocation(newCenter);
+          if (mapRef.current) {
+            mapRef.current.setCenter(new kakao.maps.LatLng(newCenter.lat, newCenter.lng));
+            onCenterChange(newCenter);
+            updateBounds();
+          }
+        },
+        (err) => {
+          console.error('Geolocation error:', err);
+        },
+      );
+    } else {
+      console.warn('Geolocation is not supported by this browser.');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    setMapCenter(center);
-    if (mapRef.current) {
+    if (mapRef.current && (center.lat !== mapCenter.lat || center.lng !== mapCenter.lng)) {
       mapRef.current.setCenter(new kakao.maps.LatLng(center.lat, center.lng));
+      setMapCenter(center);
       updateBounds();
     }
-  }, [center, updateBounds]);
+  }, [center, mapCenter, updateBounds]);
 
   return (
     <MapContainer>

@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, Suspense, useEffect } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import DropdownMenu from '@/components/Map/DropdownMenu';
 import MapWindow from '@/components/Map/MapWindow';
@@ -8,73 +8,66 @@ import { Text } from '@/components/common/typography/Text';
 import locationOptions from '@/utils/constants/LocationOptions';
 import influencerOptions from '@/utils/constants/InfluencerOptions';
 import { LocationData, PlaceData } from '@/types';
-import Loading from '@/components/common/layouts/Loading';
 
 export default function MapPage() {
-  const [longitude, setLongitude] = useState<string>('');
-  const [latitude, setLatitude] = useState<string>('');
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
     main: '',
   });
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<PlaceData[]>([]);
-
+  const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });
   const [mapBounds, setMapBounds] = useState<LocationData>({
     topLeftLatitude: 0,
     topLeftLongitude: 0,
     bottomRightLatitude: 0,
     bottomRightLongitude: 0,
   });
+  const [shouldFetchPlaces, setShouldFetchPlaces] = useState(false);
 
   const filters = useMemo(
     () => ({
       categories: selectedCategories,
       influencers: selectedInfluencer ? [selectedInfluencer] : [],
       location: selectedLocation,
-      longitude,
-      latitude,
     }),
-    [selectedCategories, selectedInfluencer, selectedLocation, longitude, latitude],
+    [selectedCategories, selectedInfluencer, selectedLocation],
   );
 
-  useEffect(() => {
-    navigator.geolocation?.getCurrentPosition(
-      (position) => {
-        setLatitude(position.coords.latitude.toString());
-        setLongitude(position.coords.longitude.toString());
-      },
-      (error) => console.error('Error getting location: ', error),
-    );
+  const handleInfluencerChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
+    setSelectedInfluencer(value.main);
+    setShouldFetchPlaces(true);
   }, []);
 
-  const handleInfluencerChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
-    setSelectedInfluencer(value.main);
-  };
-
-  const handleLocationChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
+  const handleLocationChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedLocation(value);
-  };
+    setShouldFetchPlaces(true);
+  }, []);
 
-  const handleCategorySelect = (selected: string[]) => {
+  const handleCategorySelect = useCallback((selected: string[]) => {
     setSelectedCategories(selected);
-  };
+    setShouldFetchPlaces(true);
+  }, []);
 
   const handleBoundsChange = useCallback((bounds: LocationData) => {
     setMapBounds(bounds);
   }, []);
 
-  const handlePlacesUpdate = (updatedPlaces: PlaceData[]) => {
-    setFilteredPlaces(updatedPlaces);
-  };
+  const handleCenterChange = useCallback((newCenter: { lat: number; lng: number }) => {
+    setCenter(newCenter);
+  }, []);
 
-  const mapCenter = useMemo(
-    () => ({
-      lat: selectedLocation.lat ?? Number(latitude) ?? 37.5665,
-      lng: selectedLocation.lng ?? Number(longitude) ?? 126.978,
-    }),
-    [selectedLocation, latitude, longitude],
-  );
+  const handlePlacesUpdate = useCallback((updatedPlaces: PlaceData[]) => {
+    setFilteredPlaces(updatedPlaces);
+  }, []);
+
+  const handleSearchNearby = useCallback(() => {
+    setShouldFetchPlaces(true);
+  }, []);
+
+  const handleFetchComplete = useCallback(() => {
+    setShouldFetchPlaces(false);
+  }, []);
 
   return (
     <PageContainer>
@@ -99,19 +92,19 @@ export default function MapPage() {
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
       <MapWindow
         onBoundsChange={handleBoundsChange}
-        center={mapCenter}
+        onCenterChange={handleCenterChange}
+        onSearchNearby={handleSearchNearby}
+        center={center}
         places={filteredPlaces}
-        onCoordinateChange={handleCoordinateChange}
       />
-      <Suspense fallback={<Loading size={50} />}>
-        <PlaceSection
-          mapBounds={mapBounds}
-          filters={filters}
-          onPlacesUpdate={handlePlacesUpdate}
-          longitude={mapCenter.lng.toString()}
-          latitude={mapCenter.lat.toString()}
-        />
-      </Suspense>
+      <PlaceSection
+        mapBounds={mapBounds}
+        filters={filters}
+        onPlacesUpdate={handlePlacesUpdate}
+        center={center}
+        shouldFetchPlaces={shouldFetchPlaces}
+        onFetchComplete={handleFetchComplete}
+      />
     </PageContainer>
   );
 }

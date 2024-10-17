@@ -31,7 +31,7 @@ const dummyPlaces: PlaceData[] = [
     longitude: '126.9314925',
     latitude: '37.5666478',
     likes: 120,
-    menuImgUrl: 'https://example.com/menu1.jpg',
+    menuImgUrl: 'https://via.placeholder.com/500',
   },
   {
     placeId: 3,
@@ -46,7 +46,7 @@ const dummyPlaces: PlaceData[] = [
     longitude: '128.6101069',
     latitude: '35.8857457',
     likes: 120,
-    menuImgUrl: 'https://example.com/menu1.jpg',
+    menuImgUrl: 'https://via.placeholder.com/500',
   },
 ];
 
