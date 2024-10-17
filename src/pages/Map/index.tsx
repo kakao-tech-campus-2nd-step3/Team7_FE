@@ -10,8 +10,6 @@ import influencerOptions from '@/utils/constants/InfluencerOptions';
 import { LocationData, PlaceData } from '@/types';
 
 export default function MapPage() {
-  const [longitude, setLongitude] = useState<string>('');
-  const [latitude, setLatitude] = useState<string>('');
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
     main: '',
@@ -32,11 +30,10 @@ export default function MapPage() {
       categories: selectedCategories,
       influencers: selectedInfluencer ? [selectedInfluencer] : [],
       location: selectedLocation,
-      longitude,
-      latitude,
     }),
-    [selectedCategories, selectedInfluencer, selectedLocation, longitude, latitude],
+    [selectedCategories, selectedInfluencer, selectedLocation],
   );
+
   const handleInfluencerChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedInfluencer(value.main);
     setShouldFetchPlaces(true);
@@ -63,7 +60,7 @@ export default function MapPage() {
   const handlePlacesUpdate = useCallback((updatedPlaces: PlaceData[]) => {
     setFilteredPlaces(updatedPlaces);
   }, []);
-  
+
   const handleSearchNearby = useCallback(() => {
     setShouldFetchPlaces(true);
   }, []);
@@ -94,6 +91,7 @@ export default function MapPage() {
       </DropdownContainer>
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
       <MapWindow
+        onBoundsChange={handleBoundsChange}
         onCenterChange={handleCenterChange}
         onSearchNearby={handleSearchNearby}
         center={center}
