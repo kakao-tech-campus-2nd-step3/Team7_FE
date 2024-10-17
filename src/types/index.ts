@@ -94,18 +94,10 @@ export type PlaceInfo = {
   address: AddressInfo;
   category: string;
   influencerName: string;
+  menuImgUrl: [string];
   longitude: string;
   latitude: string;
   likes: boolean;
-  facilityInfo: FacilityInfo;
-  menuInfos: {
-    menuImgUrls: [string];
-    menuList: [Menu];
-    timeExp: Date;
-  };
-  openHour: OpenHourData;
-  placeLikes: PlaceLikes;
-  videoUrl: string;
 };
 
 export type PlaceLikes = {

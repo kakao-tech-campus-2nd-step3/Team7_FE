@@ -9,7 +9,7 @@ export const getPlaceList = async (
   latitude: string,
 ) => {
   const { topLeftLongitude, topLeftLatitude, bottomRightLongitude, bottomRightLatitude } = location;
-  const { categories, influencers } = filters;
+  const { categories, influencers, longitude, latitude } = filters;
 
   const params = new URLSearchParams({
     topLeftLongitude: topLeftLongitude.toString(),
@@ -21,8 +21,10 @@ export const getPlaceList = async (
     page: '0',
     categories: categories.join(','),
     influencers: influencers.join(','),
-  });
 
+    longitude: longitude || '',
+    latitude: latitude || '',
+  });
   const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
   console.log('Sending request to /places with params:', params.toString());
 

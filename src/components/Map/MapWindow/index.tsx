@@ -7,11 +7,12 @@ import { LocationData, PlaceData } from '@/types';
 
 interface MapWindowProps {
   onBoundsChange: (bounds: LocationData) => void;
+  onCoordinateChange: (lat: string, lng: string) => void;
   center: { lat: number; lng: number };
   places: PlaceData[];
 }
 
-export default function MapWindow({ onBoundsChange, center, places }: MapWindowProps) {
+export default function MapWindow({ onBoundsChange, onCoordinateChange, center, places }: MapWindowProps) {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [mapCenter, setMapCenter] = useState(center);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -42,34 +43,29 @@ export default function MapWindow({ onBoundsChange, center, places }: MapWindowP
 
   const handleCenterChanged = (map: kakao.maps.Map) => {
     const newCenter = map.getCenter();
+    const newLat = newCenter.getLat();
+    const newLng = newCenter.getLng();
     setMapCenter({
-      lat: newCenter.getLat(),
-      lng: newCenter.getLng(),
+      lat: newLat,
+      lng: newLng,
     });
+    onCoordinateChange(newLat.toString(), newLng.toString());
   };
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const newCenter = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-          setMapCenter(newCenter);
-          setUserLocation(newCenter);
-          if (mapRef.current) {
-            mapRef.current.setCenter(new kakao.maps.LatLng(newCenter.lat, newCenter.lng));
-            updateBounds();
-          }
-        },
-        (err) => {
-          console.error('Geolocation error:', err);
-        },
-      );
-    } else {
-      console.warn('Geolocation is not supported by this browser.');
-    }
+    navigator.geolocation?.getCurrentPosition(
+      (position) => {
+        const newCenter = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+        setMapCenter(newCenter);
+        setUserLocation(newCenter);
+        mapRef.current?.setCenter(new kakao.maps.LatLng(newCenter.lat, newCenter.lng));
+        updateBounds();
+      },
+      (err) => console.error('Geolocation error:', err),
+    );
   }, [updateBounds]);
 
   useEffect(() => {
