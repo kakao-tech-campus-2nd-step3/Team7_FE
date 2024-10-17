@@ -94,18 +94,10 @@ export type PlaceInfo = {
   address: AddressInfo;
   category: string;
   influencerName: string;
+  menuImgUrl: [string];
   longitude: string;
   latitude: string;
   likes: boolean;
-  facilityInfo: FacilityInfo;
-  menuInfos: {
-    menuImgUrls: [string];
-    menuList: [Menu];
-    timeExp: Date;
-  };
-  openHour: OpenHourData;
-  placeLikes: PlaceLikes;
-  videoUrl: string;
 };
 
 export type PlaceLikes = {
@@ -125,7 +117,9 @@ export type FacilityInfo = {
 export type Menu = {
   price: string;
   recommend: boolean;
-  menu: string;
+  menuName: string;
+  menuImgUrl: string;
+  description: string;
 };
 
 export type ReviewData = {
@@ -145,7 +139,7 @@ export type OpenHourData = {
   offdayList: {
     holidayName: string;
     weekAndDay: string;
-    temporaryHolidays: boolean;
+    temporaryHolidays: string;
   }[];
 };
 export type RequestInfluencerLike = {

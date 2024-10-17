@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, Suspense } from 'react';
+import { useState, useMemo, useCallback, Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import DropdownMenu from '@/components/Map/DropdownMenu';
 import MapWindow from '@/components/Map/MapWindow';
@@ -11,6 +11,8 @@ import { LocationData, PlaceData } from '@/types';
 import Loading from '@/components/common/layouts/Loading';
 
 export default function MapPage() {
+  const [longitude, setLongitude] = useState<string>('');
+  const [latitude, setLatitude] = useState<string>('');
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
     main: '',
@@ -30,9 +32,21 @@ export default function MapPage() {
       categories: selectedCategories,
       influencers: selectedInfluencer ? [selectedInfluencer] : [],
       location: selectedLocation,
+      longitude,
+      latitude,
     }),
-    [selectedCategories, selectedInfluencer, selectedLocation],
+    [selectedCategories, selectedInfluencer, selectedLocation, longitude, latitude],
   );
+
+  useEffect(() => {
+    navigator.geolocation?.getCurrentPosition(
+      (position) => {
+        setLatitude(position.coords.latitude.toString());
+        setLongitude(position.coords.longitude.toString());
+      },
+      (error) => console.error('Error getting location: ', error),
+    );
+  }, []);
 
   const handleInfluencerChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedInfluencer(value.main);
@@ -56,10 +70,10 @@ export default function MapPage() {
 
   const mapCenter = useMemo(
     () => ({
-      lat: selectedLocation.lat ?? 37.5665,
-      lng: selectedLocation.lng ?? 126.978,
+      lat: selectedLocation.lat ?? Number(latitude) ?? 37.5665,
+      lng: selectedLocation.lng ?? Number(longitude) ?? 126.978,
     }),
-    [selectedLocation],
+    [selectedLocation, latitude, longitude],
   );
 
   return (
@@ -83,7 +97,12 @@ export default function MapPage() {
         />
       </DropdownContainer>
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
-      <MapWindow onBoundsChange={handleBoundsChange} center={mapCenter} places={filteredPlaces} />
+      <MapWindow
+        onBoundsChange={handleBoundsChange}
+        center={mapCenter}
+        places={filteredPlaces}
+        onCoordinateChange={handleCoordinateChange}
+      />
       <Suspense fallback={<Loading size={50} />}>
         <PlaceSection
           mapBounds={mapBounds}
