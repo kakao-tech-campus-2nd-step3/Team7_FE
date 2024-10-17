@@ -3,13 +3,13 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
 import { TbCurrentLocation } from 'react-icons/tb';
 import Button from '@/components/common/Button';
-import { LocationData, PlaceInfo } from '@/types';
+import { LocationData, PlaceData } from '@/types';
 
 interface MapWindowProps {
   onBoundsChange: (bounds: LocationData) => void;
   onCoordinateChange: (lat: string, lng: string) => void;
   center: { lat: number; lng: number };
-  places: PlaceInfo[];
+  places: PlaceData[];
 }
 
 export default function MapWindow({ onBoundsChange, onCoordinateChange, center, places }: MapWindowProps) {

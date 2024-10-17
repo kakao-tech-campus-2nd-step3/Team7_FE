@@ -43,6 +43,7 @@ export default function InfluencerItem({
 
   return (
     <Wrapper to={`/influencer/${influencerId}`}>
+      {/* 경로 수정필요 */}
       <ImageContainer>
         <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
           {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}

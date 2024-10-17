@@ -64,11 +64,12 @@ export type PlaceData = {
   placeId: number;
   placeName: string;
   address: AddressInfo;
-  category?: string;
+  category: string;
   influencerName: string;
-  longitude?: string;
-  latitude?: string;
-  likes: boolean;
+  menuImgUrl: string;
+  longitude: string;
+  latitude: string;
+  likes: number;
 };
 
 export type LocationData = {
@@ -84,7 +85,7 @@ export type FilterParams = {
 };
 
 export type PlaceList = {
-  places: PlaceInfo[];
+  places: PlaceData[];
 };
 
 export type PlaceInfo = {
@@ -116,7 +117,9 @@ export type FacilityInfo = {
 export type Menu = {
   price: string;
   recommend: boolean;
-  menu: string;
+  menuName: string;
+  menuImgUrl: string;
+  description: string;
 };
 
 export type ReviewData = {
@@ -136,7 +139,7 @@ export type OpenHourData = {
   offdayList: {
     holidayName: string;
     weekAndDay: string;
-    temporaryHolidays: boolean;
+    temporaryHolidays: string;
   }[];
 };
 export type RequestInfluencerLike = {

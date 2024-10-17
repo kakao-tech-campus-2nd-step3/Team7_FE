@@ -7,7 +7,7 @@ import ToggleButton from '@/components/Map/ToggleButton';
 import { Text } from '@/components/common/typography/Text';
 import locationOptions from '@/utils/constants/LocationOptions';
 import influencerOptions from '@/utils/constants/InfluencerOptions';
-import { LocationData, PlaceInfo } from '@/types';
+import { LocationData, PlaceData } from '@/types';
 import Loading from '@/components/common/layouts/Loading';
 
 export default function MapPage() {
@@ -18,7 +18,7 @@ export default function MapPage() {
     main: '',
   });
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [filteredPlaces, setFilteredPlaces] = useState<PlaceInfo[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<PlaceData[]>([]);
 
   const [mapBounds, setMapBounds] = useState<LocationData>({
     topLeftLatitude: 0,
@@ -64,12 +64,7 @@ export default function MapPage() {
     setMapBounds(bounds);
   }, []);
 
-  const handleCoordinateChange = useCallback((lat: string, lng: string) => {
-    setLatitude(lat);
-    setLongitude(lng);
-  }, []);
-
-  const handlePlacesUpdate = (updatedPlaces: PlaceInfo[]) => {
+  const handlePlacesUpdate = (updatedPlaces: PlaceData[]) => {
     setFilteredPlaces(updatedPlaces);
   };
 
@@ -109,7 +104,13 @@ export default function MapPage() {
         onCoordinateChange={handleCoordinateChange}
       />
       <Suspense fallback={<Loading size={50} />}>
-        <PlaceSection mapBounds={mapBounds} filters={filters} onPlacesUpdate={handlePlacesUpdate} />
+        <PlaceSection
+          mapBounds={mapBounds}
+          filters={filters}
+          onPlacesUpdate={handlePlacesUpdate}
+          longitude={mapCenter.lng.toString()}
+          latitude={mapCenter.lat.toString()}
+        />
       </Suspense>
     </PageContainer>
   );

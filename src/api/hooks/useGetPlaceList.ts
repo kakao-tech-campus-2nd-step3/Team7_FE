@@ -4,7 +4,9 @@ import { LocationData, FilterParams, PlaceList } from '@/types';
 
 export const getPlaceList = async (
   location: LocationData,
-  filters: FilterParams & { longitude?: string; latitude?: string },
+  filters: FilterParams,
+  longitude: string,
+  latitude: string,
 ) => {
   const { topLeftLongitude, topLeftLatitude, bottomRightLongitude, bottomRightLatitude } = location;
   const { categories, influencers, longitude, latitude } = filters;
@@ -14,6 +16,8 @@ export const getPlaceList = async (
     topLeftLatitude: topLeftLatitude.toString(),
     bottomRightLongitude: bottomRightLongitude.toString(),
     bottomRightLatitude: bottomRightLatitude.toString(),
+    longitude,
+    latitude,
     page: '0',
     categories: categories.join(','),
     influencers: influencers.join(','),
@@ -22,13 +26,15 @@ export const getPlaceList = async (
     latitude: latitude || '',
   });
   const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
+  console.log('Sending request to /places with params:', params.toString());
+
   return response.data;
 };
 
-export const useGetPlaceList = (location: LocationData, filters: FilterParams) => {
+export const useGetPlaceList = (location: LocationData, filters: FilterParams, longitude: string, latitude: string) => {
   return useSuspenseQuery({
-    queryKey: ['placeList', location, filters],
-    queryFn: () => getPlaceList(location, filters),
+    queryKey: ['placeList', location, filters, longitude, latitude],
+    queryFn: () => getPlaceList(location, filters, longitude, latitude),
     staleTime: 1000 * 60 * 5,
   });
 };
