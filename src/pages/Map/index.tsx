@@ -37,7 +37,6 @@ export default function MapPage() {
     }),
     [selectedCategories, selectedInfluencer, selectedLocation, longitude, latitude],
   );
-
   const handleInfluencerChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedInfluencer(value.main);
     setShouldFetchPlaces(true);
@@ -95,7 +94,6 @@ export default function MapPage() {
       </DropdownContainer>
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
       <MapWindow
-        onBoundsChange={handleBoundsChange}
         onCenterChange={handleCenterChange}
         onSearchNearby={handleSearchNearby}
         center={center}
