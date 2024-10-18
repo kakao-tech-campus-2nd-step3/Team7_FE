@@ -1,8 +1,12 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
-import { LocationData, FilterParams, PlaceList } from '@/types';
+import { LocationData, FilterParams, PlaceData, PlaceList } from '@/types';
 
-export const getPlaceList = async (location: LocationData, filters: FilterParams) => {
+export const getPlaceList = async (
+  location: LocationData,
+  filters: FilterParams,
+  center: { lat: number; lng: number },
+): Promise<PlaceData[]> => {
   const { topLeftLongitude, topLeftLatitude, bottomRightLongitude, bottomRightLatitude } = location;
   const { categories, influencers } = filters;
 
@@ -11,19 +15,29 @@ export const getPlaceList = async (location: LocationData, filters: FilterParams
     topLeftLatitude: topLeftLatitude.toString(),
     bottomRightLongitude: bottomRightLongitude.toString(),
     bottomRightLatitude: bottomRightLatitude.toString(),
+    longitude: center.lng.toString(),
+    latitude: center.lat.toString(),
     page: '0',
     categories: categories.join(','),
     influencers: influencers.join(','),
   });
 
   const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
-  return response.data;
+  console.log('Sending request to /places with params:', params.toString());
+
+  return response.data.places;
 };
 
-export const useGetPlaceList = (location: LocationData, filters: FilterParams) => {
-  return useSuspenseQuery({
-    queryKey: ['placeList', location, filters],
-    queryFn: () => getPlaceList(location, filters),
+export const useGetPlaceList = (
+  location: LocationData,
+  filters: FilterParams,
+  center: { lat: number; lng: number },
+  enabled: boolean,
+) => {
+  return useQuery<PlaceData[], Error>({
+    queryKey: ['placeList', location, filters, center],
+    queryFn: () => getPlaceList(location, filters, center),
     staleTime: 1000 * 60 * 5,
+    enabled,
   });
 };

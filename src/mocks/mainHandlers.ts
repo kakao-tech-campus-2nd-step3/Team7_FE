@@ -78,6 +78,43 @@ export const mainHandlers = [
             placeName: '가성비집',
           },
         },
+        {
+          videoId: 7,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
+          },
+        },
+
+        {
+          videoId: 4,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
+        },
+        {
+          videoId: 5,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
+          },
+        },
+        {
+          videoId: 6,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
+        },
       ],
       number: 0,
       sort: {
@@ -125,15 +162,6 @@ export const mainHandlers = [
           place: {
             placeId: 2,
             placeName: '풍자또가',
-          },
-        },
-        {
-          videoId: 3,
-          videoAlias: '히밥이 다 못먹은 가성비 그곳',
-          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
-          place: {
-            placeId: 3,
-            placeName: '가성비집',
           },
         },
       ],

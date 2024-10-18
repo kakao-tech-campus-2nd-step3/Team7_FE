@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, Suspense } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import styled from 'styled-components';
 import DropdownMenu from '@/components/Map/DropdownMenu';
 import MapWindow from '@/components/Map/MapWindow';
@@ -7,8 +7,7 @@ import ToggleButton from '@/components/Map/ToggleButton';
 import { Text } from '@/components/common/typography/Text';
 import locationOptions from '@/utils/constants/LocationOptions';
 import influencerOptions from '@/utils/constants/InfluencerOptions';
-import { LocationData, PlaceInfo } from '@/types';
-import Loading from '@/components/common/layouts/Loading';
+import { LocationData, PlaceData } from '@/types';
 
 export default function MapPage() {
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>('');
@@ -16,14 +15,16 @@ export default function MapPage() {
     main: '',
   });
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [filteredPlaces, setFilteredPlaces] = useState<PlaceInfo[]>([]);
-
+  const [filteredPlaces, setFilteredPlaces] = useState<PlaceData[]>([]);
+  const [center, setCenter] = useState({ lat: 37.5665, lng: 126.978 });
   const [mapBounds, setMapBounds] = useState<LocationData>({
     topLeftLatitude: 0,
     topLeftLongitude: 0,
     bottomRightLatitude: 0,
     bottomRightLongitude: 0,
   });
+  const [shouldFetchPlaces, setShouldFetchPlaces] = useState(false);
+  const [initialLocation, setInitialLocation] = useState(false);
 
   const filters = useMemo(
     () => ({
@@ -34,33 +35,50 @@ export default function MapPage() {
     [selectedCategories, selectedInfluencer, selectedLocation],
   );
 
-  const handleInfluencerChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
+  const handleInfluencerChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedInfluencer(value.main);
-  };
+    setShouldFetchPlaces(true);
+  }, []);
 
-  const handleLocationChange = (value: { main: string; sub?: string; lat?: number; lng?: number }) => {
+  const handleLocationChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedLocation(value);
-  };
+    if (value.lat && value.lng) {
+      setCenter({ lat: value.lat, lng: value.lng });
+    }
+    setShouldFetchPlaces(true);
+  }, []);
 
-  const handleCategorySelect = (selected: string[]) => {
+  const handleCategorySelect = useCallback((selected: string[]) => {
     setSelectedCategories(selected);
-  };
+    setShouldFetchPlaces(true);
+  }, []);
 
   const handleBoundsChange = useCallback((bounds: LocationData) => {
     setMapBounds(bounds);
   }, []);
 
-  const handlePlacesUpdate = (updatedPlaces: PlaceInfo[]) => {
-    setFilteredPlaces(updatedPlaces);
-  };
+  const handleCenterChange = useCallback((newCenter: { lat: number; lng: number }) => {
+    setCenter(newCenter);
+  }, []);
 
-  const mapCenter = useMemo(
-    () => ({
-      lat: selectedLocation.lat ?? 37.5665,
-      lng: selectedLocation.lng ?? 126.978,
-    }),
-    [selectedLocation],
-  );
+  const handlePlacesUpdate = useCallback((updatedPlaces: PlaceData[]) => {
+    setFilteredPlaces(updatedPlaces);
+  }, []);
+
+  const handleSearchNearby = useCallback(() => {
+    setShouldFetchPlaces(true);
+  }, []);
+
+  const handleInitialLocation = useCallback((value: boolean) => {
+    setInitialLocation(value);
+    if (value) {
+      setShouldFetchPlaces(true);
+    }
+  }, []);
+
+  const handleFetchComplete = useCallback(() => {
+    setShouldFetchPlaces(false);
+  }, []);
 
   return (
     <PageContainer>
@@ -83,10 +101,23 @@ export default function MapPage() {
         />
       </DropdownContainer>
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
-      <MapWindow onBoundsChange={handleBoundsChange} center={mapCenter} places={filteredPlaces} />
-      <Suspense fallback={<Loading size={50} />}>
-        <PlaceSection mapBounds={mapBounds} filters={filters} onPlacesUpdate={handlePlacesUpdate} />
-      </Suspense>
+      <MapWindow
+        onBoundsChange={handleBoundsChange}
+        onCenterChange={handleCenterChange}
+        onSearchNearby={handleSearchNearby}
+        onInitialLocation={handleInitialLocation}
+        center={center}
+        places={filteredPlaces}
+      />
+      <PlaceSection
+        mapBounds={mapBounds}
+        filters={filters}
+        onPlacesUpdate={handlePlacesUpdate}
+        center={center}
+        shouldFetchPlaces={shouldFetchPlaces}
+        onFetchComplete={handleFetchComplete}
+        initialLocation={initialLocation}
+      />
     </PageContainer>
   );
 }
