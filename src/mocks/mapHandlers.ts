@@ -15,7 +15,7 @@ const dummyPlaces: PlaceData[] = [
     influencerName: '성시경',
     longitude: '35.123',
     latitude: '135.11',
-    likes: 240,
+    likes: true,
     menuImgUrl: 'https://via.placeholder.com/500',
   },
   {
@@ -30,7 +30,7 @@ const dummyPlaces: PlaceData[] = [
     influencerName: '풍자',
     longitude: '126.9314925',
     latitude: '37.5666478',
-    likes: 120,
+    likes: true,
     menuImgUrl: 'https://via.placeholder.com/500',
   },
   {
@@ -45,7 +45,7 @@ const dummyPlaces: PlaceData[] = [
     influencerName: '풍자',
     longitude: '128.6101069',
     latitude: '35.8857457',
-    likes: 120,
+    likes: false,
     menuImgUrl: 'https://via.placeholder.com/500',
   },
 ];
