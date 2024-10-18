@@ -41,6 +41,9 @@ export default function MapPage() {
 
   const handleLocationChange = useCallback((value: { main: string; sub?: string; lat?: number; lng?: number }) => {
     setSelectedLocation(value);
+    if (value.lat && value.lng) {
+      setCenter({ lat: value.lat, lng: value.lng });
+    }
     setShouldFetchPlaces(true);
   }, []);
 
