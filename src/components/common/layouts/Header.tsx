@@ -84,7 +84,7 @@ const HeaderContainer = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 20px 0px;
   height: 80px;
   box-sizing: border-box;
 `;
@@ -118,7 +118,7 @@ const NavItem = styled(Link)`
 
 const LoginButton = styled.div`
   margin-left: 20px;
-  padding: 8px 16px;
+  padding: 8px 0px;
   color: white;
   cursor: pointer;
 `;
