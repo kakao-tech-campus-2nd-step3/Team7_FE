@@ -81,7 +81,6 @@ export default function MapWindow({ onBoundsChange, onCenterChange, onSearchNear
     } else {
       console.warn('Geolocation is not supported by this browser.');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
