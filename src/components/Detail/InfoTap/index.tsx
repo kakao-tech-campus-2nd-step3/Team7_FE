@@ -41,7 +41,7 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos }: Props) {
           </Text>
         </TitleContainer>
         <MenuContainer>
-          <MenuModal images={menuInfos.menuImgUrls} />
+          {menuInfos.menuImgUrls.length > 0 && <MenuModal images={menuInfos.menuImgUrls} />}
           <MenuList lists={menuInfos.menuList.slice(0, moreMenu ? menuInfos.menuList.length : 4)} />
           <MoreMenuBtn onClick={() => setMoreMenu(!moreMenu)}>{moreMenu ? '메뉴 접기' : '메뉴 더보기'}</MoreMenuBtn>
         </MenuContainer>
