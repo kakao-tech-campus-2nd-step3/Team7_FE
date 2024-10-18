@@ -4,37 +4,44 @@ import styled from 'styled-components';
 
 import { Text } from '@/components/common/typography/Text';
 
-import InfluencerSection from './InfluencerSection';
-import SpotSection from './SpotSection';
-import { InfluencerData, SpotData } from '@/types';
+import InfluencerSection from '../Main/InfluencerSection';
+import SpotSection from '../Main/SpotSection';
+import { InfluencerData, SpotData, UserPlaceData } from '@/types';
+import UserPlaceSection from '../My/UserPlaceSection';
 
 type Props = {
   type: string;
   prevSubText?: string;
   mainText: string;
   SubText: string;
-  items: InfluencerData[] | SpotData[];
+  items: InfluencerData[] | SpotData[] | UserPlaceData[];
 };
 
-export default function BaseLayout({ type, prevSubText = '', mainText, SubText, items }: Props) {
+export default function BaseLayout({ type, prevSubText = '', mainText = '', SubText, items }: Props) {
   const navigate = useNavigate();
+
+  const renderSection = () => {
+    if (type === 'influencer') {
+      return <InfluencerSection items={items as InfluencerData[]} />;
+    }
+    if (type === 'spot') {
+      return <SpotSection items={items as SpotData[]} />;
+    }
+    return <UserPlaceSection items={items as UserPlaceData[]} />;
+  };
   return (
     <Container>
       <TitleContainer>
-        <Text size="l" weight="bold">
+        <Text size="m" weight="bold">
           {prevSubText || ''}
-          <Text size="xxl" weight="bold" variant="mint">
-            {mainText}
+          <Text size="28px" weight="bold" variant="mint">
+            {mainText || ''}
           </Text>
           {SubText}
         </Text>
         {type === 'influencer' ? <MoreBtn onClick={() => navigate('/influencer')}>더보기</MoreBtn> : null}
       </TitleContainer>
-      {type === 'influencer' ? (
-        <InfluencerSection items={items as InfluencerData[]} />
-      ) : (
-        <SpotSection items={items as SpotData[]} />
-      )}
+      {renderSection()}
     </Container>
   );
 }

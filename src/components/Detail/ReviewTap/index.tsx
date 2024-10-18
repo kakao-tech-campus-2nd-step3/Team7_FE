@@ -6,9 +6,11 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 
 import BarGraph from './BarGraph';
 import Review from './Review';
-import { PlaceLikes, ReviewData } from '@/types';
+import { PlaceLikes } from '@/types';
+import { useGetReview } from '@/api/hooks/useGetReview';
 
-export default function ReviewTap({ placeLikes, list }: { placeLikes: PlaceLikes; list: ReviewData[] }) {
+export default function ReviewTap({ placeLikes, id }: { placeLikes: PlaceLikes; id: string }) {
+  const { data: list } = useGetReview(id);
   return (
     <Wrapper>
       <CountLike>
@@ -16,7 +18,7 @@ export default function ReviewTap({ placeLikes, list }: { placeLikes: PlaceLikes
         <BarGraph like={placeLikes.like} dislike={placeLikes.dislike} />
         <AiFillDislike size={50} color="#6F6CFF" />
       </CountLike>
-      <Paragraph size="m" weight="bold" variant="white">
+      <Paragraph size="s" weight="bold" variant="white">
         <span style={{ color: '#55EBFF' }}>리뷰</span> 한마디
       </Paragraph>
       <Review items={list} />
@@ -31,6 +33,6 @@ const Wrapper = styled.div`
 `;
 const CountLike = styled.div`
   display: flex;
-  gap: 24px;
+  gap: 20px;
   margin-bottom: 20px;
 `;

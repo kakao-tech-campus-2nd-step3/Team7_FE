@@ -1,21 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
-export default function useDetectClose() {
-  const [isOpen, setIsOpen] = useState(false);
+interface UseDetectCloseProps {
+  onDetected: () => void;
+}
+
+export default function useDetectClose({ onDetected }: UseDetectCloseProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback(
+    (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
-        setIsOpen(false);
+        onDetected();
       }
-    };
+    },
+    [onDetected],
+  );
 
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
 
-  return { isOpen, setIsOpen, ref };
+  return ref;
 }

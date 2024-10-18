@@ -12,12 +12,12 @@ export default function ReviewItem({ likes, comment, userNickname, createdDate }
     <Wrapper>
       <Title>
         <Name>
-          <Text size="s" weight="bold" variant="white">
+          <Text size="xs" weight="bold" variant="white">
             {userNickname}
           </Text>
           {likes ? <AiFillLike size={22} color="#fe7373" /> : <AiFillDislike size={22} color="#6F6CFF" />}
         </Name>
-        <Text size="s" weight="normal" variant="white">
+        <Text size="xs" weight="normal" variant="white">
           {new Date(createdDate).toLocaleDateString()}
         </Text>
       </Title>

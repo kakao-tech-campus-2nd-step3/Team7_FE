@@ -5,7 +5,9 @@ export type BannerData = {
   bannerImg: string;
   title: string;
 };
-
+export type BannerResponse = {
+  banners: [BannerData];
+};
 export type InfluencerData = {
   influencerId: number;
   influencerName: string;
@@ -22,6 +24,34 @@ export type SpotData = {
     placeId: number;
     placeName: string;
   };
+};
+export type PageableData = {
+  totalPages: 0;
+  totalElements: 0;
+  size: 0;
+  content: [SpotData];
+  number: 0;
+  sort: {
+    empty: true;
+    sorted: true;
+    unsorted: true;
+  };
+  numberOfElements: 0;
+  pageable: {
+    offset: 0;
+    sort: {
+      empty: true;
+      sorted: true;
+      unsorted: true;
+    };
+    paged: true;
+    pageNumber: 0;
+    pageSize: 0;
+    unpaged: true;
+  };
+  first: true;
+  last: true;
+  empty: true;
 };
 
 export type AddressData = {
@@ -40,6 +70,23 @@ export type PlaceData = {
   latitude?: string;
   likes: boolean;
 };
+
+export type LocationData = {
+  topLeftLongitude: number;
+  topLeftLatitude: number;
+  bottomRightLongitude: number;
+  bottomRightLatitude: number;
+};
+
+export type FilterParams = {
+  categories: string[];
+  influencers: string[];
+};
+
+export type PlaceList = {
+  places: PlaceInfo[];
+};
+
 export type PlaceInfo = {
   placeId: number;
   placeName: string;
@@ -66,16 +113,16 @@ export type PlaceLikes = {
 };
 
 export type FacilityInfo = {
-  wifi: boolean;
-  pet: boolean;
-  parking: boolean;
-  forDisabled: boolean;
-  nursery: boolean;
-  smokingRoom: boolean;
+  wifi?: string;
+  pet?: string;
+  parking?: string;
+  forDisabled?: string;
+  nursery?: string;
+  smokingRoom?: string;
 };
 
 export type Menu = {
-  price: number;
+  price: string;
   recommend: boolean;
   menu: string;
 };
@@ -89,7 +136,6 @@ export type ReviewData = {
 };
 
 export type OpenHourData = {
-  periodName: string;
   periodList: {
     timeName: string;
     timeSE: string;
@@ -100,4 +146,47 @@ export type OpenHourData = {
     weekAndDay: string;
     temporaryHolidays: boolean;
   }[];
+};
+export type RequestInfluencerLike = {
+  influencerId: number;
+  likes: boolean;
+};
+export type UserInfoData = {
+  nickname: string;
+};
+export type InfluencerResponse = {
+  influencers: [InfluencerData];
+};
+export type UserPlaceData = {
+  placeId: number;
+  placeName: string;
+  imageUrl: string;
+  influencer: string;
+  likes: boolean;
+};
+export type UserPlaceResponse = {
+  places: [UserPlaceData];
+};
+export type RequestPlaceLike = {
+  placeId: number;
+  likes: boolean;
+};
+export type UserReviewData = {
+  reviewId: number;
+  userNickname: string;
+  place: {
+    placeId: number;
+    imgUrl: string;
+    address: {
+      address1: string;
+      address2: string;
+      address3: string;
+    };
+  };
+  likes: boolean;
+  comment: string;
+  createdDate: Date;
+};
+export type UserReviewResponse = {
+  reviews: [UserReviewData];
 };

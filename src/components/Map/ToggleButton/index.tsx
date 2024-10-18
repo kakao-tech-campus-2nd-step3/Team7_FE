@@ -67,7 +67,7 @@ const ButtonText = styled.span<{ isActive: boolean }>`
   font-weight: 700;
   font-size: 16px;
   color: ${(props) => (props.isActive ? '#004BFE' : '#202020')};
-  ${(props) => (props.isActive ? 'left: 28px; right: 41px;' : 'left: 0px; right: 0px; text-align: center;')}
+  ${(props) => (props.isActive ? 'left: 20%; right: 30%;' : 'left: 0px; right: 0px; text-align: center;')}
 `;
 
 const CheckIconWrapper = styled.div`

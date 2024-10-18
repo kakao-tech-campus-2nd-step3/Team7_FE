@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 import { Paragraph } from '@/components/common/typography/Paragraph';
 
-import useExtractYoutubeVideoId from '@/hooks/useExtractYoutube';
+import useExtractYoutubeVideoId from '@/libs/youtube/useExtractYoutube';
 import { SpotData } from '@/types';
 
 export default function SpotItem({ videoId, videoAlias, videoUrl, place }: SpotData) {
@@ -15,10 +15,10 @@ export default function SpotItem({ videoId, videoAlias, videoUrl, place }: SpotD
         src={`https://img.youtube.com/vi/${useExtractYoutubeVideoId(videoUrl)}/maxresdefault.jpg`}
         alt={String(videoId)}
       />
-      <Paragraph size="l" weight="bold" variant="white">
+      <Paragraph size="m" weight="bold" variant="white">
         {videoAlias}
       </Paragraph>
-      <Paragraph size="m" weight="normal" variant="white">
+      <Paragraph size="xs" weight="normal" variant="white">
         <FaMapMarkerAlt size={20} color="#55EBFF" />
         {place.placeName}
       </Paragraph>
@@ -26,8 +26,8 @@ export default function SpotItem({ videoId, videoAlias, videoUrl, place }: SpotD
   );
 }
 const Wrapper = styled(Link)`
-  width: 426px;
-  height: 360px;
+  width: 340px;
+  height: 304px;
   display: flex;
   flex-direction: column;
   align-content: end;
@@ -39,9 +39,9 @@ const Wrapper = styled(Link)`
 `;
 
 const Image = styled.img`
-  width: 426px;
-  height: 240px;
+  width: 340px;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-radius: 6px;
 `;

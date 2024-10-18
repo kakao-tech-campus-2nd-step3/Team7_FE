@@ -5,19 +5,13 @@ import styled from 'styled-components';
 import Button from '@/components/common/Button';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 
-export default function VisitModal({
-  placeName,
-  setVisitModal,
-}: {
-  placeName: string;
-  setVisitModal: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
-  const handleModalClick = (event: React.MouseEvent) => {
+export default function VisitModal({ placeName, onClose }: { placeName: string; onClose: () => void }) {
+  const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
   return (
-    <Overlay onClick={() => setVisitModal(false)}>
-      <Wrapper onClick={(e) => handleModalClick(e)}>
+    <Overlay onClick={() => onClose()}>
+      <Wrapper onClick={handleModalClick}>
         <DescriptionSection>
           <FcInfo size={180} />
           <Paragraph size="l" weight="normal">
@@ -27,13 +21,13 @@ export default function VisitModal({
         </DescriptionSection>
         <BtnContainer>
           <Button
-            theme="blackOutline"
+            variant="blackOutline"
             style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-            onClick={() => setVisitModal(false)}
+            onClick={() => onClose()}
           >
             취소
           </Button>
-          <Button theme="kakao" style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}>
+          <Button variant="kakao" style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}>
             확인
           </Button>
         </BtnContainer>
@@ -51,6 +45,7 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 100;
 `;
 const Wrapper = styled.div`
   position: fixed;
@@ -58,11 +53,13 @@ const Wrapper = styled.div`
   transform: translateX(-50%);
   width: 500px;
   height: 600px;
+  border-radius: 8px;
   background-color: white;
-  text-align: center;
+
   display: flex;
-  align-items: center;
   flex-direction: column;
+  text-align: center;
+  align-items: center;
   gap: 60px;
 `;
 const DescriptionSection = styled.div`
