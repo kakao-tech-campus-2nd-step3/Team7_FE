@@ -24,6 +24,7 @@ export default function MapPage() {
     bottomRightLongitude: 0,
   });
   const [shouldFetchPlaces, setShouldFetchPlaces] = useState(false);
+  const [initialLocation, setInitialLocation] = useState(false);
 
   const filters = useMemo(
     () => ({
@@ -68,6 +69,13 @@ export default function MapPage() {
     setShouldFetchPlaces(true);
   }, []);
 
+  const handleInitialLocation = useCallback((value: boolean) => {
+    setInitialLocation(value);
+    if (value) {
+      setShouldFetchPlaces(true);
+    }
+  }, []);
+
   const handleFetchComplete = useCallback(() => {
     setShouldFetchPlaces(false);
   }, []);
@@ -97,6 +105,7 @@ export default function MapPage() {
         onBoundsChange={handleBoundsChange}
         onCenterChange={handleCenterChange}
         onSearchNearby={handleSearchNearby}
+        onInitialLocation={handleInitialLocation}
         center={center}
         places={filteredPlaces}
       />
@@ -107,6 +116,7 @@ export default function MapPage() {
         center={center}
         shouldFetchPlaces={shouldFetchPlaces}
         onFetchComplete={handleFetchComplete}
+        initialLocation={initialLocation}
       />
     </PageContainer>
   );
