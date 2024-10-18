@@ -1,7 +1,9 @@
-import { FaHeart } from 'react-icons/fa';
 import styled from 'styled-components';
+import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
+import { useCallback, useState } from 'react';
 import { Text } from '@/components/common/typography/Text';
 import { PlaceData } from '@/types';
+import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
 
 interface PlaceItemProps extends PlaceData {
   onClick: () => void;
@@ -19,6 +21,29 @@ export default function PlaceItem({
   menuImgUrl,
   onClick,
 }: PlaceItemProps) {
+  const [isLike, setIsLike] = useState(likes);
+  const { mutate: postLike } = usePostPlaceLike();
+  const handleClickLike = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const newLikeStatus = !isLike;
+      console.log('New like status:', newLikeStatus);
+      postLike(
+        { placeId, likes: newLikeStatus },
+        {
+          onSuccess: () => {
+            console.log('성공');
+            setIsLike(newLikeStatus);
+          },
+          onError: (error) => {
+            console.error('Error:', error);
+          },
+        },
+      );
+    },
+    [isLike, placeId, postLike],
+  );
   return (
     <PlaceCard key={placeId} onClick={onClick}>
       <PlaceImage src={menuImgUrl} alt={placeName} />
@@ -38,7 +63,9 @@ export default function PlaceItem({
             </Text>
           </InfluencerName>
         </PlaceDetails>
-        <HeartIcon $isLiked={likes > 0} />
+        <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+          {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+        </LikeIcon>
       </CardContent>
     </PlaceCard>
   );
@@ -89,17 +116,12 @@ const InfluencerName = styled.div`
   top: 70px;
 `;
 
-const HeartIcon = styled(FaHeart)<{ $isLiked: boolean }>`
+const LikeIcon = styled.div`
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 30px;
+  height: 30px;
   right: 10px;
-  top: 10px;
-  color: ${(props) => (props.$isLiked ? '#fe7373' : '#9ca3af')};
+  top: 12px;
+  z-index: 100;
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    color: #ef4444;
-  }
 `;
