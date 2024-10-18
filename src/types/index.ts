@@ -69,7 +69,7 @@ export type PlaceData = {
   menuImgUrl: string;
   longitude: string;
   latitude: string;
-  likes: number;
+  likes: boolean;
 };
 
 export type LocationData = {
