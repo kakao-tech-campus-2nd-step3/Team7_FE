@@ -13,6 +13,7 @@
 ├── src
 │   ├── api
 │   │   ├── hooks       // api 호출과 관련된 custom hook
+    │   ├── libs       // react에서 제공하는 기능에 의존하지 않는 함수
 │   │   ├── instance    // 기본 api의 axios instance
 │   ├── assets          // 이미지, 폰트 등 미디어 파일
 │   ├── components      // 주요 컴포넌트

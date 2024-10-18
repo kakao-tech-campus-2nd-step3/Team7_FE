@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
@@ -10,19 +10,14 @@ import { Text } from '@/components/common/typography/Text';
 import Logo from '@/assets/images/Logo.svg';
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => Cookies.get('access_token'));
   const location = useLocation();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const accessToken = Cookies.get('access_token');
-    setIsLoggedIn(!!accessToken);
-  }, []);
 
   const handleLogout = () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
-    setIsLoggedIn(false);
+    setIsLoggedIn(undefined);
     navigate('/');
   };
 
