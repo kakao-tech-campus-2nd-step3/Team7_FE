@@ -3,14 +3,10 @@ name: CI/CD for feat, develop and Master branches
 on:
   push:
     branches:
-      - 'feat/**'
-      - 'refactor/**'
-      - develop
-      - Master
+      - '**'
 
 jobs:
   lint-and-test:
-    if: startsWith(github.ref, 'refs/heads/feat/') || startsWith(github.ref, 'refs/heads/refactor/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

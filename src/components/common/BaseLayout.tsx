@@ -58,8 +58,8 @@ const TitleContainer = styled.div`
   color: white;
 `;
 const MoreBtn = styled.button`
-  font-size: 18px;
-  color: white;
+  font-size: 14px;
+  color: #b0b0b0;
   background: none;
   border: none;
   cursor: pointer;

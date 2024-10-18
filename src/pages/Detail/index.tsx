@@ -63,7 +63,13 @@ export default function DetailPage() {
       </TapContainer>
       <InfoContainer>
         {activeTab === 'info' ? (
-          <InfoTap facilityInfo={infoData.facilityInfo} openHour={infoData.openHour} menuInfos={infoData.menuInfos} />
+          <InfoTap
+            facilityInfo={infoData.facilityInfo}
+            openHour={infoData.openHour}
+            menuInfos={infoData.menuInfos}
+            longitude={infoData.longitude}
+            latitude={infoData.latitude}
+          />
         ) : (
           <Suspense fallback={<Loading size={50} />}>
             <ReviewTap placeLikes={infoData.placeLikes} id={id} />

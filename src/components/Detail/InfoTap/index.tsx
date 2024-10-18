@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import styled from 'styled-components';
-
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 
 import FacilitySign from './FacilitySign';
@@ -19,9 +19,15 @@ type Props = {
     menuList: [Menu];
     timeExp: Date;
   };
+  longitude: string;
+  latitude: string;
 };
-export default function InfoTap({ facilityInfo, openHour, menuInfos }: Props) {
+export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, latitude }: Props) {
   const [moreMenu, setMoreMenu] = useState(false);
+  const lat = Number(latitude);
+  const lng = Number(longitude);
+  console.log(lat, lng);
+
   return (
     <Wrapper>
       <FacilitySign facilityInfo={facilityInfo} />
@@ -41,7 +47,7 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos }: Props) {
           </Text>
         </TitleContainer>
         <MenuContainer>
-          <MenuModal images={menuInfos.menuImgUrls} />
+          {menuInfos.menuImgUrls.length > 0 && <MenuModal images={menuInfos.menuImgUrls} />}
           <MenuList lists={menuInfos.menuList.slice(0, moreMenu ? menuInfos.menuList.length : 4)} />
           <MoreMenuBtn onClick={() => setMoreMenu(!moreMenu)}>{moreMenu ? '메뉴 접기' : '메뉴 더보기'}</MoreMenuBtn>
         </MenuContainer>
@@ -49,7 +55,26 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos }: Props) {
       <Paragraph size="s" weight="bold" variant="white">
         지도 보기
       </Paragraph>
-      {/* todo - <Map /> */}
+      <MapContainer>
+        <Map
+          center={{
+            lat,
+            lng,
+          }}
+          style={{
+            width: '90%',
+            height: '410px',
+          }}
+          level={3}
+        >
+          <MapMarker
+            position={{
+              lat,
+              lng,
+            }}
+          />
+        </Map>
+      </MapContainer>
     </Wrapper>
   );
 }
@@ -81,4 +106,10 @@ const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: end;
+`;
+
+const MapContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 120px;
 `;

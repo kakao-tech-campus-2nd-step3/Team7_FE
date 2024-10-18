@@ -2,9 +2,9 @@ import { Outlet } from 'react-router-dom';
 import { Suspense } from 'react';
 import styled from 'styled-components';
 
-import Footer from './Footer';
-import Header, { HEADER_HEIGHT } from './Header';
-import Loading from './Loading';
+import Footer from '@/components/common/layouts/Footer';
+import Header from '@/components/common/layouts/Header';
+import Loading from '@/components/common/layouts/Loading';
 
 export default function MainLayout() {
   return (
@@ -14,8 +14,8 @@ export default function MainLayout() {
         <Suspense fallback={<Loading size={50} />}>
           <Outlet />
         </Suspense>
-        <Footer />
       </InnerWrapper>
+      <Footer />
     </Wrapper>
   );
 }
@@ -28,8 +28,6 @@ const Wrapper = styled.div`
 
 const InnerWrapper = styled.div`
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin-top: calc(${HEADER_HEIGHT}px + 26px);
+  margin-top: 26px;
+  flex-grow: 1;
 `;

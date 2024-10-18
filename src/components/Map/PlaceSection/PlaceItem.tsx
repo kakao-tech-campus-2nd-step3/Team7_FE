@@ -1,19 +1,52 @@
-import { FaHeart } from 'react-icons/fa';
 import styled from 'styled-components';
+import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
+import { useCallback, useState } from 'react';
 import { Text } from '@/components/common/typography/Text';
-import { PlaceInfo } from '@/types';
+import { PlaceData } from '@/types';
+import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
 
-interface PlaceItemProps extends PlaceInfo {
+interface PlaceItemProps extends PlaceData {
   onClick: () => void;
 }
-const getFullAddress = (addr: PlaceInfo['address']) => {
+const getFullAddress = (addr: PlaceData['address']) => {
   return [addr.address1, addr.address2, addr.address3].filter(Boolean).join(' ');
 };
 
-export default function PlaceItem({ placeId, placeName, address, influencerName, likes, onClick }: PlaceItemProps) {
+export default function PlaceItem({
+  placeId,
+  placeName,
+  address,
+  influencerName,
+  likes,
+  menuImgUrl,
+  onClick,
+}: PlaceItemProps) {
+  const [isLike, setIsLike] = useState(likes);
+  const { mutate: postLike } = usePostPlaceLike();
+  const handleClickLike = useCallback(
+    (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      event.preventDefault();
+      const newLikeStatus = !isLike;
+      console.log('New like status:', newLikeStatus);
+      postLike(
+        { placeId, likes: newLikeStatus },
+        {
+          onSuccess: () => {
+            console.log('성공');
+            setIsLike(newLikeStatus);
+          },
+          onError: (error) => {
+            console.error('Error:', error);
+          },
+        },
+      );
+    },
+    [isLike, placeId, postLike],
+  );
   return (
     <PlaceCard key={placeId} onClick={onClick}>
-      <PlaceImage src="https://via.placeholder.com/100" alt={placeName} />
+      <PlaceImage src={menuImgUrl} alt={placeName} />
       <CardContent>
         <PlaceDetails>
           <Text size="l" weight="bold" variant="white">
@@ -30,35 +63,38 @@ export default function PlaceItem({ placeId, placeName, address, influencerName,
             </Text>
           </InfluencerName>
         </PlaceDetails>
-        <HeartIcon $isLiked={likes} />
+        <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+          {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+        </LikeIcon>
       </CardContent>
     </PlaceCard>
   );
 }
 
 const PlaceCard = styled.div`
-  width: 520px;
+  width: 460px;
   height: 160px;
   position: relative;
   display: flex;
+  box-sizing: border-box;
 `;
 
 const PlaceImage = styled.img`
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   left: 10px;
-  top: 20px;
+  top: 30px;
   border-radius: 30px;
   object-fit: cover;
 `;
 
 const CardContent = styled.div`
   position: absolute;
-  width: 350px;
-  height: 120px;
-  left: 160px;
-  top: 20px;
+  width: 320px;
+  height: 100px;
+  left: 130px;
+  top: 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -80,17 +116,12 @@ const InfluencerName = styled.div`
   top: 70px;
 `;
 
-const HeartIcon = styled(FaHeart)<{ $isLiked: boolean }>`
+const LikeIcon = styled.div`
   position: absolute;
-  width: 32px;
+  width: 30px;
   height: 30px;
-  left: 314px;
-  top: 4px;
-  color: ${(props) => (props.$isLiked ? '#fe7373' : '#9ca3af')};
+  right: 10px;
+  top: 12px;
+  z-index: 100;
   cursor: pointer;
-  transition: color 0.2s ease-in-out;
-
-  &:hover {
-    color: #ef4444;
-  }
 `;

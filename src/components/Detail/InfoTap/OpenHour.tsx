@@ -4,24 +4,50 @@ import { Text } from '@/components/common/typography/Text';
 
 import { OpenHourData } from '@/types';
 
+interface Period {
+  timeName: string;
+  timeSE: string;
+  dayOfWeek: string;
+}
+
 export default function OpenHour({ openHour }: { openHour: OpenHourData }) {
+  const periodMap: { [key: string]: Period[] } = {};
+
+  openHour.periodList.forEach((list: Period) => {
+    if (!periodMap[list.dayOfWeek]) {
+      periodMap[list.dayOfWeek] = [];
+    }
+    periodMap[list.dayOfWeek].push(list);
+  });
   return (
     <Wrapper>
-      {openHour.periodList.map((list) => (
-        <HourItem key={list.dayOfWeek}>
-          <Text size="xs" weight="bold" variant="white">
-            {list.dayOfWeek} :
-          </Text>
-          <Text size="xs" weight="normal" variant="white">
-            {list.timeSE}
-          </Text>
+      {Object.entries(periodMap).map(([day, periods]) => (
+        <HourItem key={day}>
+          <DayOfWeek>{day}</DayOfWeek>
+          <TimeWrapper>
+            {periods.map((period) => (
+              <TimeItem key={period.timeName}>
+                <Text size="xs" weight="normal" variant="white">
+                  {period.timeSE}
+                </Text>
+                {period.timeName !== '영업시간' && (
+                  <Text size="xs" weight="bold" variant="white">
+                    {period.timeName}
+                  </Text>
+                )}
+              </TimeItem>
+            ))}
+          </TimeWrapper>
         </HourItem>
       ))}
       {openHour.offdayList.map((list) => (
         <OffItem key={list.weekAndDay}>
-          <Text size="xs" weight="normal" variant="white">
-            {list.holidayName}
-          </Text>
+          {list.temporaryHolidays === 'Y' && (
+            <Text size="xs" weight="bold" variant="#ff2d2d">
+              임시{' '}
+            </Text>
+          )}
+          <DayOfWeek>{list.holidayName}</DayOfWeek>
           <Text size="xs" weight="bold" variant="white">
             {list.weekAndDay}
           </Text>
@@ -34,16 +60,28 @@ export default function OpenHour({ openHour }: { openHour: OpenHourData }) {
 const Wrapper = styled.div`
   margin: 10px 0px;
   padding: 20px;
+  line-height: 170%;
 `;
 
 const HourItem = styled.div`
   display: flex;
-  gap: 8px;
-  line-height: 150%;
+  gap: 10px;
+`;
+const DayOfWeek = styled.p`
+  font-size: 16px;
+  color: #dcdcdc;
+  width: 50px;
 `;
 const OffItem = styled.div`
   margin: 10px 0px;
   display: flex;
   gap: 8px;
-  line-height: 150%;
+`;
+const TimeItem = styled.div`
+  display: flex;
+  gap: 6px;
+`;
+const TimeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
 `;

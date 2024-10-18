@@ -9,23 +9,23 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 export default function UserReviewItem({ likes, comment, userNickname, place, createdDate }: UserReviewData) {
   const address = `${place.address.address1} ${place.address.address2} ${place.address.address3}`;
   return (
-    <Wrapper to={`detail/${place.placeId}`}>
+    <Wrapper to={`/detail/${place.placeId}`}>
       <Image src={place.imgUrl} alt={userNickname} />
       <TextContainer>
         <Title>
-          <Text size="m" weight="bold" variant="white">
+          <Text size="s" weight="bold" variant="white">
             {userNickname}
           </Text>
           {likes ? <AiFillLike size={26} color="#fe7373" /> : <AiFillDislike size={26} color="#6F6CFF" />}
         </Title>
-        <Paragraph size="xs" weight="normal" variant="white">
+        <Paragraph size="xs" weight="normal" variant="#9e9e9e">
           {address}
         </Paragraph>
         <Title>
-          <Paragraph size="s" weight="normal" variant="white">
+          <Paragraph size="xs" weight="normal" variant="white">
             {comment}
           </Paragraph>
-          <Text size="s" weight="normal" variant="white">
+          <Text size="xs" weight="normal" variant="white">
             {new Date(createdDate).toLocaleDateString()}
           </Text>
         </Title>
@@ -44,6 +44,7 @@ const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-content: center;
+  justify-content: center;
   gap: 8px;
 `;
 const Image = styled.img`

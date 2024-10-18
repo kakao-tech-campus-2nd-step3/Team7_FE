@@ -24,13 +24,13 @@ export default function InfluencerItem({
       event.stopPropagation();
       event.preventDefault();
       const newLikeStatus = !isLike;
-      setIsLike(newLikeStatus);
       console.log('New like status:', newLikeStatus);
       postLike(
         { influencerId, likes: newLikeStatus },
         {
           onSuccess: () => {
             console.log('성공');
+            setIsLike(newLikeStatus);
           },
           onError: (error) => {
             console.error('Error:', error);
@@ -43,6 +43,7 @@ export default function InfluencerItem({
 
   return (
     <Wrapper to={`/influencer/${influencerId}`}>
+      {/* 경로 수정필요 */}
       <ImageContainer>
         <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
           {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
