@@ -3,19 +3,25 @@ import styled from 'styled-components';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 
 import { Menu } from '@/types';
+import { Text } from '@/components/common/typography/Text';
 
 export default function MenuList({ lists }: { lists: Menu[] }) {
   return (
     <Wrapper>
       {lists.map((list) => (
         <MenuItem key={list.menuName}>
-          <MenuIamge src={list.menuImgUrl} alt={list.menuName} />
+          {list.menuImgUrl && <MenuIamge src={list.menuImgUrl} alt={list.menuName} />}
           <MenuContent>
-            <Paragraph size="s" weight="normal" variant="white">
+            <Text size="s" weight="normal" variant="white">
               {list.menuName}
-            </Paragraph>
+            </Text>
+            {list.recommend && (
+              <Text size="s" weight="bold" variant="mint">
+                {` Pick !`}
+              </Text>
+            )}
             <Paragraph size="xs" weight="bold" variant="white">
-              {list.price}
+              {Number(list.price).toLocaleString()}
             </Paragraph>
             <Paragraph size="xs" weight="normal" variant="white">
               {list.description}

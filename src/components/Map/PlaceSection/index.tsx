@@ -17,6 +17,7 @@ interface PlaceSectionProps {
   center: { lat: number; lng: number };
   shouldFetchPlaces: boolean;
   onFetchComplete: () => void;
+  initialLocation: boolean;
 }
 
 export default function PlaceSection({
@@ -26,6 +27,7 @@ export default function PlaceSection({
   center,
   shouldFetchPlaces,
   onFetchComplete,
+  initialLocation,
 }: PlaceSectionProps) {
   const navigate = useNavigate();
   const previousPlacesRef = useRef<PlaceData[]>([]);
@@ -58,12 +60,12 @@ export default function PlaceSection({
   }, [places, filters]);
 
   useEffect(() => {
-    if (shouldFetchPlaces) {
+    if (initialLocation || shouldFetchPlaces) {
       refetch().then(() => {
         onFetchComplete();
       });
     }
-  }, [shouldFetchPlaces, refetch, onFetchComplete]);
+  }, [shouldFetchPlaces, refetch, onFetchComplete, initialLocation]);
 
   useEffect(() => {
     if (!isLoading) {

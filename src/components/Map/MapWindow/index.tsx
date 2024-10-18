@@ -9,11 +9,19 @@ interface MapWindowProps {
   onBoundsChange: (bounds: LocationData) => void;
   onCenterChange: (center: { lat: number; lng: number }) => void;
   onSearchNearby: () => void;
+  onInitialLocation: (value: boolean) => void;
   center: { lat: number; lng: number };
   places: PlaceData[];
 }
 
-export default function MapWindow({ onBoundsChange, onCenterChange, onSearchNearby, center, places }: MapWindowProps) {
+export default function MapWindow({
+  onBoundsChange,
+  onCenterChange,
+  onSearchNearby,
+  onInitialLocation,
+  center,
+  places,
+}: MapWindowProps) {
   const mapRef = useRef<kakao.maps.Map | null>(null);
   const [mapCenter, setMapCenter] = useState(center);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -68,6 +76,7 @@ export default function MapWindow({ onBoundsChange, onCenterChange, onSearchNear
           };
           setMapCenter(newCenter);
           setUserLocation(newCenter);
+          onInitialLocation(true);
           if (mapRef.current) {
             mapRef.current.setCenter(new kakao.maps.LatLng(newCenter.lat, newCenter.lng));
             onCenterChange(newCenter);
@@ -81,7 +90,6 @@ export default function MapWindow({ onBoundsChange, onCenterChange, onSearchNear
     } else {
       console.warn('Geolocation is not supported by this browser.');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

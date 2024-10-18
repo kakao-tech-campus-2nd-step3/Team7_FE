@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
 
@@ -12,22 +12,44 @@ import Logo from '@/assets/images/Logo.svg';
 import { BASE_URL } from '@/api/instance';
 
 type LoginModalProps = {
-  children: (openModal: () => void) => React.ReactNode;
+  children?: (openModal: () => void) => React.ReactNode;
   currentPath: string;
+  immediateOpen?: boolean;
+  onClose?: () => void;
+  onLoginSuccess?: () => void;
 };
 
-export default function LoginModal({ children, currentPath }: LoginModalProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function LoginModal({
+  children,
+  currentPath,
+  immediateOpen = false,
+  onClose,
+  onLoginSuccess,
+}: LoginModalProps) {
+  const [isOpen, setIsOpen] = useState(immediateOpen);
+
+  useEffect(() => {
+    if (immediateOpen) setIsOpen(true);
+  }, [immediateOpen]);
 
   const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
-
+  const closeModal = () => {
+    setIsOpen(false);
+    if (onClose) onClose();
+  };
   const handleKakaoLogin = () => {
     localStorage.setItem('redirectPath', currentPath);
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
   };
 
-  if (!isOpen) {
+  useEffect(() => {
+    const isLoginSuccessful = new URLSearchParams(window.location.search).get('success') === 'true';
+    if (isLoginSuccessful && onLoginSuccess) {
+      onLoginSuccess();
+    }
+  }, [onLoginSuccess]);
+
+  if (!isOpen && children) {
     return <>{children(openModal)}</>;
   }
 

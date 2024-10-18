@@ -15,8 +15,8 @@ export const detailHandlers = [
       },
       category: '맛집',
       influencerName: '성시경',
-      longitude: '35.123',
-      latitude: '135.11',
+      longitude: '126.570667',
+      latitude: '33.450701',
       likes: true,
       facilityInfo: {
         wifi: 'Y',
@@ -35,7 +35,7 @@ export const detailHandlers = [
         menuList: [
           {
             price: '14000',
-            recommend: false,
+            recommend: true,
             menuName: '료코카츠',
             menuImgUrl: 'https://via.placeholder.com/100',
             description: '료코만의 감성을 담은',
@@ -58,46 +58,46 @@ export const detailHandlers = [
             price: '3020',
             recommend: false,
             menuName: '리조또',
-            menuImgUrl: 'https://via.placeholder.com/100',
+            menuImgUrl: '',
             description: '국내산 돼지 안심을 료코만의 방식으로 숙성 및 조리하여 육즙과 부드러움의 특징을 살린 메뉴',
           },
         ],
         timeExp: new Date('2024-10-01T12:00:00Z'),
       },
       openHour: {
-        periodName: '영업시간',
         periodList: [
           {
             timeName: '영업시간',
-            timeSE: '10:00 - 22:00',
-            dayOfWeek: '월',
+            timeSE: '10:00 ~ 20:00',
+            dayOfWeek: '매일',
+          },
+
+          {
+            timeName: '휴게시간',
+            timeSE: '10:00 - 12:00',
+            dayOfWeek: '월~금',
           },
           {
-            timeName: '영업시간',
-            timeSE: '10:00 - 22:00',
-            dayOfWeek: '화',
+            timeName: '라스트오더',
+            timeSE: '- 12:00',
+            dayOfWeek: '월~금',
           },
           {
-            timeName: '영업시간',
-            timeSE: '10:00 - 22:00',
-            dayOfWeek: '수',
+            timeName: '휴게시간',
+            timeSE: '13:10 - 13:40',
+            dayOfWeek: '토, 일',
           },
           {
-            timeName: '영업시간',
-            timeSE: '10:00 - 22:00',
-            dayOfWeek: '목',
-          },
-          {
-            timeName: '영업시간',
-            timeSE: '10:00 - 22:00',
-            dayOfWeek: '금',
+            timeName: '라스트오더',
+            timeSE: '- 11:20',
+            dayOfWeek: '토, 일',
           },
         ],
         offdayList: [
           {
-            holidayName: '공휴일',
+            holidayName: '휴무일',
             weekAndDay: '토',
-            temporaryHolidays: 'N',
+            temporaryHolidays: 'Y',
           },
         ],
       },
