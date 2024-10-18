@@ -15,8 +15,8 @@ export const detailHandlers = [
       },
       category: '맛집',
       influencerName: '성시경',
-      longitude: '35.123',
-      latitude: '135.11',
+      longitude: '126.570667',
+      latitude: '33.450701',
       likes: true,
       facilityInfo: {
         wifi: 'Y',
