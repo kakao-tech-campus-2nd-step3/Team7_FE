@@ -1,27 +1,44 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
-import { PlaceInfo, LocationData } from '@/types';
+import { PlaceData, LocationData } from '@/types';
 import { useGetPlaceList } from '@/api/hooks/useGetPlaceList';
+import Loading from '@/components/common/layouts/Loading';
 
 interface PlaceSectionProps {
   mapBounds: LocationData;
   filters: {
     categories: string[];
     influencers: string[];
-    location: { main: string; sub?: string };
+    location: { main: string; sub?: string; lat?: number; lng?: number };
   };
-  onPlacesUpdate: (places: PlaceInfo[]) => void;
+  onPlacesUpdate: (places: PlaceData[]) => void;
+  center: { lat: number; lng: number };
+  shouldFetchPlaces: boolean;
+  onFetchComplete: () => void;
+  initialLocation: boolean;
 }
 
-export default function PlaceSection({ mapBounds, filters, onPlacesUpdate }: PlaceSectionProps) {
+export default function PlaceSection({
+  mapBounds,
+  filters,
+  onPlacesUpdate,
+  center,
+  shouldFetchPlaces,
+  onFetchComplete,
+  initialLocation,
+}: PlaceSectionProps) {
   const navigate = useNavigate();
-  const { data: placeList } = useGetPlaceList(mapBounds, filters);
+  const previousPlacesRef = useRef<PlaceData[]>([]);
+
+  const { data: places, isLoading, isError, error, refetch } = useGetPlaceList(mapBounds, filters, center, false);
 
   const filteredPlaces = useMemo(() => {
-    if (!placeList) return [];
-    const filtered = placeList.places.filter((place: PlaceInfo) => {
+    const currentPlaces = places || previousPlacesRef.current;
+    if (!currentPlaces) return [];
+
+    const filtered = currentPlaces.filter((place: PlaceData) => {
       const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
       const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
       const locationMatch = (() => {
@@ -37,13 +54,31 @@ export default function PlaceSection({ mapBounds, filters, onPlacesUpdate }: Pla
       })();
       return categoryMatch && influencerMatch && locationMatch;
     });
-    onPlacesUpdate(filtered);
+
+    previousPlacesRef.current = filtered;
     return filtered;
-  }, [placeList, filters, onPlacesUpdate]);
+  }, [places, filters]);
+
+  useEffect(() => {
+    if (initialLocation || shouldFetchPlaces) {
+      refetch().then(() => {
+        onFetchComplete();
+      });
+    }
+  }, [shouldFetchPlaces, refetch, onFetchComplete, initialLocation]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      onPlacesUpdate(filteredPlaces);
+    }
+  }, [filteredPlaces, onPlacesUpdate, isLoading]);
 
   const handlePlaceClick = (placeId: number) => {
     navigate(`/detail/${placeId}`);
   };
+
+  if (isLoading) return <Loading size={50} />;
+  if (isError) return <div>Error: {(error as Error).message}</div>;
 
   return (
     <ListContainer>

@@ -54,7 +54,7 @@ export type PageableData = {
   empty: true;
 };
 
-export type AddressData = {
+export type AddressInfo = {
   address1: string;
   address2: string;
   address3: string;
@@ -63,11 +63,12 @@ export type AddressData = {
 export type PlaceData = {
   placeId: number;
   placeName: string;
-  address: AddressData;
-  category?: string;
+  address: AddressInfo;
+  category: string;
   influencerName: string;
-  longitude?: string;
-  latitude?: string;
+  menuImgUrl: string;
+  longitude: string;
+  latitude: string;
   likes: boolean;
 };
 
@@ -84,13 +85,13 @@ export type FilterParams = {
 };
 
 export type PlaceList = {
-  places: PlaceInfo[];
+  places: PlaceData[];
 };
 
 export type PlaceInfo = {
   placeId: number;
   placeName: string;
-  address: AddressData;
+  address: AddressInfo;
   category: string;
   influencerName: string;
   longitude: string;
@@ -124,7 +125,9 @@ export type FacilityInfo = {
 export type Menu = {
   price: string;
   recommend: boolean;
-  menu: string;
+  menuName: string;
+  menuImgUrl: string;
+  description: string;
 };
 
 export type ReviewData = {
@@ -144,7 +147,7 @@ export type OpenHourData = {
   offdayList: {
     holidayName: string;
     weekAndDay: string;
-    temporaryHolidays: boolean;
+    temporaryHolidays: string;
   }[];
 };
 export type RequestInfluencerLike = {

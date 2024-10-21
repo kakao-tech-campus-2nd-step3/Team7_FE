@@ -40,16 +40,16 @@ export default function Footer() {
         <FooterInfo>
           <CompanyInfo>
             <Text size="xxs" weight="normal" variant="#979797">
-              (주)방금 그곳
+              (주) 쿠키 7개입
             </Text>
             <Text size="xxs" weight="normal" variant="#979797">
-              Copyright 2024. banggeumgugot Co.,Ltd. All rights reserved
+              Copyright 2024. sevenKookie Co.,Ltd. All rights reserved
             </Text>
             <Text size="xxs" weight="normal" variant="#979797">
               주소 : 대구광역시 북구 대학로 80
             </Text>
             <Text size="xxs" weight="normal" variant="#979797">
-              문의전화 : (053)123-12345 | 이메일 : abc@kakao.com
+              문의전화 : (053)123-12345 | 이메일 : inplace.kakao@gmail.com
             </Text>
             <Text size="xxs" weight="normal" variant="#979797">
               대표전화 : (053)777-7777 | FAX : (053)123-4567
@@ -81,17 +81,17 @@ export default function Footer() {
   );
 }
 
-const FooterContainer = styled.div`
+const FooterContainer = styled.footer`
   background: #2f2f2f;
   width: 100%;
   padding: 30px;
+  box-sizing: border-box;
 `;
 
 const FooterSection = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1080px;
 `;
 
 const FooterNav = styled.div`

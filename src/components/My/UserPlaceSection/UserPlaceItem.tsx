@@ -17,13 +17,13 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
       event.stopPropagation();
       event.preventDefault();
       const newLikeStatus = !isLike;
-      setIsLike(newLikeStatus);
       console.log('New like status:', newLikeStatus);
       postLike(
         { placeId, likes: newLikeStatus },
         {
           onSuccess: () => {
             console.log('성공');
+            setIsLike(newLikeStatus);
           },
           onError: (error) => {
             console.error('Error:', error);
