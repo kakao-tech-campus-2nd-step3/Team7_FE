@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { GrPrevious, GrNext } from 'react-icons/gr';
 
 import { useRef } from 'react';
-import InfluencerItem from './InfluencerItem';
+import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { InfluencerData } from '@/types';
 
 export default function InfluencerSection({ items }: { items: InfluencerData[] }) {
