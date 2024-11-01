@@ -4,6 +4,7 @@ import MainBanner from '@/components/Main/MainBanner';
 
 import { useGetMain } from '@/api/hooks/useGetMain';
 import SearchBar from '@/components/common/SearchBar';
+import BannerImg from '@/assets/images/bannerImg.png';
 
 const bannerData = {
   banners: [
@@ -11,44 +12,45 @@ const bannerData = {
       bannerId: 1,
       placeId: '1',
       description: '9.9 - 9.20',
-      bannerImg: 'https://via.placeholder.com/1000',
+      bannerImg: BannerImg,
       title: '도구리 팝업스토어',
     },
     {
       bannerId: 2,
       placeId: '2',
       description: '9.9 - 9.20',
-      bannerImg: 'https://via.placeholder.com/1000',
+      bannerImg: BannerImg,
       title: '숲속 캠핑',
     },
     {
       bannerId: 3,
       placeId: '3',
       description: '9.9 - 9.20',
-      bannerImg: 'https://via.placeholder.com/1000',
+      bannerImg: BannerImg,
       title: '도시 탐방',
     },
     {
       bannerId: 4,
       placeId: '4',
       description: '9.9 - 9.20',
-      bannerImg: 'https://via.placeholder.com/1000',
+      bannerImg: BannerImg,
       title: '산악 트레킹',
     },
     {
       bannerId: 5,
       placeId: '5',
       description: '9.9 - 9.20',
-      bannerImg: 'https://via.placeholder.com/1000',
+      bannerImg: BannerImg,
       title: '바다에서의 하루',
     },
   ],
 };
+const searchData = ['apple', 'banana', 'coding', 'javascript', '원티드', '프리온보딩', '프론트엔드'];
 export default function MainPage() {
   const [{ data: influencersData }, { data: coolVideoData }, { data: newVideoData }] = useGetMain();
   return (
     <Wrapper>
-      <SearchBar />
+      <SearchBar placeholder="인플루언서, 장소를 검색해주세요!" data={searchData} />
       <MainBanner items={bannerData.banners} />
       <BaseLayout
         type="influencer"
