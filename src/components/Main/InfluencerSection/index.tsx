@@ -2,15 +2,15 @@ import styled from 'styled-components';
 import { GrPrevious, GrNext } from 'react-icons/gr';
 
 import { useRef } from 'react';
-import InfluencerItem from './InfluencerItem';
+import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { InfluencerData } from '@/types';
 
 export default function InfluencerSection({ items }: { items: InfluencerData[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
-
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
-      const scrollAmount = direction === 'left' ? -248 : 248;
+      const someWidth = 200;
+      const scrollAmount = direction === 'left' ? -someWidth : someWidth;
       listRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -50,7 +50,7 @@ const ListContainer = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 30px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;

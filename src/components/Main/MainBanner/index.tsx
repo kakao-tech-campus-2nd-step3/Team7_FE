@@ -13,7 +13,7 @@ export default function MainBanner({ items }: { items: BannerData[] }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex === items.length - 1 ? 0 : prevIndex + 1));
-    }, 3000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [items.length]);
 
