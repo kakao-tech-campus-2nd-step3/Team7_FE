@@ -81,6 +81,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
+  margin-bottom: auto;
 
   &:hover {
     & > div:nth-child(2) {
