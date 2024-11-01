@@ -10,7 +10,8 @@ export default function SpotSection({ items }: { items: SpotData[] }) {
 
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
-      const scrollAmount = direction === 'left' ? -520 : 520;
+      const someWidth = 520;
+      const scrollAmount = direction === 'left' ? -someWidth : someWidth;
       listRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };

@@ -10,7 +10,8 @@ export default function UserPlaceSection({ items }: { items: UserPlaceData[] }) 
 
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
-      const scrollAmount = direction === 'left' ? -248 : 248;
+      const someWidth = 200;
+      const scrollAmount = direction === 'left' ? -someWidth : someWidth;
       listRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -50,7 +51,7 @@ const ListContainer = styled.div`
   overflow: hidden;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 30px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;

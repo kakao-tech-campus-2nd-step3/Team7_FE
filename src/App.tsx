@@ -11,6 +11,7 @@ import ChoicePage from '@/pages/Choice';
 import PrivatedRoute from '@/routes/component/PrivatedRoute';
 
 import GlobalStyle from './global';
+import SearchPage from './pages/Search';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="/influencer" element={<InfluencerPage />} />
             <Route path="/map" element={<MapPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route
               path="/my"
               element={
