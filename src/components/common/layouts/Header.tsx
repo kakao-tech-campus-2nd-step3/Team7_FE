@@ -64,7 +64,7 @@ export default function Header() {
               </Text>
             </NavItem>
             <LoginModal currentPath={location.pathname}>
-              {(openModal) => <LoginButton onClick={openModal}>로그인</LoginButton>}
+              {(openModal: () => void) => <LoginButton onClick={openModal}>로그인</LoginButton>}
             </LoginModal>
           </>
         )}
