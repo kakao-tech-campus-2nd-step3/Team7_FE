@@ -12,7 +12,7 @@ export default function InfluencerPage() {
       <Text size="l" weight="bold" variant="white">
         인플루언서
       </Text>
-      <SearchBar />
+      <SearchBar data={[]} />
       <LayoutWrapper>
         <BaseLayout
           type="influencer"
