@@ -10,7 +10,7 @@ export default function MenuList({ lists }: { lists: Menu[] }) {
     <Wrapper>
       {lists.map((list) => (
         <MenuItem key={list.menuName}>
-          {list.menuImgUrl && <MenuIamge src={list.menuImgUrl} alt={list.menuName} />}
+          {list.menuImgUrl && <MenuImage src={list.menuImgUrl} alt={list.menuName} />}
           <MenuContent>
             <Text size="s" weight="normal" variant="white">
               {list.menuName}
@@ -43,7 +43,7 @@ const MenuItem = styled.div`
   gap: 14px;
 `;
 
-const MenuIamge = styled.img`
+const MenuImage = styled.img`
   width: 70px;
   height: 70px;
   border-radius: 10px;

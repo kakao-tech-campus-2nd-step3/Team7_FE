@@ -1,4 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import DropdownMenu from '@/components/Map/DropdownMenu';
 import MapWindow from '@/components/Map/MapWindow';
@@ -10,7 +11,10 @@ import influencerOptions from '@/utils/constants/InfluencerOptions';
 import { LocationData, PlaceData } from '@/types';
 
 export default function MapPage() {
-  const [selectedInfluencer, setSelectedInfluencer] = useState<string>('');
+  const [searchParams] = useSearchParams();
+  const influencerParam = searchParams.get('influencer');
+
+  const [selectedInfluencer, setSelectedInfluencer] = useState<string>(influencerParam || '');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
     main: '',
   });
@@ -25,6 +29,10 @@ export default function MapPage() {
   });
   const [shouldFetchPlaces, setShouldFetchPlaces] = useState(false);
   const [initialLocation, setInitialLocation] = useState(false);
+
+  useEffect(() => {
+    if (influencerParam) setShouldFetchPlaces(true);
+  }, [influencerParam]);
 
   const filters = useMemo(
     () => ({
@@ -98,6 +106,7 @@ export default function MapPage() {
           onChange={handleInfluencerChange}
           placeholder="인플루언서"
           type="influencer"
+          defaultValue={influencerParam ? { main: influencerParam } : undefined}
         />
       </DropdownContainer>
       <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
