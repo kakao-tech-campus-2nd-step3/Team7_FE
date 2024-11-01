@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import styled from 'styled-components';
 
-import LoginModal from '@/components/common/Modals/LoginModal';
+import LoginModal from '@/components/common/modals/LoginModal';
 import { Text } from '@/components/common/typography/Text';
 
 import Logo from '@/assets/images/Logo.svg';

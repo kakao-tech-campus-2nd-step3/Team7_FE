@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
-import LoginModal from '@/components/common/Modals/LoginModal';
+import LoginModal from '@/components/common/modals/LoginModal';
 
 type PrivatedRouteProps = {
   children: ReactElement;
