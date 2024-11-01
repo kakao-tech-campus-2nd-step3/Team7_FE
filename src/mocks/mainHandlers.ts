@@ -216,14 +216,14 @@ export const mainHandlers = [
       influencers: [
         {
           influencerId: 1,
-          influencerName: '이하늬',
+          influencerName: '성시경',
           influencerImgUrl: 'https://via.placeholder.com/100',
           influencerJob: '모델',
           likes: true,
         },
         {
           influencerId: 2,
-          influencerName: '박서준',
+          influencerName: '풍자',
           influencerImgUrl: 'https://via.placeholder.com/100',
           influencerJob: '배우',
           likes: false,
@@ -279,7 +279,7 @@ export const mainHandlers = [
         },
         {
           influencerId: 10,
-          influencerName: '임시완',
+          influencerName: '임영웅',
           influencerImgUrl: 'https://via.placeholder.com/100',
           influencerJob: '배우',
           likes: false,
