@@ -16,15 +16,7 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
   const [normalizedInput, setNormalizedInput] = useState('');
 
   const normalizeInput = (input: string) => {
-    return input
-      .split('')
-      .map((char) => {
-        if (char.match(/[가-힣]/) || char.match(/[a-zA-Z]/) || char.match(/[0-9]/) || char === ' ') {
-          return char;
-        }
-        return '';
-      })
-      .join('');
+    return input.replace(/[^가-힣a-zA-Z0-9\s]/g, '');
   };
   const showDropDownList = () => {
     if (inputValue === '') {
