@@ -48,7 +48,9 @@ export default function MainPage() {
   const [{ data: influencersData }, { data: coolVideoData }, { data: newVideoData }] = useGetMain();
   return (
     <Wrapper>
-      <SearchBar />
+      <SearchBarWrapper>
+        <SearchBar />
+      </SearchBarWrapper>
       <MainBanner items={bannerData.banners} />
       <BaseLayout
         type="influencer"
@@ -65,4 +67,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 50px;
+`;
+
+const SearchBarWrapper = styled.div`
+  margin-bottom: -20px;
 `;

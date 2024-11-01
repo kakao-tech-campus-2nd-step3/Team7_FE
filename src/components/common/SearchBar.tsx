@@ -35,7 +35,6 @@ const SearchBarContainer = styled.div`
   background: #414141;
   border-radius: 16px;
   padding: 0px 14px;
-  margin-bottom: -20px;
 `;
 
 const SearchInputWrapper = styled.div`
