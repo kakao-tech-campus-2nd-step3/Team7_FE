@@ -78,3 +78,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 50px;
 `;
+
+const SearchBarWrapper = styled.div`
+  margin-bottom: -20px;
+`;
