@@ -45,7 +45,17 @@ const bannerData = {
     },
   ],
 };
-const searchData = ['apple', 'banana', 'coding', 'javascript', '원티드', '프리온보딩', '프론트엔드'];
+const searchData = [
+  'apple',
+  'banana',
+  'coding',
+  'Javascript',
+  '원티드',
+  '프리온보딩',
+  '프론트엔드',
+  '12료코',
+  '띄워쓰기 검사',
+];
 export default function MainPage() {
   const [{ data: influencersData }, { data: coolVideoData }, { data: newVideoData }] = useGetMain();
   return (

@@ -16,15 +16,7 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
   const [normalizedInput, setNormalizedInput] = useState('');
 
   const normalizeInput = (input: string) => {
-    return input
-      .split('')
-      .map((char) => {
-        if (char.match(/[가-힣]/) || char.match(/[a-zA-Z]/)) {
-          return char;
-        }
-        return '';
-      })
-      .join('');
+    return input.replace(/[^가-힣a-zA-Z0-9\s]/g, '');
   };
   const showDropDownList = () => {
     if (inputValue === '') {
@@ -34,13 +26,15 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
     } else {
       const newNormalizedInput = normalizeInput(inputValue);
       setNormalizedInput(newNormalizedInput);
+      const regex = new RegExp(newNormalizedInput, 'i');
+
       const choosenTextList = data.filter((textItem) => {
-        return textItem.includes(newNormalizedInput);
+        return regex.test(textItem);
       });
+
       setDropDownList(choosenTextList);
     }
   };
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value);
     setIsInputValue(true);
@@ -101,7 +95,7 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
             <SearchDropDownItem>해당하는 키워드가 없습니다!</SearchDropDownItem>
           ) : (
             dropDownList.map((item, index) => {
-              const matchIndex = item.indexOf(normalizedInput);
+              const matchIndex = item.toLowerCase().indexOf(normalizedInput.toLowerCase());
               return (
                 <SearchDropDownItem
                   key={item}
@@ -111,6 +105,7 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
                 >
                   {matchIndex !== -1 ? (
                     <>
+                      {item.substring(0, matchIndex)}
                       <span style={{ color: 'red' }}>
                         {item.substring(matchIndex, matchIndex + normalizedInput.length)}
                       </span>
