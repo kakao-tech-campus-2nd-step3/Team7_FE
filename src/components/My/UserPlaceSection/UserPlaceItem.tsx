@@ -1,5 +1,5 @@
 import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -8,14 +8,24 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 
 import { UserPlaceData } from '@/types';
 import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
+import useAuth from '@/hooks/useAuth';
+import LoginModal from '@/components/common/modals/LoginModal';
 
 export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer, likes }: UserPlaceData) {
+  const authInfo = useAuth();
+  const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostPlaceLike();
+
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
+      if (!authInfo.accessToken) {
+        setShowLoginModal(true);
+        return;
+      }
       const newLikeStatus = !isLike;
       console.log('New like status:', newLikeStatus);
       postLike(
@@ -34,20 +44,23 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
     [isLike, placeId, postLike],
   );
   return (
-    <Wrapper to={`/detail/${placeId}`}>
-      <ImageContainer>
-        <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-          {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
-        </LikeIcon>
-        <Image src={imageUrl} alt={String(placeId)} />
-      </ImageContainer>
-      <Paragraph size="m" weight="bold" variant="white">
-        {placeName}
-      </Paragraph>
-      <Paragraph size="xs" weight="normal" variant="white">
-        {influencer}
-      </Paragraph>
-    </Wrapper>
+    <>
+      <Wrapper to={`/detail/${placeId}`}>
+        <ImageContainer>
+          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          </LikeIcon>
+          <Image src={imageUrl} alt={String(placeId)} />
+        </ImageContainer>
+        <Paragraph size="m" weight="bold" variant="white">
+          {placeName}
+        </Paragraph>
+        <Paragraph size="xs" weight="normal" variant="white">
+          {influencer}
+        </Paragraph>
+      </Wrapper>
+      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+    </>
   );
 }
 const Wrapper = styled(Link)`

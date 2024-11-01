@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
 import { useCallback, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Text } from '@/components/common/typography/Text';
 import { PlaceData } from '@/types';
 import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
+import useAuth from '@/hooks/useAuth';
+import LoginModal from '@/components/common/modals/LoginModal';
 
 interface PlaceItemProps extends PlaceData {
   onClick: () => void;
@@ -21,12 +24,20 @@ export default function PlaceItem({
   menuImgUrl,
   onClick,
 }: PlaceItemProps) {
+  const authInfo = useAuth();
+  const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostPlaceLike();
+
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
+      if (!authInfo.accessToken) {
+        setShowLoginModal(true);
+        return;
+      }
       const newLikeStatus = !isLike;
       console.log('New like status:', newLikeStatus);
       postLike(
@@ -45,29 +56,32 @@ export default function PlaceItem({
     [isLike, placeId, postLike],
   );
   return (
-    <PlaceCard key={placeId} onClick={onClick}>
-      <PlaceImage src={menuImgUrl} alt={placeName} />
-      <CardContent>
-        <PlaceDetails>
-          <Text size="l" weight="bold" variant="white">
-            {placeName}
-          </Text>
-          <Address>
-            <Text size="s" weight="normal" variant="white">
-              {getFullAddress(address)}
+    <>
+      <PlaceCard key={placeId} onClick={onClick}>
+        <PlaceImage src={menuImgUrl} alt={placeName} />
+        <CardContent>
+          <PlaceDetails>
+            <Text size="l" weight="bold" variant="white">
+              {placeName}
             </Text>
-          </Address>
-          <InfluencerName>
-            <Text size="s" weight="normal" variant="white">
-              {influencerName}
-            </Text>
-          </InfluencerName>
-        </PlaceDetails>
-        <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-          {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
-        </LikeIcon>
-      </CardContent>
-    </PlaceCard>
+            <Address>
+              <Text size="s" weight="normal" variant="white">
+                {getFullAddress(address)}
+              </Text>
+            </Address>
+            <InfluencerName>
+              <Text size="s" weight="normal" variant="white">
+                {influencerName}
+              </Text>
+            </InfluencerName>
+          </PlaceDetails>
+          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          </LikeIcon>
+        </CardContent>
+      </PlaceCard>
+      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+    </>
   );
 }
 
