@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import BaseLayout from '@/components/common/BaseLayout';
 import { useGetMain } from '@/api/hooks/useGetMain';
+import Button from '@/components/common/Button';
 
 export default function ChoicePage() {
   const [{ data: influencersData }] = useGetMain();
@@ -17,6 +18,14 @@ export default function ChoicePage() {
           showMoreButton={false}
         />
       </LayoutWrapper>
+      <ButtonWrapper>
+        <Button variant="white" style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}>
+          건너뛰기
+        </Button>
+        <Button variant="mint" style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}>
+          시작하기
+        </Button>
+      </ButtonWrapper>
     </PageContainer>
   );
 }
@@ -29,5 +38,12 @@ const PageContainer = styled.div`
 `;
 
 const LayoutWrapper = styled.div`
-  margin-bottom: 80px;
+  margin-bottom: 60px;
+`;
+
+const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 960px;
+  margin-bottom: 30px;
 `;
