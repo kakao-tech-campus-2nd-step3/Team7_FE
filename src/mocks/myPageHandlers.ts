@@ -58,7 +58,7 @@ export const myHandlers = [
           placeId: 2,
           placeName: '이선장네',
           imageUrl: 'https://via.placeholder.com/100',
-          influencer: '박서준',
+          influencer: '임영웅',
         },
         {
           placeId: 3,

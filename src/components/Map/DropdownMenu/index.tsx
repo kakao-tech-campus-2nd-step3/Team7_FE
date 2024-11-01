@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import styled from 'styled-components';
@@ -18,6 +18,7 @@ interface DropdownMenuProps {
   onChange: (value: { main: string; sub?: string; lat?: number; lng?: number }) => void;
   placeholder?: string;
   type: 'location' | 'influencer';
+  defaultValue?: { main: string; sub?: string };
 }
 
 export default function DropdownMenu({
@@ -26,12 +27,32 @@ export default function DropdownMenu({
   onChange,
   placeholder = '',
   type,
+  defaultValue,
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useDetectClose({ onDetected: () => setIsOpen(false) });
-  const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(null);
+  const findOptionByLabel = (label: string) => {
+    return options.find((option) => option.label === label);
+  };
+  const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(() => {
+    if (defaultValue) {
+      return findOptionByLabel(defaultValue.main) || null;
+    }
+    return null;
+  });
   const [selectedSubOption, setSelectedSubOption] = useState<Option | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    if (defaultValue && selectedMainOption) {
+      onChange({
+        main: selectedMainOption.label,
+        sub: undefined,
+        lat: undefined,
+        lng: undefined,
+      });
+    }
+  }, []);
 
   const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(searchTerm.toLowerCase()));
 

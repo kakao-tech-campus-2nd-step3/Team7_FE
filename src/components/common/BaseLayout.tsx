@@ -4,10 +4,11 @@ import styled from 'styled-components';
 
 import { Text } from '@/components/common/typography/Text';
 
-import InfluencerSection from '../Main/InfluencerSection';
-import SpotSection from '../Main/SpotSection';
+import InfluencerSection from '@/components/Main/InfluencerSection';
+import InfluencerList from '@/components/Influencer/InfluencerList';
+import SpotSection from '@/components/Main/SpotSection';
 import { InfluencerData, SpotData, UserPlaceData } from '@/types';
-import UserPlaceSection from '../My/UserPlaceSection';
+import UserPlaceSection from '@/components/My/UserPlaceSection';
 
 type Props = {
   type: string;
@@ -15,12 +16,23 @@ type Props = {
   mainText: string;
   SubText: string;
   items: InfluencerData[] | SpotData[] | UserPlaceData[];
+  showMoreButton?: boolean;
 };
 
-export default function BaseLayout({ type, prevSubText = '', mainText = '', SubText, items }: Props) {
+export default function BaseLayout({
+  type,
+  prevSubText = '',
+  mainText = '',
+  SubText,
+  items,
+  showMoreButton = true,
+}: Props) {
   const navigate = useNavigate();
 
   const renderSection = () => {
+    if (type === 'influencer' && showMoreButton === false) {
+      return <InfluencerList items={items as InfluencerData[]} />;
+    }
     if (type === 'influencer') {
       return <InfluencerSection items={items as InfluencerData[]} />;
     }
@@ -39,7 +51,9 @@ export default function BaseLayout({ type, prevSubText = '', mainText = '', SubT
           </Text>
           {SubText}
         </Text>
-        {type === 'influencer' ? <MoreBtn onClick={() => navigate('/influencer')}>더보기</MoreBtn> : null}
+        {type === 'influencer' && showMoreButton ? (
+          <MoreBtn onClick={() => navigate('/influencer')}>더보기</MoreBtn>
+        ) : null}
       </TitleContainer>
       {renderSection()}
     </Container>

@@ -27,7 +27,7 @@ const dummyPlaces: PlaceData[] = [
       address3: '서교동',
     },
     category: '맛집',
-    influencerName: '풍자',
+    influencerName: '임영웅',
     longitude: '126.9314925',
     latitude: '37.5666478',
     likes: true,
