@@ -13,7 +13,15 @@ export default function InfluencerPage() {
         인플루언서
       </Text>
       <SearchBar />
-      <BaseLayout type="influencer" mainText="" SubText="" items={influencersData.influencers} showMoreButton={false} />
+      <LayoutWrapper>
+        <BaseLayout
+          type="influencer"
+          mainText=""
+          SubText=""
+          items={influencersData.influencers}
+          showMoreButton={false}
+        />
+      </LayoutWrapper>
     </PageContainer>
   );
 }
@@ -23,4 +31,8 @@ const PageContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+`;
+
+const LayoutWrapper = styled.div`
+  margin-bottom: 80px;
 `;
