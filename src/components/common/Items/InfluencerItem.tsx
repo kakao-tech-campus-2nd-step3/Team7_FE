@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
 
 import styled from 'styled-components';
@@ -9,6 +9,8 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 import backCard from '@/assets/images/back-card.png';
 import { InfluencerData } from '@/types';
 import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
+import useAuth from '@/hooks/useAuth';
+import LoginModal from '@/components/common/modals/LoginModal';
 
 export default function InfluencerItem({
   influencerId,
@@ -17,14 +19,20 @@ export default function InfluencerItem({
   influencerJob,
   likes,
 }: InfluencerData) {
+  const authInfo = useAuth();
+  const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostInfluencerLike();
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
+      if (!authInfo.accessToken) {
+        setShowLoginModal(true);
+        return;
+      }
       const newLikeStatus = !isLike;
-      console.log('New like status:', newLikeStatus);
       postLike(
         { influencerId, likes: newLikeStatus },
         {
@@ -34,6 +42,7 @@ export default function InfluencerItem({
           },
           onError: (error) => {
             console.error('Error:', error);
+            /* todo - 좋아요 실패시 띄울 컴포넌트 */
           },
         },
       );
@@ -42,27 +51,29 @@ export default function InfluencerItem({
   );
 
   return (
-    <Wrapper to={`/influencer/${influencerId}`}>
-      {/* 경로 수정필요 */}
-      <ImageContainer>
-        <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-          {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
-        </LikeIcon>
-        <FrontImage src={influencerImgUrl} alt={influencerName} />
-        <BackImageWrapper>
-          <MdLocationOn size={50} color="#55EBFF" />
-          <Paragraph size="m" variant="white" weight="bold">
-            지도 보기
-          </Paragraph>
-        </BackImageWrapper>
-      </ImageContainer>
-      <Paragraph size="m" weight="bold" variant="white">
-        {influencerName}
-      </Paragraph>
-      <Paragraph size="xs" weight="normal" variant="white">
-        {influencerJob}
-      </Paragraph>
-    </Wrapper>
+    <>
+      <Wrapper to={`/map?influencer=${encodeURIComponent(influencerName)}`}>
+        <ImageContainer>
+          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          </LikeIcon>
+          <FrontImage src={influencerImgUrl} alt={influencerName} />
+          <BackImageWrapper>
+            <MdLocationOn size={50} color="#55EBFF" />
+            <Paragraph size="m" variant="white" weight="bold">
+              지도 보기
+            </Paragraph>
+          </BackImageWrapper>
+        </ImageContainer>
+        <Paragraph size="m" weight="bold" variant="white">
+          {influencerName}
+        </Paragraph>
+        <Paragraph size="xs" weight="normal" variant="white">
+          {influencerJob}
+        </Paragraph>
+      </Wrapper>
+      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+    </>
   );
 }
 const Wrapper = styled(Link)`
@@ -81,6 +92,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
+  margin-bottom: auto;
 
   &:hover {
     & > div:nth-child(2) {
