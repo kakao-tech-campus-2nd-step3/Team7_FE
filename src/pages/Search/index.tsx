@@ -1,13 +1,13 @@
-import { useLocation } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
 import SearchBar from '@/components/common/SearchBar';
 
 export default function SearchPage() {
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('query');
 
-  const query = new URLSearchParams(location.search).get('query');
   const searchData = ['apple', 'banana', 'coding', 'javascript', '원티드', '프리온보딩', '프론트엔드'];
 
   /* todo - api 개발되면 검색결과 호출 추가 */
