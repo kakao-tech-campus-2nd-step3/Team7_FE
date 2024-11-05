@@ -7,6 +7,7 @@ import { PlaceData } from '@/types';
 import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import BasicImage from '@/assets/images/basic-image.png';
 
 interface PlaceItemProps extends PlaceData {
   onClick: () => void;
@@ -29,6 +30,10 @@ export default function PlaceItem({
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostPlaceLike();
+
+  const handleBasicImg = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = BasicImage;
+  };
 
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
@@ -58,7 +63,7 @@ export default function PlaceItem({
   return (
     <>
       <PlaceCard key={placeId} onClick={onClick}>
-        <PlaceImage src={menuImgUrl} alt={placeName} />
+        <PlaceImage src={menuImgUrl} onError={handleBasicImg} alt={placeName} />
         <CardContent>
           <PlaceDetails>
             <Text size="l" weight="bold" variant="white">
