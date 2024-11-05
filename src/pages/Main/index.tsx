@@ -85,7 +85,7 @@ export default function MainPage() {
         SubText=" 가 방문한 장소를 찾아볼까요?"
         items={influencersData.influencers}
       />
-      {authInfo ? (
+      {authInfo.accessToken ? (
         <>
           <BaseLayout
             type="spot"
