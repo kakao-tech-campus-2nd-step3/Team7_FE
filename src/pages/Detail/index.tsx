@@ -85,7 +85,11 @@ export default function DetailPage() {
           </QueryErrorResetBoundary>
         )}
       </InfoContainer>
-      {visitModal ? <VisitModal placeName={infoData.placeName} onClose={() => setVisitModal(false)} /> : null}
+      <Suspense fallback={<Loading size={50} />}>
+        {visitModal ? (
+          <VisitModal id={infoData.placeId} placeName={infoData.placeName} onClose={() => setVisitModal(false)} />
+        ) : null}
+      </Suspense>
     </Wrapper>
   );
 }
