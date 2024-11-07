@@ -9,7 +9,7 @@ export default function InfluencerSection({ items }: { items: InfluencerData[] }
   const listRef = useRef<HTMLDivElement | null>(null);
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
-      const someWidth = 200;
+      const someWidth = 400;
       const scrollAmount = direction === 'left' ? -someWidth : someWidth;
       listRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
