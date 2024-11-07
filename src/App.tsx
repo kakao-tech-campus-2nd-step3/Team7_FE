@@ -12,6 +12,7 @@ import PrivatedRoute from '@/routes/component/PrivatedRoute';
 
 import GlobalStyle from './global';
 import SearchPage from './pages/Search';
+import ReviewPage from './pages/Review';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
             <Route path="/map" element={<MapPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/places/:id/reviews" element={<ReviewPage />} />
             <Route
               path="/my"
               element={
