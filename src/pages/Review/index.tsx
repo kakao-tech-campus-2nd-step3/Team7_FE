@@ -42,7 +42,9 @@ export default function ReviewPage() {
 
   return (
     <Container>
-      <Header />
+      <HeaderWrapper>
+        <Header />
+      </HeaderWrapper>
       <MainContent>
         {currentStep === 1 && <RatingStep onSubmit={handleRatingSubmit} placeInfo={infoData} />}
         {currentStep === 2 && (
@@ -66,6 +68,10 @@ const Container = styled.div`
   color: white;
   width: 430px;
   margin: 0 auto;
+`;
+
+const HeaderWrapper = styled.div`
+  margin: 0 1rem;
 `;
 
 const MainContent = styled.main`
