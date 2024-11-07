@@ -34,16 +34,16 @@ export default function Header() {
       <Nav>
         {isLoggedIn ? (
           <>
-            <NavItem to="/map">
+            <DesktopOnlyNavItem to="/map">
               <Text size="xs" variant="white" weight="normal">
                 지도
               </Text>
-            </NavItem>
-            <NavItem to="/influencer">
+            </DesktopOnlyNavItem>
+            <DesktopOnlyNavItem to="/influencer">
               <Text size="xs" variant="white" weight="normal">
                 인플루언서
               </Text>
-            </NavItem>
+            </DesktopOnlyNavItem>
             <NavItem to="/my">
               <Text size="xs" variant="white" weight="normal">
                 마이페이지
@@ -109,6 +109,12 @@ const NavItem = styled(Link)`
   margin-left: 20px;
   text-decoration: none;
   cursor: pointer;
+`;
+
+const DesktopOnlyNavItem = styled(NavItem)`
+  @media (max-width: 430px) {
+    display: none;
+  }
 `;
 
 const LoginButton = styled.div`
