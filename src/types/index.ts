@@ -193,3 +193,8 @@ export type UserReviewData = {
 export type UserReviewResponse = {
   reviews: [UserReviewData];
 };
+
+export type RequestPlaceReview = {
+  likes: boolean | null;
+  comments: string;
+};
