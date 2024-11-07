@@ -17,6 +17,7 @@ type Props = {
   SubText: string;
   items: InfluencerData[] | SpotData[] | UserPlaceData[];
   showMoreButton?: boolean;
+  isChoice?: boolean;
 };
 
 export default function BaseLayout({
@@ -26,12 +27,14 @@ export default function BaseLayout({
   SubText,
   items,
   showMoreButton = true,
+  isChoice = false,
 }: Props) {
   const navigate = useNavigate();
 
   const renderSection = () => {
     if (type === 'influencer' && showMoreButton === false) {
-      return <InfluencerList items={items as InfluencerData[]} />;
+      if (isChoice) return <InfluencerList items={items as InfluencerData[]} useBackCard={false} useNav={false} />;
+      return <InfluencerList items={items as InfluencerData[]} useBackCard={false} />;
     }
     if (type === 'influencer') {
       return <InfluencerSection items={items as InfluencerData[]} />;

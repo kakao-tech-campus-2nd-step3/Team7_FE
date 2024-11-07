@@ -38,6 +38,7 @@ export default function ChoicePage() {
           SubText="를 선택하세요!"
           items={influencersData.influencers}
           showMoreButton={false}
+          isChoice
         />
       </LayoutWrapper>
       <ButtonWrapper>

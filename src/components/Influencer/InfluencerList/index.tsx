@@ -2,7 +2,13 @@ import styled from 'styled-components';
 import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { InfluencerData } from '@/types';
 
-export default function InfluencerList({ items }: { items: InfluencerData[] }) {
+interface InfluencerListProps {
+  items: InfluencerData[];
+  useBackCard?: boolean;
+  useNav?: boolean;
+}
+
+export default function InfluencerList({ items, useBackCard = true, useNav = true }: InfluencerListProps) {
   return (
     <GridContainer>
       {items.map((influencer) => {
@@ -14,6 +20,8 @@ export default function InfluencerList({ items }: { items: InfluencerData[] }) {
             influencerImgUrl={influencer.influencerImgUrl}
             influencerJob={influencer.influencerJob}
             likes={influencer.likes}
+            useBackCard={useBackCard}
+            useNav={useNav}
           />
         );
       })}

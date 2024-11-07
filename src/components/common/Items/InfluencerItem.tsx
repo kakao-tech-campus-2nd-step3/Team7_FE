@@ -12,18 +12,26 @@ import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 
+interface InfluencerItemProps extends InfluencerData {
+  useBackCard?: boolean;
+  useNav?: boolean;
+}
+
 export default function InfluencerItem({
   influencerId,
   influencerName,
   influencerImgUrl,
   influencerJob,
   likes,
-}: InfluencerData) {
+  useBackCard = true,
+  useNav = true,
+}: InfluencerItemProps) {
   const authInfo = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostInfluencerLike();
+
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
@@ -52,18 +60,20 @@ export default function InfluencerItem({
 
   return (
     <>
-      <Wrapper to={`/map?influencer=${encodeURIComponent(influencerName)}`}>
+      <Wrapper as={useNav ? Link : 'div'} to={useNav ? `/map?influencer=${encodeURIComponent(influencerName)}` : ''}>
         <ImageContainer>
           <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
             {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
           </LikeIcon>
           <FrontImage src={influencerImgUrl} alt={influencerName} />
-          <BackImageWrapper>
-            <MdLocationOn size={50} color="#55EBFF" />
-            <Paragraph size="m" variant="white" weight="bold">
-              지도 보기
-            </Paragraph>
-          </BackImageWrapper>
+          {useBackCard && useNav && (
+            <BackImageWrapper>
+              <MdLocationOn size={50} color="#55EBFF" />
+              <Paragraph size="m" variant="white" weight="bold">
+                지도 보기
+              </Paragraph>
+            </BackImageWrapper>
+          )}
         </ImageContainer>
         <Paragraph size="m" weight="bold" variant="white">
           {influencerName}
@@ -76,6 +86,7 @@ export default function InfluencerItem({
     </>
   );
 }
+
 const Wrapper = styled(Link)`
   width: 170px;
   height: 278px;
@@ -84,6 +95,7 @@ const Wrapper = styled(Link)`
   align-items: center;
   text-align: center;
   line-height: 30px;
+  text-decoration: none;
 `;
 
 const ImageContainer = styled.div`
