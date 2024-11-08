@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { CiWifiOn, CiWifiOff } from 'react-icons/ci';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { FacilityInfo } from '@/types';
+import NoItem from '@/components/common/layouts/NoItem';
 
 const facilities = {
   wifi: {
@@ -39,18 +40,38 @@ const facilities = {
 export default function FacilitySign({ facilityInfo }: { facilityInfo: FacilityInfo }) {
   return (
     <Wrapper>
-      {Object.entries(facilities).map(([key, { icon, label }]) => {
-        const iconElement = facilityInfo[key as keyof FacilityInfo] === 'Y' ? icon.Y : icon.N;
-        if (iconElement === null) return null;
-        return (
-          <SignWrapper key={key}>
-            {key === 'parking' ? iconElement : <Sign>{iconElement}</Sign>}
-            <Paragraph size="xs" weight="normal" variant="white">
-              {label}
-            </Paragraph>
-          </SignWrapper>
-        );
-      })}
+      {Object.keys(facilityInfo).length === 0 ? (
+        <NoItem message="정보가 없습니다." height={0} logo={false} alignItems="start" />
+      ) : (
+        <>
+          {Object.entries(facilities).map(([key, { icon, label }]) => {
+            const facilityStatus = facilityInfo[key as keyof FacilityInfo];
+
+            let iconElement = null;
+            switch (facilityStatus) {
+              case 'Y':
+                iconElement = icon.Y;
+                break;
+              case 'N':
+                iconElement = icon.N;
+                break;
+              default:
+                iconElement = null;
+            }
+
+            if (iconElement === null) return null;
+
+            return (
+              <SignWrapper key={key}>
+                {key === 'parking' ? iconElement : <Sign>{iconElement}</Sign>}
+                <Paragraph size="xs" weight="normal" variant="white">
+                  {label}
+                </Paragraph>
+              </SignWrapper>
+            );
+          })}
+        </>
+      )}
     </Wrapper>
   );
 }
@@ -58,6 +79,7 @@ export default function FacilitySign({ facilityInfo }: { facilityInfo: FacilityI
 const Wrapper = styled.div`
   display: flex;
   gap: 18px;
+  padding: 0px 20px;
 `;
 
 const Sign = styled.div`
