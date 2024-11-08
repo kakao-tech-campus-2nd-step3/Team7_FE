@@ -284,6 +284,13 @@ export const mainHandlers = [
           influencerJob: '배우',
           likes: false,
         },
+        {
+          influencerId: 11,
+          influencerName: '짱구 대디',
+          influencerImgUrl: 'https://via.placeholder.com/100',
+          influencerJob: '패션 유튜버',
+          likes: false,
+        },
       ],
     });
   }),
