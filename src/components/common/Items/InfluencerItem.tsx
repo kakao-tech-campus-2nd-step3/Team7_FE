@@ -92,7 +92,6 @@ const Wrapper = styled(Link)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  line-height: 30px;
   text-decoration: none;
 `;
 

@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Text } from '@/components/common/typography/Text';
+
 import InfluencerSection from '@/components/Main/InfluencerSection';
 import InfluencerList from '@/components/Influencer/InfluencerList';
 import SpotSection from '@/components/Main/SpotSection';
 import { InfluencerData, SpotData, UserPlaceData } from '@/types';
 import UserPlaceSection from '@/components/My/UserPlaceSection';
 import ChoiceList from '@/components/Choice/ChoiceList';
+
 
 type Props = {
   type: string;
