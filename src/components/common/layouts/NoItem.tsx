@@ -5,14 +5,16 @@ import { Paragraph } from '../typography/Paragraph';
 interface NoItemsMessageProps {
   message?: string;
   height?: number;
+  logo?: boolean;
+  alignItems?: string;
 }
 
-function NoItem({ message = '데이터가 없습니다!', height }: NoItemsMessageProps) {
+function NoItem({ message = '데이터가 없습니다!', height, logo = true, alignItems }: NoItemsMessageProps) {
   return (
-    <MessageContainer style={{ height }}>
-      <TextWrapper>
-        <LogoImage src={Logo} alt="인플레이스 로고" />
-        <Paragraph size="m" weight="normal" variant="white">
+    <MessageContainer height={height}>
+      <TextWrapper alignItems={alignItems}>
+        {logo && <LogoImage src={Logo} alt="인플레이스 로고" />}
+        <Paragraph size="xs" weight="normal" variant="white">
           {message}
         </Paragraph>
       </TextWrapper>
@@ -20,21 +22,21 @@ function NoItem({ message = '데이터가 없습니다!', height }: NoItemsMessa
   );
 }
 
-const MessageContainer = styled.div`
+const MessageContainer = styled.div<{ height?: number }>`
   width: 100%;
-  text-align: center;
   margin: 20px 0;
   align-content: center;
+  height: ${({ height }) => (height ? `${height}px` : 'auto')};
 `;
-const TextWrapper = styled.div`
+const TextWrapper = styled.div<{ alignItems?: string }>`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: ${({ alignItems }) => alignItems || 'center'};
   gap: 20px;
   white-space: pre-line;
   line-height: 26px;
 `;
 const LogoImage = styled.img`
-  height: 100px;
+  height: 80px;
 `;
 export default NoItem;
