@@ -1,33 +1,33 @@
 import styled from 'styled-components';
-import InfluencerItem from '@/components/common/Items/InfluencerItem';
+import ChoiceItem from '@/components/common/Items/ChoiceItem';
 import { InfluencerData } from '@/types';
 
-interface InfluencerListProps {
+interface ChoiceListProps {
   items: InfluencerData[];
-  useBackCard?: boolean;
-  useNav?: boolean;
+  onToggleLike: (influencerId: number, isLiked: boolean) => void;
+  selectedInfluencers: Set<number>;
 }
 
-export default function InfluencerList({ items, useBackCard = true, useNav = true }: InfluencerListProps) {
+export default function ChoiceList({ items, onToggleLike, selectedInfluencers }: ChoiceListProps) {
   return (
     <GridContainer>
       {items.map((influencer) => {
         return (
-          <InfluencerItem
+          <ChoiceItem
             key={influencer.influencerId}
             influencerId={influencer.influencerId}
             influencerName={influencer.influencerName}
             influencerImgUrl={influencer.influencerImgUrl}
             influencerJob={influencer.influencerJob}
-            likes={influencer.likes}
-            useBackCard={useBackCard}
-            useNav={useNav}
+            onToggleLike={onToggleLike}
+            isSelected={selectedInfluencers.has(influencer.influencerId)}
           />
         );
       })}
     </GridContainer>
   );
 }
+
 const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);

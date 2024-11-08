@@ -40,14 +40,14 @@ export default function ToggleButton({ options, onSelect }: ToggleButtonProps) {
 
 const ToggleButtonContainer = styled.div`
   display: flex;
-  gap: 14px;
+  gap: 20px;
   width: 320px;
   height: 40px;
 `;
 
 const Button = styled.button<{ isActive: boolean }>`
   position: relative;
-  width: 100px;
+  width: 84px;
   height: 40px;
   border: none;
   background: ${(props) => (props.isActive ? '#DBFBFF' : '#F9F9F9')};
@@ -67,12 +67,12 @@ const ButtonText = styled.span<{ isActive: boolean }>`
   font-weight: 700;
   font-size: 16px;
   color: ${(props) => (props.isActive ? '#004BFE' : '#202020')};
-  ${(props) => (props.isActive ? 'left: 20%; right: 30%;' : 'left: 0px; right: 0px; text-align: center;')}
+  ${(props) => (props.isActive ? 'left: 20%; right: 36%;' : 'left: 0px; right: 0px; text-align: center;')}
 `;
 
 const CheckIconWrapper = styled.div`
   position: absolute;
-  left: 70%;
+  left: 66%;
   right: 6%;
   top: 20%;
   bottom: 22%;

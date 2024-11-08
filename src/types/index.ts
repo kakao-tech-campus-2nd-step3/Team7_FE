@@ -194,3 +194,13 @@ export type UserReviewData = {
 export type UserReviewResponse = {
   reviews: [UserReviewData];
 };
+
+export type RequestPlaceReview = {
+  likes: boolean | null;
+  comments: string;
+};
+
+export type MultipleLikeRequest = {
+  influencerIds: number[];
+  likes: boolean;
+};
