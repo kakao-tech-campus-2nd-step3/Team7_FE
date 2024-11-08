@@ -9,7 +9,6 @@ import { InfluencerData, SpotData, UserPlaceData } from '@/types';
 import UserPlaceSection from '@/components/My/UserPlaceSection';
 import ChoiceList from '@/components/Choice/ChoiceList';
 
-
 type Props = {
   type: string;
   prevSubText?: string;
