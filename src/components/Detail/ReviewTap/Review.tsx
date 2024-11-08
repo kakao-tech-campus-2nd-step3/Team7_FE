@@ -10,10 +10,12 @@ export default function Review({ items }: { items: ReviewData[] }) {
         return (
           <ReviewItem
             key={review.reviewId}
+            reviewId={review.reviewId}
             likes={review.likes}
             comment={review.comment}
             userNickname={review.userNickname}
             createdDate={review.createdDate}
+            mine={review.mine}
           />
         );
       })}
