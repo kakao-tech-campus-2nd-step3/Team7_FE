@@ -44,11 +44,10 @@ export default function PlaceItem({
         { placeId, likes: newLikeStatus },
         {
           onSuccess: () => {
-            console.log('성공');
             setIsLike(newLikeStatus);
           },
-          onError: (error) => {
-            console.error('Error:', error);
+          onError: () => {
+            alert('좋아요 등록에 실패했어요. 다시 시도해주세요!');
           },
         },
       );

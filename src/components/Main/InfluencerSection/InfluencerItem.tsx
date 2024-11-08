@@ -37,12 +37,10 @@ export default function InfluencerItem({
         { influencerId, likes: newLikeStatus },
         {
           onSuccess: () => {
-            console.log('성공');
             setIsLike(newLikeStatus);
           },
-          onError: (error) => {
-            console.error('Error:', error);
-            /* todo - 좋아요 실패시 띄울 컴포넌트 */
+          onError: () => {
+            alert('좋아요 등록에 실패했어요. 다시 시도해주세요!');
           },
         },
       );
