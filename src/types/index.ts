@@ -198,3 +198,8 @@ export type RequestPlaceReview = {
   likes: boolean | null;
   comments: string;
 };
+
+export type MultipleLikeRequest = {
+  influencerIds: number[];
+  likes: boolean;
+};

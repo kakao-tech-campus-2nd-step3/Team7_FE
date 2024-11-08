@@ -1,14 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-
 import styled from 'styled-components';
-
 import { Text } from '@/components/common/typography/Text';
-
 import InfluencerSection from '@/components/Main/InfluencerSection';
 import InfluencerList from '@/components/Influencer/InfluencerList';
 import SpotSection from '@/components/Main/SpotSection';
 import { InfluencerData, SpotData, UserPlaceData } from '@/types';
 import UserPlaceSection from '@/components/My/UserPlaceSection';
+import ChoiceList from '@/components/Choice/ChoiceList';
 
 type Props = {
   type: string;
@@ -18,7 +16,18 @@ type Props = {
   items: InfluencerData[] | SpotData[] | UserPlaceData[];
   showMoreButton?: boolean;
   isChoice?: boolean;
-};
+} & (
+  | {
+      isChoice: true;
+      onToggleLike: (influencerId: number, isLiked: boolean) => void;
+      selectedInfluencers: Set<number>;
+    }
+  | {
+      isChoice?: false;
+      onToggleLike?: never;
+      selectedInfluencers?: never;
+    }
+);
 
 export default function BaseLayout({
   type,
@@ -28,12 +37,22 @@ export default function BaseLayout({
   items,
   showMoreButton = true,
   isChoice = false,
+  onToggleLike,
+  selectedInfluencers,
 }: Props) {
   const navigate = useNavigate();
 
   const renderSection = () => {
     if (type === 'influencer' && showMoreButton === false) {
-      if (isChoice) return <InfluencerList items={items as InfluencerData[]} useBackCard={false} useNav={false} />;
+      if (isChoice && onToggleLike && selectedInfluencers) {
+        return (
+          <ChoiceList
+            items={items as InfluencerData[]}
+            onToggleLike={onToggleLike}
+            selectedInfluencers={selectedInfluencers}
+          />
+        );
+      }
       return <InfluencerList items={items as InfluencerData[]} useBackCard={false} />;
     }
     if (type === 'influencer') {
@@ -44,6 +63,7 @@ export default function BaseLayout({
     }
     return <UserPlaceSection items={items as UserPlaceData[]} />;
   };
+
   return (
     <Container>
       <TitleContainer>
@@ -62,18 +82,21 @@ export default function BaseLayout({
     </Container>
   );
 }
+
 const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 30px;
 `;
+
 const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: end;
   color: white;
 `;
+
 const MoreBtn = styled.button`
   font-size: 14px;
   color: #b0b0b0;

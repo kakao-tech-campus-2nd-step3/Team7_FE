@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { IoChevronBack, IoChevronForward } from 'react-icons/io5';
 import BaseLayout from '@/components/common/BaseLayout';
 import { useGetMain } from '@/api/hooks/useGetMain';
-import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
+import { usePostMultipleInfluencerLike } from '@/api/hooks/usePostMultipleInfluencerLike';
 import Button from '@/components/common/Button';
 
 const ITEMS_PER_PAGE = 10;
@@ -13,7 +13,8 @@ const MAX_PAGE_BUTTONS = 5;
 export default function ChoicePage() {
   const navigate = useNavigate();
   const [{ data: influencersData }] = useGetMain();
-  const { mutateAsync: postLike } = usePostInfluencerLike();
+  const { mutateAsync: postMultipleLikes } = usePostMultipleInfluencerLike();
+  const [selectedInfluencers, setSelectedInfluencers] = useState<Set<number>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
 
   const paginatedInfluencers = useMemo(() => {
@@ -51,22 +52,35 @@ export default function ChoicePage() {
     setCurrentPage(pageNum);
   };
 
-  const handleSkip = async () => {
+  const handleSkip = () => {
+    navigate('/');
+  };
+
+  const handleStart = async () => {
     try {
-      const updatePromises = influencersData.influencers
-        .filter((influencer) => influencer.likes)
-        .map((influencer) =>
-          postLike({
-            influencerId: influencer.influencerId,
-            likes: false,
-          }),
-        );
-      await Promise.all(updatePromises);
+      if (selectedInfluencers.size > 0) {
+        await postMultipleLikes({
+          influencerIds: Array.from(selectedInfluencers),
+          likes: true,
+        });
+      }
       navigate('/');
     } catch (error) {
-      console.error('좋아요 초기화 중 오류 발생:', error);
+      console.error('좋아요 처리 중 오류 발생:', error);
       navigate('/');
     }
+  };
+
+  const handleToggleLike = (influencerId: number, isLiked: boolean) => {
+    setSelectedInfluencers((prev) => {
+      const newSet = new Set(prev);
+      if (isLiked) {
+        newSet.add(influencerId);
+      } else {
+        newSet.delete(influencerId);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -80,6 +94,8 @@ export default function ChoicePage() {
           items={paginatedInfluencers}
           showMoreButton={false}
           isChoice
+          onToggleLike={handleToggleLike}
+          selectedInfluencers={selectedInfluencers}
         />
         {totalPages > 1 && (
           <PaginationContainer>
@@ -87,7 +103,7 @@ export default function ChoicePage() {
               <IoChevronBack size={20} />
             </ArrowButton>
             {pageNumbers.map((pageNum) => (
-              <PageNumber key={pageNum} onClick={() => handlePageChange(pageNum)} active={pageNum === currentPage}>
+              <PageNumber key={pageNum} onClick={() => handlePageChange(pageNum)} $active={pageNum === currentPage}>
                 {pageNum}
               </PageNumber>
             ))}
@@ -108,7 +124,7 @@ export default function ChoicePage() {
         <Button
           variant="mint"
           style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-          onClick={() => navigate('/')}
+          onClick={handleStart}
         >
           시작하기
         </Button>
@@ -164,22 +180,22 @@ const ArrowButton = styled.button`
   }
 `;
 
-const PageNumber = styled.button<{ active: boolean }>`
+const PageNumber = styled('button')<{ $active: boolean }>`
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
   background: transparent;
-  color: ${(props) => (props.active ? 'black' : 'white')};
+  color: ${(props) => (props.$active ? 'black' : 'white')};
   cursor: pointer;
 
   ${(props) =>
-    props.active &&
+    props.$active &&
     `
     background: #c8c8c8;
     border: 1px solid #000;
   `}
 
   &:hover {
-    background: ${(props) => (props.active ? '#c8c8c8' : 'grey')};
+    background: ${(props) => (props.$active ? '#c8c8c8' : 'grey')};
   }
 `;
