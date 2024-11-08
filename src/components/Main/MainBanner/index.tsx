@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import BannerItem from '@/components/Main/MainBanner/BannerItem';
 
 import { BannerData } from '@/types';
+import NoItem from '@/components/common/layouts/NoItem';
 
 export default function MainBanner({ items }: { items: BannerData[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,26 +27,32 @@ export default function MainBanner({ items }: { items: BannerData[] }) {
   };
   return (
     <Container>
-      <PrevBtn onClick={handleBtnPrevClick} disabled={currentIndex === 0}>
-        <GrPrevious size={40} />
-      </PrevBtn>
-      <NextBtn onClick={handleBtnNextClick} disabled={currentIndex === items.length - 1}>
-        <GrNext size={40} />
-      </NextBtn>
-      <CarouselWrapper>
-        <CarouselContainer currentIndex={currentIndex}>
-          {items.map((item) => (
-            <BannerItem
-              key={item.bannerId}
-              bannerId={item.bannerId}
-              placeId={item.placeId}
-              description={item.description}
-              bannerImg={item.bannerImg}
-              title={item.title}
-            />
-          ))}
-        </CarouselContainer>
-      </CarouselWrapper>
+      {items.length === 0 ? (
+        <NoItem message="배너 정보가 없어요!" height={400} />
+      ) : (
+        <>
+          <PrevBtn onClick={handleBtnPrevClick} disabled={currentIndex === 0}>
+            <GrPrevious size={40} />
+          </PrevBtn>
+          <NextBtn onClick={handleBtnNextClick} disabled={currentIndex === items.length - 1}>
+            <GrNext size={40} />
+          </NextBtn>
+          <CarouselWrapper>
+            <CarouselContainer currentIndex={currentIndex}>
+              {items.map((item) => (
+                <BannerItem
+                  key={item.bannerId}
+                  bannerId={item.bannerId}
+                  placeId={item.placeId}
+                  description={item.description}
+                  bannerImg={item.bannerImg}
+                  title={item.title}
+                />
+              ))}
+            </CarouselContainer>
+          </CarouselWrapper>
+        </>
+      )}
     </Container>
   );
 }

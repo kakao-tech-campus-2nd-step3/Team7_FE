@@ -12,6 +12,7 @@ import PrivatedRoute from '@/routes/component/PrivatedRoute';
 
 import GlobalStyle from './global';
 import SearchPage from './pages/Search';
+import ReviewPage from './pages/Review';
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
             />
           </Route>
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/places/:id/reviews" element={<ReviewPage />} />
         </Routes>
       </AuthProvider>
     </>
