@@ -30,6 +30,9 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, 
 
   return (
     <Wrapper>
+      <Paragraph size="s" weight="bold" variant="white">
+        시설 정보
+      </Paragraph>
       <FacilitySign facilityInfo={facilityInfo} />
       <PeriodWrapper>
         <Paragraph size="s" weight="bold" variant="white">
@@ -49,7 +52,9 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, 
         <MenuContainer>
           {menuInfos.menuImgUrls.length > 0 && <MenuModal images={menuInfos.menuImgUrls} />}
           <MenuList lists={menuInfos.menuList.slice(0, moreMenu ? menuInfos.menuList.length : 4)} />
-          <MoreMenuBtn onClick={() => setMoreMenu(!moreMenu)}>{moreMenu ? '메뉴 접기' : '메뉴 더보기'}</MoreMenuBtn>
+          {menuInfos.menuList.length > 4 && (
+            <MoreMenuBtn onClick={() => setMoreMenu(!moreMenu)}>{moreMenu ? '메뉴 접기' : '메뉴 더보기'}</MoreMenuBtn>
+          )}
         </MenuContainer>
       </MenuWrapper>
       <Paragraph size="s" weight="bold" variant="white">

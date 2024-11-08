@@ -5,6 +5,7 @@ import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
 import { PlaceData, LocationData } from '@/types';
 import { useGetPlaceList } from '@/api/hooks/useGetPlaceList';
 import Loading from '@/components/common/layouts/Loading';
+import NoItem from '@/components/common/layouts/NoItem';
 
 interface PlaceSectionProps {
   mapBounds: LocationData;
@@ -80,7 +81,9 @@ export default function PlaceSection({
   if (isLoading) return <Loading size={50} />;
   if (isError) return <div>Error: {(error as Error).message}</div>;
 
-  return (
+  return filteredPlaces.length === 0 ? (
+    <NoItem message="장소 정보가 없어요!" height={400} />
+  ) : (
     <ListContainer>
       {filteredPlaces.map((place) => (
         <PlaceItem key={place.placeId} {...place} onClick={() => handlePlaceClick(place.placeId)} />

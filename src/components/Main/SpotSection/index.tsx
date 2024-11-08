@@ -4,6 +4,7 @@ import { GrPrevious, GrNext } from 'react-icons/gr';
 import { useRef } from 'react';
 import SpotItem from './SpotItem';
 import { SpotData } from '@/types';
+import NoItem from '@/components/common/layouts/NoItem';
 
 export default function SpotSection({ items }: { items: SpotData[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
@@ -17,26 +18,32 @@ export default function SpotSection({ items }: { items: SpotData[] }) {
   };
   return (
     <SectionContainer>
-      <ArrowButton onClick={() => scrollList('left')} className="left-arrow" direction="left">
-        <GrPrevious size={40} />
-      </ArrowButton>
-      <ListContainer ref={listRef}>
-        {items.map((spot) => {
-          return (
-            <SpotItem
-              key={spot.videoId}
-              videoId={spot.videoId}
-              videoAlias={spot.videoAlias}
-              videoUrl={spot.videoUrl}
-              place={spot.place}
-            />
-          );
-        })}
-      </ListContainer>
-      {items.length > 3 && (
-        <ArrowButton onClick={() => scrollList('right')} className="right-arrow" direction="right">
-          <GrNext size={40} />
-        </ArrowButton>
+      {items.length === 0 ? (
+        <NoItem message="그곳 정보가 없어요!" height={200} />
+      ) : (
+        <>
+          <ArrowButton onClick={() => scrollList('left')} className="left-arrow" direction="left">
+            <GrPrevious size={40} />
+          </ArrowButton>
+          <ListContainer ref={listRef}>
+            {items.map((spot) => {
+              return (
+                <SpotItem
+                  key={spot.videoId}
+                  videoId={spot.videoId}
+                  videoAlias={spot.videoAlias}
+                  videoUrl={spot.videoUrl}
+                  place={spot.place}
+                />
+              );
+            })}
+          </ListContainer>
+          {items.length > 3 && (
+            <ArrowButton onClick={() => scrollList('right')} className="right-arrow" direction="right">
+              <GrNext size={40} />
+            </ArrowButton>
+          )}
+        </>
       )}
     </SectionContainer>
   );

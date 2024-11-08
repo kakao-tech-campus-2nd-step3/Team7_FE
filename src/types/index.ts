@@ -136,6 +136,7 @@ export type ReviewData = {
   comment: string;
   userNickname: string;
   createdDate: Date;
+  mine: boolean;
 };
 
 export type OpenHourData = {

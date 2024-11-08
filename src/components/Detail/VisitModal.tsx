@@ -2,12 +2,28 @@ import { FcInfo } from 'react-icons/fc';
 
 import styled from 'styled-components';
 
+import { useState } from 'react';
 import Button from '@/components/common/Button';
 import { Paragraph } from '@/components/common/typography/Paragraph';
+import { useGetSendInfo } from '@/api/hooks/useGetSendInfo';
 
-export default function VisitModal({ placeName, onClose }: { placeName: string; onClose: () => void }) {
+export default function VisitModal({ id, placeName, onClose }: { id: number; placeName: string; onClose: () => void }) {
+  const { refetch } = useGetSendInfo(String(id));
+  const [message, setMessage] = useState<string>('');
+
   const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
+  };
+  const handleSendInfo = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    try {
+      const response = await refetch();
+      if (response.data.success) {
+        setMessage('완료되었습니다.');
+      }
+    } catch (error) {
+      console.error('실패: 정보를 보내는 데 실패했습니다.');
+    }
   };
   return (
     <Overlay onClick={() => onClose()}>
@@ -15,21 +31,36 @@ export default function VisitModal({ placeName, onClose }: { placeName: string; 
         <DescriptionSection>
           <FcInfo size={180} />
           <Paragraph size="l" weight="normal">
-            {placeName}에 대한 정보를
-            <br /> 카카오톡으로 보내드릴까요?
+            {message || `${placeName}에 대한 정보를\n 카카오톡으로 보내드릴까요?`}
           </Paragraph>
         </DescriptionSection>
-        <BtnContainer>
-          <Button
-            variant="blackOutline"
-            style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-            onClick={() => onClose()}
-          >
-            취소
-          </Button>
-          <Button variant="kakao" style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}>
-            확인
-          </Button>
+        <BtnContainer hasMessage={message === '완료되었습니다.'}>
+          {message === '완료되었습니다.' ? (
+            <Button
+              variant="kakao"
+              style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+              onClick={() => onClose()}
+            >
+              완료
+            </Button>
+          ) : (
+            <>
+              <Button
+                variant="blackOutline"
+                style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+                onClick={() => onClose()}
+              >
+                취소
+              </Button>
+              <Button
+                variant="kakao"
+                style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+                onClick={handleSendInfo}
+              >
+                확인
+              </Button>
+            </>
+          )}
         </BtnContainer>
       </Wrapper>
     </Overlay>
@@ -70,10 +101,11 @@ const DescriptionSection = styled.div`
   margin-top: 20%;
   p {
     line-height: 180%;
+    white-space: pre-line;
   }
 `;
-const BtnContainer = styled.div`
+const BtnContainer = styled.div<{ hasMessage: boolean }>`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${({ hasMessage }) => (hasMessage ? 'center' : 'space-between')};
   width: 382px;
 `;
