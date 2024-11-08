@@ -7,6 +7,7 @@ import InfluencerPage from '@/pages/Influencer';
 import MainPage from '@/pages/Main';
 import MapPage from '@/pages/Map';
 import MyPage from '@/pages/My';
+import ChoicePage from '@/pages/Choice';
 import PrivatedRoute from '@/routes/component/PrivatedRoute';
 
 import GlobalStyle from './global';
@@ -29,6 +30,14 @@ function App() {
               element={
                 <PrivatedRoute>
                   <MyPage />
+                </PrivatedRoute>
+              }
+            />
+            <Route
+              path="/choice"
+              element={
+                <PrivatedRoute>
+                  <ChoicePage />
                 </PrivatedRoute>
               }
             />

@@ -7,7 +7,6 @@ import SearchBar from '@/components/common/SearchBar';
 export default function SearchPage() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('query');
-
   const searchData = ['apple', 'banana', 'coding', 'javascript', '원티드', '프리온보딩', '프론트엔드'];
 
   /* todo - api 개발되면 검색결과 호출 추가 */

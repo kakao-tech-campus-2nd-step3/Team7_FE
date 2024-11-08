@@ -9,7 +9,6 @@ import NoItem from '@/components/common/layouts/NoItem';
 export default function MenuList({ lists }: { lists: Menu[] }) {
   return (
     <Wrapper>
-      {' '}
       {lists.length === 0 ? (
         <NoItem message="메뉴 정보가 없습니다." height={100} logo={false} alignItems="start" />
       ) : (

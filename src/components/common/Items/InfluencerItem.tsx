@@ -50,8 +50,7 @@ export default function InfluencerItem({
 
   return (
     <>
-      <Wrapper to={`/influencer/${influencerId}`}>
-        {/* 경로 수정필요 */}
+      <Wrapper to={`/map?influencer=${encodeURIComponent(influencerName)}`}>
         <ImageContainer>
           <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
             {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
@@ -91,6 +90,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
+  margin-bottom: auto;
 
   &:hover {
     & > div:nth-child(2) {
