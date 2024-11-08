@@ -26,7 +26,6 @@ function App() {
             <Route path="/map" element={<MapPage />} />
             <Route path="/detail/:id" element={<DetailPage />} />
             <Route path="/search" element={<SearchPage />} />
-            <Route path="/places/:id/reviews" element={<ReviewPage />} />
             <Route
               path="/my"
               element={
@@ -45,6 +44,7 @@ function App() {
             />
           </Route>
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/places/:id/reviews" element={<ReviewPage />} />
         </Routes>
       </AuthProvider>
     </>
