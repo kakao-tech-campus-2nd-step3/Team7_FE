@@ -49,29 +49,31 @@ export default function LoginModal({
     }
   }, [onLoginSuccess]);
 
-  if (!isOpen && children) {
-    return <>{children(openModal)}</>;
-  }
-
-  return ReactDOM.createPortal(
-    <ModalOverlay>
-      <ModalContainer>
-        <CloseButton onClick={closeModal}>X</CloseButton>
-        <TitleWrapper>
-          <LogoImage src={Logo} alt="인플레이스 로고" />
-          <Paragraph size="l" weight="bold">
-            인플레이스
-          </Paragraph>
-        </TitleWrapper>
-        <KakaoLoginButton onClick={handleKakaoLogin}>
-          <FaComment />
-          <Text size="s" weight="normal">
-            카카오 로그인
-          </Text>
-        </KakaoLoginButton>
-      </ModalContainer>
-    </ModalOverlay>,
-    document.body,
+  return (
+    <>
+      {children && children(openModal)}
+      {isOpen &&
+        ReactDOM.createPortal(
+          <ModalOverlay>
+            <ModalContainer>
+              <CloseButton onClick={closeModal}>X</CloseButton>
+              <TitleWrapper>
+                <LogoImage src={Logo} alt="인플레이스 로고" />
+                <Paragraph size="l" weight="bold">
+                  인플레이스
+                </Paragraph>
+              </TitleWrapper>
+              <KakaoLoginButton onClick={handleKakaoLogin}>
+                <FaComment />
+                <Text size="s" weight="normal">
+                  카카오 로그인
+                </Text>
+              </KakaoLoginButton>
+            </ModalContainer>
+          </ModalOverlay>,
+          document.body,
+        )}
+    </>
   );
 }
 

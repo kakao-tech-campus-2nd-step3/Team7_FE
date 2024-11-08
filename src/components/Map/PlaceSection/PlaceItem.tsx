@@ -7,6 +7,7 @@ import { PlaceData } from '@/types';
 import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import BasicImage from '@/assets/images/basic-image.png';
 
 interface PlaceItemProps extends PlaceData {
   onClick: () => void;
@@ -30,6 +31,10 @@ export default function PlaceItem({
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostPlaceLike();
 
+  const handleBasicImg = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = BasicImage;
+  };
+
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
@@ -44,11 +49,10 @@ export default function PlaceItem({
         { placeId, likes: newLikeStatus },
         {
           onSuccess: () => {
-            console.log('성공');
             setIsLike(newLikeStatus);
           },
-          onError: (error) => {
-            console.error('Error:', error);
+          onError: () => {
+            alert('좋아요 등록에 실패했어요. 다시 시도해주세요!');
           },
         },
       );
@@ -58,7 +62,7 @@ export default function PlaceItem({
   return (
     <>
       <PlaceCard key={placeId} onClick={onClick}>
-        <PlaceImage src={menuImgUrl} alt={placeName} />
+        <PlaceImage src={menuImgUrl} onError={handleBasicImg} alt={placeName} />
         <CardContent>
           <PlaceDetails>
             <Text size="l" weight="bold" variant="white">

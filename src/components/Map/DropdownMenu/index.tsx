@@ -31,12 +31,9 @@ export default function DropdownMenu({
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useDetectClose({ onDetected: () => setIsOpen(false) });
-  const findOptionByLabel = (label: string) => {
-    return options.find((option) => option.label === label);
-  };
   const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(() => {
     if (defaultValue) {
-      return findOptionByLabel(defaultValue.main) || null;
+      return options.find((option) => option.label === defaultValue.main) || null;
     }
     return null;
   });

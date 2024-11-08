@@ -1,7 +1,7 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
-import { InfluencerResponse, PageableData } from '@/types';
+import { InfluencerResponse } from '@/types';
 
 export const getBannerPath = () => `/banners`;
 export const getInfluencerPath = () => `/influencers`;
@@ -14,14 +14,6 @@ export const getNewVideoPath = () => `/videos/new`;
 // };
 export const getInfluencer = async () => {
   const response = await fetchInstance.get<InfluencerResponse>(getInfluencerPath());
-  return response.data;
-};
-export const getCoolVideo = async () => {
-  const response = await fetchInstance.get<PageableData>(getCoolVideoPath());
-  return response.data;
-};
-export const getNewVideo = async () => {
-  const response = await fetchInstance.get<PageableData>(getNewVideoPath());
   return response.data;
 };
 export const useGetMain = () => {
@@ -37,8 +29,6 @@ export const useGetMain = () => {
         queryFn: getInfluencer,
         staleTime: 1000 * 60 * 5,
       },
-      { queryKey: ['coolVideo'], queryFn: getCoolVideo, staleTime: 1000 * 60 * 5 },
-      { queryKey: ['newVideo'], queryFn: getNewVideo, staleTime: 1000 * 60 * 5 },
     ],
   });
 };

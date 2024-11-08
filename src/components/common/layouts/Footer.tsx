@@ -1,42 +1,12 @@
-import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 
-import { RiKakaoTalkFill } from 'react-icons/ri';
-import { FaInstagram, FaGithub } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import { Text } from '@/components/common/typography/Text';
 
 export default function Footer() {
   return (
     <FooterContainer>
       <FooterSection>
-        <FooterNav>
-          <NavItem to="/service">
-            <Text size="xxs" weight="bold" variant="white">
-              서비스 이용 약관
-            </Text>
-          </NavItem>
-          <NavItem to="/privacy">
-            <Text size="xxs" weight="bold" variant="white">
-              개인정보 처리방침
-            </Text>
-          </NavItem>
-          <NavItem to="/marketing">
-            <Text size="xxs" weight="bold" variant="white">
-              마케팅 수신 동의
-            </Text>
-          </NavItem>
-          <NavItem to="/customer">
-            <Text size="xxs" weight="bold" variant="white">
-              고객센터
-            </Text>
-          </NavItem>
-          <NavItem to="/business">
-            <Text size="xxs" weight="bold" variant="white">
-              비즈니스
-            </Text>
-          </NavItem>
-        </FooterNav>
         <FooterInfo>
           <CompanyInfo>
             <Text size="xxs" weight="normal" variant="#979797">
@@ -56,22 +26,24 @@ export default function Footer() {
             </Text>
           </CompanyInfo>
           <SocialLinks>
-            <SocialNavItem href="https://kakao.com" target="_blank" rel="noopener noreferrer">
-              <RiKakaoTalkFill size={16} color="white" />
-              <Text size="xxs" weight="normal" variant="white">
-                카카오톡
-              </Text>
-            </SocialNavItem>
-            <SocialNavItem href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <FaInstagram size={16} color="white" />
-              <Text size="xxs" weight="normal" variant="white">
-                인스타그램
-              </Text>
-            </SocialNavItem>
-            <SocialNavItem href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <SocialNavItem
+              href="https://github.com/kakao-tech-campus-2nd-step3/Team7_FE"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <FaGithub size={16} color="white" />
               <Text size="xxs" weight="normal" variant="white">
-                깃허브
+                FE Github
+              </Text>
+            </SocialNavItem>
+            <SocialNavItem
+              href="https://github.com/kakao-tech-campus-2nd-step3/Team7_BE"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaGithub size={16} color="white" />
+              <Text size="xxs" weight="normal" variant="white">
+                BE Github
               </Text>
             </SocialNavItem>
           </SocialLinks>
@@ -94,15 +66,8 @@ const FooterSection = styled.div`
   width: 100%;
 `;
 
-const FooterNav = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-`;
-
 const FooterInfo = styled.div`
   display: flex;
-  margin-top: 15px;
   justify-content: space-between;
   align-items: flex-start;
 `;
@@ -116,12 +81,6 @@ const CompanyInfo = styled.div`
 const SocialLinks = styled.div`
   display: flex;
   gap: 20px;
-`;
-
-const NavItem = styled(Link)`
-  font-family: 'Merriweather', sans-serif;
-  line-height: 24px;
-  text-decoration: none;
 `;
 
 const SocialNavItem = styled.a`

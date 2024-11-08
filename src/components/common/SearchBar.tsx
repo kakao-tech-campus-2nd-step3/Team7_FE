@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -10,39 +10,21 @@ interface SearchBarProps {
 export default function SearchBar({ placeholder = '키워드를 입력해주세요!', data }: SearchBarProps) {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
-  const [isInputValue, setIsInputValue] = useState(false);
   const [dropDownList, setDropDownList] = useState(data);
   const [itemIndex, setItemIndex] = useState(-1);
-  const [normalizedInput, setNormalizedInput] = useState('');
 
-  const normalizeInput = (input: string) => {
-    return input.replace(/[^가-힣a-zA-Z0-9\s]/g, '');
-  };
-  const showDropDownList = () => {
-    if (inputValue === '') {
-      setIsInputValue(false);
-      setDropDownList([]);
-      setNormalizedInput('');
-    } else {
-      const newNormalizedInput = normalizeInput(inputValue);
-      setNormalizedInput(newNormalizedInput);
-      const regex = new RegExp(newNormalizedInput, 'i');
-
-      const choosenTextList = data.filter((textItem) => {
-        return regex.test(textItem);
-      });
-
-      setDropDownList(choosenTextList);
-    }
-  };
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    setIsInputValue(true);
+    const newInputValue = event.target.value;
+    setInputValue(newInputValue);
+
+    const newNormalizedInput = newInputValue.replace(/[^가-힣a-zA-Z0-9\s]/g, '');
+    const regex = new RegExp(newNormalizedInput, 'i');
+    const choosenTextList = data.filter((textItem) => regex.test(textItem));
+    setDropDownList(choosenTextList);
   };
 
   const handleDropDownItem = (item: string) => {
     setInputValue(item);
-    setIsInputValue(false);
     setItemIndex(-1);
     handleSearch(item);
   };
@@ -55,7 +37,7 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
   };
 
   const handleDropDownKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (isInputValue) {
+    if (inputValue) {
       if (event.key === 'ArrowDown' && dropDownList.length - 1 > itemIndex) {
         setItemIndex(itemIndex + 1);
       }
@@ -75,11 +57,9 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
     }
   };
 
-  useEffect(showDropDownList, [inputValue]);
-
   return (
     <SearchBarContainer>
-      <SearchInputWrapper $isInputValue={isInputValue}>
+      <SearchInputWrapper isInputValue={inputValue !== ''}>
         <SearchInput
           type="text"
           value={inputValue}
@@ -87,15 +67,15 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
           onKeyDown={handleDropDownKey}
           placeholder={placeholder}
         />
-        <SearchIconWrapper onClick={() => handleSearch(inputValue)} />
+        <SearchIconWrapper role="button" aria-label="검색" onClick={() => handleSearch(inputValue)} />
       </SearchInputWrapper>
-      {isInputValue && (
+      {inputValue && (
         <SearchDropDownBox>
           {dropDownList.length === 0 ? (
             <SearchDropDownItem>해당하는 키워드가 없습니다!</SearchDropDownItem>
           ) : (
             dropDownList.map((item, index) => {
-              const matchIndex = item.toLowerCase().indexOf(normalizedInput.toLowerCase());
+              const matchIndex = item.toLowerCase().indexOf(inputValue.toLowerCase());
               return (
                 <SearchDropDownItem
                   key={item}
@@ -106,10 +86,8 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
                   {matchIndex !== -1 ? (
                     <>
                       {item.substring(0, matchIndex)}
-                      <span style={{ color: 'red' }}>
-                        {item.substring(matchIndex, matchIndex + normalizedInput.length)}
-                      </span>
-                      {item.substring(matchIndex + normalizedInput.length)}
+                      <span style={{ color: 'red' }}>{item.substring(matchIndex, matchIndex + inputValue.length)}</span>
+                      {item.substring(matchIndex + inputValue.length)}
                     </>
                   ) : (
                     item
@@ -129,14 +107,14 @@ const SearchBarContainer = styled.div`
   height: 44px;
 `;
 
-const SearchInputWrapper = styled.div<{ $isInputValue: boolean }>`
+const SearchInputWrapper = styled.div<{ isInputValue: boolean }>`
   display: flex;
   align-items: center;
   background: #414141;
   padding: 12px 16px;
   border: 1.5px solid #a5a5a5;
-  border-bottom: ${({ $isInputValue }) => ($isInputValue ? 'none' : null)};
-  border-radius: ${({ $isInputValue }) => ($isInputValue ? '16px 16px 0 0' : '16px')};
+  border-bottom: ${({ isInputValue }) => (isInputValue ? 'none' : null)};
+  border-radius: ${({ isInputValue }) => (isInputValue ? '16px 16px 0 0' : '16px')};
   z-index: 3;
 `;
 

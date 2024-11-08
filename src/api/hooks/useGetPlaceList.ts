@@ -23,7 +23,6 @@ export const getPlaceList = async (
   });
 
   const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
-  console.log('Sending request to /places with params:', params.toString());
 
   return response.data.places;
 };

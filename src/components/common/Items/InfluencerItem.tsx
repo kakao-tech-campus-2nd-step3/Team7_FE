@@ -12,18 +12,26 @@ import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 
+interface InfluencerItemProps extends InfluencerData {
+  useBackCard?: boolean;
+  useNav?: boolean;
+}
+
 export default function InfluencerItem({
   influencerId,
   influencerName,
   influencerImgUrl,
   influencerJob,
   likes,
-}: InfluencerData) {
+  useBackCard = true,
+  useNav = true,
+}: InfluencerItemProps) {
   const authInfo = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostInfluencerLike();
+
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
@@ -37,12 +45,10 @@ export default function InfluencerItem({
         { influencerId, likes: newLikeStatus },
         {
           onSuccess: () => {
-            console.log('성공');
             setIsLike(newLikeStatus);
           },
-          onError: (error) => {
-            console.error('Error:', error);
-            /* todo - 좋아요 실패시 띄울 컴포넌트 */
+          onError: () => {
+            alert('좋아요 등록에 실패했어요. 다시 시도해주세요!');
           },
         },
       );
@@ -52,18 +58,20 @@ export default function InfluencerItem({
 
   return (
     <>
-      <Wrapper to={`/map?influencer=${encodeURIComponent(influencerName)}`}>
+      <Wrapper as={useNav ? Link : 'div'} to={useNav ? `/map?influencer=${encodeURIComponent(influencerName)}` : ''}>
         <ImageContainer>
           <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
             {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
           </LikeIcon>
           <FrontImage src={influencerImgUrl} alt={influencerName} />
-          <BackImageWrapper>
-            <MdLocationOn size={50} color="#55EBFF" />
-            <Paragraph size="m" variant="white" weight="bold">
-              지도 보기
-            </Paragraph>
-          </BackImageWrapper>
+          {useBackCard && useNav && (
+            <BackImageWrapper>
+              <MdLocationOn size={50} color="#55EBFF" />
+              <Paragraph size="m" variant="white" weight="bold">
+                지도 보기
+              </Paragraph>
+            </BackImageWrapper>
+          )}
         </ImageContainer>
         <Paragraph size="m" weight="bold" variant="white">
           {influencerName}
@@ -76,6 +84,7 @@ export default function InfluencerItem({
     </>
   );
 }
+
 const Wrapper = styled(Link)`
   width: 170px;
   height: 278px;
@@ -83,7 +92,7 @@ const Wrapper = styled(Link)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  line-height: 30px;
+  text-decoration: none;
 `;
 
 const ImageContainer = styled.div`

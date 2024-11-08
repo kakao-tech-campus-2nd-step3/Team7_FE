@@ -4,40 +4,47 @@ import { GrPrevious, GrNext } from 'react-icons/gr';
 import { useRef } from 'react';
 import { UserPlaceData } from '@/types';
 import UserPlaceItem from './UserPlaceItem';
+import NoItem from '@/components/common/layouts/NoItem';
 
 export default function UserPlaceSection({ items }: { items: UserPlaceData[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
-      const someWidth = 200;
+      const someWidth = 400;
       const scrollAmount = direction === 'left' ? -someWidth : someWidth;
       listRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
   return (
     <SectionContainer>
-      <ArrowButton onClick={() => scrollList('left')} className="left-arrow" direction="left">
-        <GrPrevious size={40} />
-      </ArrowButton>
-      <ListContainer ref={listRef}>
-        {items.map((place) => {
-          return (
-            <UserPlaceItem
-              key={place.placeId}
-              placeId={place.placeId}
-              placeName={place.placeName}
-              imageUrl={place.imageUrl}
-              influencer={place.influencer}
-              likes={place.likes}
-            />
-          );
-        })}
-      </ListContainer>
-      {items.length > 5 && (
-        <ArrowButton onClick={() => scrollList('right')} className="right-arrow" direction="right">
-          <GrNext size={40} />
-        </ArrowButton>
+      {items.length === 0 ? (
+        <NoItem message="장소 정보가 없어요!" height={180} />
+      ) : (
+        <>
+          <ArrowButton onClick={() => scrollList('left')} className="left-arrow" direction="left">
+            <GrPrevious size={40} />
+          </ArrowButton>
+          <ListContainer ref={listRef}>
+            {items.map((place) => {
+              return (
+                <UserPlaceItem
+                  key={place.placeId}
+                  placeId={place.placeId}
+                  placeName={place.placeName}
+                  imageUrl={place.imageUrl}
+                  influencer={place.influencer}
+                  likes={place.likes}
+                />
+              );
+            })}
+          </ListContainer>
+          {items.length > 5 && (
+            <ArrowButton onClick={() => scrollList('right')} className="right-arrow" direction="right">
+              <GrNext size={40} />
+            </ArrowButton>
+          )}
+        </>
       )}
     </SectionContainer>
   );

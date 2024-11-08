@@ -6,8 +6,23 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
 
 import { ReviewData } from '@/types';
+import { useDeleteReview } from '@/api/hooks/useDeleteReview';
 
-export default function ReviewItem({ likes, comment, userNickname, createdDate }: ReviewData) {
+export default function ReviewItem({ reviewId, likes, comment, userNickname, createdDate, mine }: ReviewData) {
+  const { mutate: deleteReview } = useDeleteReview();
+  const handleDeleteReview = () => {
+    const isConfirm = window.confirm('삭제하시겠습니까?');
+    if (!isConfirm) return;
+
+    deleteReview(String(reviewId), {
+      onSuccess: () => {
+        alert('삭제되었습니다.');
+      },
+      onError: () => {
+        alert('리뷰를 삭제하지 못했어요. 다시 시도해주세요!');
+      },
+    });
+  };
   return (
     <Wrapper>
       <Title>
@@ -21,9 +36,12 @@ export default function ReviewItem({ likes, comment, userNickname, createdDate }
           {new Date(createdDate).toLocaleDateString()}
         </Text>
       </Title>
-      <Paragraph size="xs" weight="normal" variant="white">
-        {comment}
-      </Paragraph>
+      <Comment>
+        <Paragraph size="xs" weight="normal" variant="white">
+          {comment}
+        </Paragraph>
+        {mine ? <DeleteBtn onClick={handleDeleteReview}>삭제</DeleteBtn> : null}
+      </Comment>
     </Wrapper>
   );
 }
@@ -36,7 +54,7 @@ const Wrapper = styled.div`
   gap: 2px;
 
   svg {
-    margin-left: 40px;
+    margin-left: 20px;
   }
 `;
 const Title = styled.div`
@@ -44,3 +62,14 @@ const Title = styled.div`
   justify-content: space-between;
 `;
 const Name = styled.div``;
+const DeleteBtn = styled.button`
+  font-size: 14px;
+  color: #b0b0b0;
+  background: none;
+  border: none;
+  cursor: pointer;
+`;
+const Comment = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
