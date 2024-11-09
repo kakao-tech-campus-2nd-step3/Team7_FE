@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Suspense } from 'react';
 import styled from 'styled-components';
 
@@ -8,8 +8,20 @@ import Footer from '@/components/common/layouts/Footer';
 import Header from '@/components/common/layouts/Header';
 import Loading from '@/components/common/layouts/Loading';
 import Error from '@/components/common/layouts/Error';
+import MainSkeleton from '@/components/Main/MainSkeleton';
+import DetailSkeleton from '@/components/Detail/DetailSkeleton';
 
 export default function MainLayout() {
+  const location = useLocation();
+  const renderSkeleton = () => {
+    if (location.pathname === '/') {
+      return <MainSkeleton />;
+    }
+    if (location.pathname.startsWith('/detail')) {
+      return <DetailSkeleton />;
+    }
+    return <Loading size={50} />;
+  };
   return (
     <Wrapper>
       <Header />
@@ -17,7 +29,7 @@ export default function MainLayout() {
         <QueryErrorResetBoundary>
           {({ reset }) => (
             <ErrorBoundary FallbackComponent={Error} onReset={reset}>
-              <Suspense fallback={<Loading size={50} />}>
+              <Suspense fallback={renderSkeleton()}>
                 <Outlet />
               </Suspense>
             </ErrorBoundary>
