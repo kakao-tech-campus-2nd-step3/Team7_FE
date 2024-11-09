@@ -139,21 +139,6 @@ const dummyPlaces: PlaceData[] = [
     menuImgUrl: 'https://via.placeholder.com/500',
   },
   {
-    placeId: 9,
-    placeName: '맘스터치 대구대현점',
-    address: {
-      address1: '대구광역시',
-      address2: '북구',
-      address3: '대현동 119-13',
-    },
-    category: '맛집',
-    influencerName: '풍자',
-    longitude: '128.6101069',
-    latitude: '35.8858457',
-    likes: false,
-    menuImgUrl: 'https://via.placeholder.com/500',
-  },
-  {
     placeId: 10,
     placeName: '10맘스터치 대구대현점',
     address: {
