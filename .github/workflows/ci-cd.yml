@@ -30,7 +30,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -38,20 +37,12 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
-      
-      - name: Print current branch
-        run: |
-          echo "Current branch: ${{ github.ref }}"
-          echo "Expected branch (Master): refs/heads/Master"
-      
       - name: Run tests
         run: npm test
-      
       - name: Build project
         run: npm run build
         env:
           VITE_KAKAO_JS_KEY: ${{ secrets.VITE_KAKAO_JS_KEY }}
-      
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -59,60 +50,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       
-      - name: Check Current S3 Content
-        run: |
-          echo "Current S3 content before deployment:"
-          aws s3 ls s3://inplace.my/assets/ --recursive
-
-          - name: Update CloudFront TTL Settings
-          run: |
-            # 현재 CloudFront 설정 가져오기
-            CONFIG=$(aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --query 'DistributionConfig' --output json)
-            ETAG=$(aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --query 'ETag' --output text)
-            
-            # TTL 설정을 포함한 새로운 설정 생성
-            echo "$CONFIG" | \
-            jq '(.DefaultCacheBehavior.MinTTL = 0) |
-                (.DefaultCacheBehavior.MaxTTL = 60) |
-                (.DefaultCacheBehavior.DefaultTTL = 60)' > updated-config.json
-            
-            # 설정 파일 내용 확인
-            echo "Updated configuration:"
-            cat updated-config.json
-            
-            # 업데이트된 설정 적용
-            aws cloudfront update-distribution \
-              --id ${{ secrets.CLOUDFRONT_ID }} \
-              --distribution-config file://updated-config.json \
-              --if-match $ETAG
-
       - name: Deploy to S3
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/develop" ] || [ "${{ github.ref }}" == "refs/heads/Master" ] || [ "${{ github.ref }}" == "refs/heads/hotfix/#78-debug-cicd" ]; then
-            echo "Deploying to environment..."
-            echo "Contents of dist directory:"
-            ls -la dist/
-            
-            echo "Syncing with S3..."
-            aws s3 sync dist/ s3://inplace.my --delete --metadata-directive REPLACE
-            
-            echo "Verifying S3 upload:"
-            aws s3 ls s3://inplace.my/assets/ --recursive
+          if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            echo "Deploying to QA environment..."
+            aws s3 sync dist/ s3://inplace.my --delete
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
+          elif [ "${{ github.ref }}" == "refs/heads/Master" ]; then
+            echo "Deploying to Production environment..."
+            aws s3 sync dist/ s3://inplace.my --delete
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
+            elif [ "${{ github.ref }}" == "refs/heads/hotfix/#78-debug-cicd" ]; then
+            echo "Deploying to Production environment..."
+            aws s3 sync dist/ s3://inplace.my --delete
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
           fi
-            
-      - name: Verify Deployment
-        run: |
-          echo "=== Deployment Verification ==="
-          echo "1. Checking final S3 content:"
-          aws s3 ls s3://inplace.my/assets/ --recursive
-          
-          echo "3. Checking specific JS file:"
-          # dist 폴더에서 index-*.js 파일명 찾기
-          JS_FILE=$(find dist/assets -name "index-*.js" -printf "%f\n")
-          echo "Checking if $JS_FILE exists in S3:"
-          aws s3 ls s3://inplace.my/assets/$JS_FILE
-          
-          echo "4. Deployment Summary:"
-          echo "Branch: ${{ github.ref }}"
-          echo "Last modified files in S3:"
-          aws s3 ls s3://inplace.my --recursive --human-readable --summarize | tail -n 5
