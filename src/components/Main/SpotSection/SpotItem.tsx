@@ -27,7 +27,6 @@ export default function SpotItem({ videoId, videoAlias, videoUrl, place }: SpotD
 }
 const Wrapper = styled(Link)`
   width: 340px;
-  height: 280px;
   display: flex;
   flex-direction: column;
   align-content: end;

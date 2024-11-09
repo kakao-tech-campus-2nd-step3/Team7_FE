@@ -65,7 +65,6 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
 }
 const Wrapper = styled(Link)`
   width: 170px;
-  height: 278px;
   display: flex;
   flex-direction: column;
   align-items: center;

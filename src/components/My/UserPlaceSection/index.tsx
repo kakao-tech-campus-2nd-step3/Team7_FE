@@ -57,7 +57,6 @@ const SectionContainer = styled.div`
 const ListContainer = styled.div`
   overflow: hidden;
   display: flex;
-  align-items: center;
   gap: 30px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;

@@ -54,7 +54,7 @@ export const mainHandlers = [
       content: [
         {
           videoId: 1,
-          videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
+          videoAlias: '정육왕 (이)가 추천하는 맛집! 다양한 메뉴를 즐길 수 있습니다.',
           videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
           place: {
             placeId: 1,
@@ -149,7 +149,7 @@ export const mainHandlers = [
       content: [
         {
           videoId: 1,
-          videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
+          videoAlias: '정육왕 (이)가 추천하는 맛집! 다양한 메뉴를 즐길 수 있습니다.',
           videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
           place: {
             placeId: 1,
@@ -293,7 +293,7 @@ export const mainHandlers = [
       influencers: [
         {
           influencerId: 1,
-          influencerName: '성시경',
+          influencerName: '긴 문자열 테스트용입니다.',
           influencerImgUrl: 'https://via.placeholder.com/100',
           influencerJob: '모델',
           likes: true,

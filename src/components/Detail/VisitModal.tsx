@@ -3,19 +3,29 @@ import { FcInfo } from 'react-icons/fc';
 import styled from 'styled-components';
 
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { useGetSendInfo } from '@/api/hooks/useGetSendInfo';
+import useAuth from '@/hooks/useAuth';
+import LoginModal from '../common/modals/LoginModal';
 
 export default function VisitModal({ id, placeName, onClose }: { id: number; placeName: string; onClose: () => void }) {
+  const authInfo = useAuth();
+  const location = useLocation();
   const { refetch } = useGetSendInfo(String(id));
   const [message, setMessage] = useState<string>('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
   const handleSendInfo = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    if (!authInfo.accessToken) {
+      setMessage('로그인이 필요합니다.');
+      return;
+    }
     try {
       const response = await refetch();
       if (response.data.success) {
@@ -26,44 +36,47 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
     }
   };
   return (
-    <Overlay onClick={() => onClose()}>
-      <Wrapper onClick={handleModalClick}>
-        <DescriptionSection>
-          <FcInfo size={180} />
-          <Paragraph size="l" weight="normal">
-            {message || `${placeName}에 대한 정보를\n 카카오톡으로 보내드릴까요?`}
-          </Paragraph>
-        </DescriptionSection>
-        <BtnContainer hasMessage={message === '완료되었습니다.'}>
-          {message === '완료되었습니다.' ? (
-            <Button
-              variant="kakao"
-              style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-              onClick={() => onClose()}
-            >
-              완료
-            </Button>
-          ) : (
-            <>
-              <Button
-                variant="blackOutline"
-                style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-                onClick={() => onClose()}
-              >
-                취소
-              </Button>
+    <>
+      <Overlay onClick={() => onClose()}>
+        <Wrapper onClick={handleModalClick}>
+          <DescriptionSection>
+            <FcInfo size={180} />
+            <Paragraph size="l" weight="normal">
+              {message || `${placeName}에 대한 정보를\n 카카오톡으로 보내드릴까요?`}
+            </Paragraph>
+          </DescriptionSection>
+          <BtnContainer hasMessage={message === '완료되었습니다.' || message === '로그인이 필요합니다.'}>
+            {message === '완료되었습니다.' || message === '로그인이 필요합니다.' ? (
               <Button
                 variant="kakao"
                 style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-                onClick={handleSendInfo}
+                onClick={() => onClose()}
               >
-                확인
+                완료
               </Button>
-            </>
-          )}
-        </BtnContainer>
-      </Wrapper>
-    </Overlay>
+            ) : (
+              <>
+                <Button
+                  variant="blackOutline"
+                  style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+                  onClick={() => onClose()}
+                >
+                  취소
+                </Button>
+                <Button
+                  variant="kakao"
+                  style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+                  onClick={handleSendInfo}
+                >
+                  확인
+                </Button>
+              </>
+            )}
+          </BtnContainer>
+        </Wrapper>
+      </Overlay>
+      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+    </>
   );
 }
 const Overlay = styled.div`

@@ -87,12 +87,12 @@ export default function InfluencerItem({
 
 const Wrapper = styled(Link)`
   width: 170px;
-  height: 278px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   text-decoration: none;
+  gap: 10px;
 `;
 
 const ImageContainer = styled.div`
@@ -101,7 +101,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: auto;
+  margin-bottom: 4px;
 
   &:hover {
     & > div:nth-child(2) {

@@ -43,4 +43,5 @@ const InnerWrapper = styled.div`
   flex-grow: 1;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 40px;
 `;
