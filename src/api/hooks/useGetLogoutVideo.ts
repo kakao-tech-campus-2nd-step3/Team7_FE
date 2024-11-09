@@ -14,11 +14,6 @@ export const getNewVideo = async () => {
   const response = await fetchInstance.get<PageableData>(getNewVideoPath());
   return response.data;
 };
-export const useGetLogoutVideo = () => {
-  return useSuspenseQueries({
-    queries: [
-      { queryKey: ['coolVideo'], queryFn: getCoolVideo, staleTime: 1000 * 60 * 5 },
-      { queryKey: ['newVideo'], queryFn: getNewVideo, staleTime: 1000 * 60 * 5 },
 export const useGetLogoutVideo = (enabled: boolean) => {
   return useQueries({
     queries: [
