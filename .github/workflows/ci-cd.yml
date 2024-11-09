@@ -59,17 +59,30 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
       
-      - name: Check Current CloudFront Invalidations
-        run: |
-          echo "Current CloudFront invalidations before deployment:"
-          aws cloudfront list-invalidations --distribution-id ${{ secrets.CLOUDFRONT_ID }}
-      
       - name: Check Current S3 Content
         run: |
           echo "Current S3 content before deployment:"
           aws s3 ls s3://inplace.my/assets/ --recursive
 
-      - name: Deploy to S3 and Invalidate CloudFront
+      - name: Update CloudFront TTL Settings
+        run: |
+          # 현재 CloudFront 설정 가져오기
+          aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --output json > distribution-config.json
+          
+          # ETag 저장
+          ETAG=$(aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --query 'ETag' --output text)
+          
+          # 설정 파일 수정 (jq 사용)
+          jq '.DistributionConfig.DefaultCacheBehavior.MinTTL = 0 | 
+              .DistributionConfig.DefaultCacheBehavior.MaxTTL = 60 | 
+              .DistributionConfig.DefaultCacheBehavior.DefaultTTL = 60' distribution-config.json > updated-config.json
+          
+          # 업데이트된 설정 적용
+          aws cloudfront update-distribution --id ${{ secrets.CLOUDFRONT_ID }} \
+            --distribution-config file://updated-config.json \
+            --if-match $ETAG
+
+      - name: Deploy to S3
         run: |
           if [ "${{ github.ref }}" == "refs/heads/develop" ] || [ "${{ github.ref }}" == "refs/heads/Master" ] || [ "${{ github.ref }}" == "refs/heads/hotfix/#78-debug-cicd" ]; then
             echo "Deploying to environment..."
@@ -77,27 +90,10 @@ jobs:
             ls -la dist/
             
             echo "Syncing with S3..."
-            # 메타데이터 포함하여 모든 파일 강제 업데이트
-            aws s3 sync dist/ s3://inplace.my --delete --cache-control max-age=0,no-cache,no-store,must-revalidate --metadata-directive REPLACE
-      
+            aws s3 sync dist/ s3://inplace.my --delete --metadata-directive REPLACE
+            
             echo "Verifying S3 upload:"
             aws s3 ls s3://inplace.my/assets/ --recursive
-            
-            echo "Creating CloudFront invalidation..."
-            # 더 구체적인 경로 무효화
-            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/index.html" "/assets/*" "/*"
-            
-            # 모든 invalidation이 완료될 때까지 대기
-            sleep 30  # CloudFront 전파 대기
-            
-            echo "Creating second invalidation to ensure cache clear..."
-            INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/assets/*" "/*" --query 'Invalidation.Id' --output text)
-            
-            echo "Waiting for CloudFront invalidation to complete..."
-            aws cloudfront wait invalidation-completed --distribution-id ${{ secrets.CLOUDFRONT_ID }} --id $INVALIDATION_ID
-            
-            echo "Verifying CloudFront invalidation status:"
-            aws cloudfront get-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --id $INVALIDATION_ID
           fi
             
       - name: Verify Deployment
@@ -105,9 +101,6 @@ jobs:
           echo "=== Deployment Verification ==="
           echo "1. Checking final S3 content:"
           aws s3 ls s3://inplace.my/assets/ --recursive
-          
-          echo "2. Checking final CloudFront invalidations:"
-          aws cloudfront list-invalidations --distribution-id ${{ secrets.CLOUDFRONT_ID }}
           
           echo "3. Checking specific JS file:"
           # dist 폴더에서 index-*.js 파일명 찾기
