@@ -25,39 +25,81 @@ jobs:
         run: npm test
 
   build-and-deploy:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '22'
-      
-      - name: Install dependencies
-        run: npm ci
-      - name: Run tests
-        run: npm test
-      - name: Build project
-        run: npm run build
-        env:
-          VITE_KAKAO_JS_KEY: ${{ secrets.VITE_KAKAO_JS_KEY }}
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-northeast-2
-      
-      - name: Deploy to S3
-        run: |
-          if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
-            echo "Deploying to QA environment..."
-            aws s3 sync dist/ s3://inplace.my --delete
-            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
-          elif [ "${{ github.ref }}" == "refs/heads/Master" ]; then
-            echo "Deploying to Production environment..."
-            aws s3 sync dist/ s3://inplace.my --delete
-            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
-          fi
+      # develop 또는 Master 브랜치일 때만 실행
+      if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master'
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code  # 소스 코드 체크아웃
+          uses: actions/checkout@v2
+        
+        - name: Setup Node.js  # Node.js 환경 설정
+          uses: actions/setup-node@v2
+          with:
+            node-version: '22'  # Node.js 버전 지정
+        
+        - name: Install dependencies  # 프로덕션 의존성 설치
+          run: npm ci  # npm install 대신 ci를 사용하여 정확한 버전 설치
+        
+        - name: Print current branch  # 현재 브랜치 정보 출력 (디버깅용)
+          run: |
+            echo "Current branch: ${{ github.ref }}"
+            echo "Expected branch (Master): refs/heads/Master"
+        
+        - name: Run tests  # 배포 전 테스트 재실행
+          run: npm test
+        
+        - name: Build project  # 프로젝트 빌드
+          run: npm run build
+          env:
+            VITE_KAKAO_JS_KEY: ${{ secrets.VITE_KAKAO_JS_KEY }}  # 환경 변수 설정
+        
+        - name: Configure AWS credentials  # AWS 인증 설정
+          uses: aws-actions/configure-aws-credentials@v1
+          with:
+            aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws-region: ap-northeast-2
+        
+        - name: Debug AWS Configuration  # AWS 설정 확인 (디버깅용)
+          run: |
+            aws sts get-caller-identity
+            echo "Verifying S3 bucket access..."
+            aws s3 ls s3://inplace.my
+        
+        - name: Deploy to S3 and Invalidate CloudFront  # S3 배포 및 CloudFront 캐시 무효화
+          run: |
+            if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+              echo "Deploying to QA environment..."
+              echo "Contents of dist directory:"
+              ls -la dist/
+              
+              echo "Syncing with S3..."
+              aws s3 sync dist/ s3://inplace.my --delete  # S3에 배포
+              
+              echo "Creating CloudFront invalidation..."
+              aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
+              
+            elif [ "${{ github.ref }}" == "refs/heads/Master" ]; then
+              echo "Deploying to Production environment..."
+              echo "Contents of dist directory:"
+              ls -la dist/
+              
+              echo "Syncing with S3..."
+              aws s3 sync dist/ s3://inplace.my --delete  # S3에 배포
+              
+              echo "Creating CloudFront invalidation..."
+              INVALIDATION_ID=$(aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*" --query 'Invalidation.Id' --output text)
+              
+              echo "Waiting for CloudFront invalidation to complete..."
+              aws cloudfront wait invalidation-completed --distribution-id ${{ secrets.CLOUDFRONT_ID }} --id $INVALIDATION_ID
+              
+              echo "Verifying S3 deployment..."
+              aws s3 ls s3://inplace.my
+            fi
+        
+        - name: Print deployment status  # 배포 상태 확인 (디버깅용)
+          run: |
+            echo "Deployment completed"
+            echo "Branch: ${{ github.ref }}"
+            echo "Last modified files in S3:"
+            aws s3 ls s3://inplace.my --recursive --human-readable --summarize | tail -n 5
