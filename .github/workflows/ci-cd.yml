@@ -64,33 +64,27 @@ jobs:
           echo "Current S3 content before deployment:"
           aws s3 ls s3://inplace.my/assets/ --recursive
 
-      - name: Update CloudFront TTL Settings
-        run: |
-          # 현재 CloudFront 설정 가져오기
-          aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --output json > distribution-config.json
-          
-          # ETag 저장
-          ETAG=$(aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --query 'ETag' --output text)
-          
-          # 기존 설정을 유지하면서 TTL만 수정
-          jq '.DistributionConfig.DefaultCacheBehavior.MinTTL = 0 | 
-              .DistributionConfig.DefaultCacheBehavior.MaxTTL = 60 | 
-              .DistributionConfig.DefaultCacheBehavior.DefaultTTL = 60 | 
-              .DistributionConfig.Comment = .DistributionConfig.Comment | 
-              .DistributionConfig.CallerReference = .DistributionConfig.CallerReference | 
-              .DistributionConfig.Origins = .DistributionConfig.Origins | 
-              .DistributionConfig.Enabled = .DistributionConfig.Enabled | 
-              del(.ETag) | 
-              del(.DistributionConfig.ETag)' distribution-config.json > updated-config.json
-          
-          # 설정 파일 내용 확인
-          echo "Updated configuration:"
-          cat updated-config.json
-
-          # 업데이트된 설정 적용
-          aws cloudfront update-distribution --id ${{ secrets.CLOUDFRONT_ID }} \
-            --distribution-config file://updated-config.json \
-            --if-match $ETAG
+          - name: Update CloudFront TTL Settings
+          run: |
+            # 현재 CloudFront 설정 가져오기
+            CONFIG=$(aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --query 'DistributionConfig' --output json)
+            ETAG=$(aws cloudfront get-distribution-config --id ${{ secrets.CLOUDFRONT_ID }} --query 'ETag' --output text)
+            
+            # TTL 설정을 포함한 새로운 설정 생성
+            echo "$CONFIG" | \
+            jq '(.DefaultCacheBehavior.MinTTL = 0) |
+                (.DefaultCacheBehavior.MaxTTL = 60) |
+                (.DefaultCacheBehavior.DefaultTTL = 60)' > updated-config.json
+            
+            # 설정 파일 내용 확인
+            echo "Updated configuration:"
+            cat updated-config.json
+            
+            # 업데이트된 설정 적용
+            aws cloudfront update-distribution \
+              --id ${{ secrets.CLOUDFRONT_ID }} \
+              --distribution-config file://updated-config.json \
+              --if-match $ETAG
 
       - name: Deploy to S3
         run: |
