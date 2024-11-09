@@ -34,28 +34,28 @@ export const detailHandlers = [
         ],
         menuList: [
           {
-            price: '14000',
+            price: '14,000',
             recommend: true,
             menuName: '료코카츠',
             menuImgUrl: 'https://via.placeholder.com/100',
             description: '료코만의 감성을 담은',
           },
           {
-            price: '3000',
+            price: '3,000',
             recommend: false,
             menuName: '료코츠카',
             menuImgUrl: 'https://via.placeholder.com/100',
             description: '료코만의 감성을 담은',
           },
           {
-            price: '14000',
+            price: '14,000',
             recommend: false,
             menuName: '료코카츠',
             menuImgUrl: 'https://via.placeholder.com/100',
             description: '국내산 돼지 안심을 료코만의 방식으로 숙성 및 조리하여 육즙과 부드러움의 특징을 살린 메뉴',
           },
           {
-            price: '3020',
+            price: '3,020',
             recommend: false,
             menuName: '리조또',
             menuImgUrl: '',
