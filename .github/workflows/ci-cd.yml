@@ -54,20 +54,16 @@ jobs:
         run: |
           if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
             echo "Deploying to QA environment..."
-            # inplace.my 버킷에 배포
+            # 두 버킷에 배포
             aws s3 sync dist/ s3://inplace.my --delete
-            # www.inplace.my 버킷에도 배포
             aws s3 sync dist/ s3://www.inplace.my --delete
+            # CloudFront 캐시 무효화 필수
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
           elif [ "${{ github.ref }}" == "refs/heads/Master" ]; then
             echo "Deploying to Production environment..."
-            # inplace.my 버킷에 배포
+            # 두 버킷에 배포
             aws s3 sync dist/ s3://inplace.my --delete
-            # www.inplace.my 버킷에도 배포
             aws s3 sync dist/ s3://www.inplace.my --delete
-          elif [ "${{ github.ref }}" == "refs/heads/hotfix/#78-debug-cicd" ]; then
-            echo "Deploying to Production environment..."
-            # inplace.my 버킷에 배포
-            aws s3 sync dist/ s3://inplace.my --delete
-            # www.inplace.my 버킷에도 배포
-            aws s3 sync dist/ s3://www.inplace.my --delete
+            # CloudFront 캐시 무효화 필수
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
           fi
