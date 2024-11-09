@@ -6,7 +6,7 @@ import SpotItem from './SpotItem';
 import { SpotData } from '@/types';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function SpotSection({ items }: { items: SpotData[] }) {
+export default function SpotSection({ items = [] }: { items: SpotData[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const scrollList = (direction: 'left' | 'right') => {

@@ -6,7 +6,7 @@ import { UserPlaceData } from '@/types';
 import UserPlaceItem from './UserPlaceItem';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function UserPlaceSection({ items }: { items: UserPlaceData[] }) {
+export default function UserPlaceSection({ items = [] }: { items: UserPlaceData[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const scrollList = (direction: 'left' | 'right') => {
