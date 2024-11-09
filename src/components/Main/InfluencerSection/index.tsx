@@ -6,7 +6,7 @@ import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { InfluencerData } from '@/types';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function InfluencerSection({ items }: { items: InfluencerData[] }) {
+export default function InfluencerSection({ items = [] }: { items: InfluencerData[] }) {
   const listRef = useRef<HTMLDivElement | null>(null);
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
