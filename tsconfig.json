@@ -22,7 +22,7 @@
     "types": ["kakao.maps.d.ts"],
 
     /* Folder Link */
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
     },
