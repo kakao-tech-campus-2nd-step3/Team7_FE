@@ -66,7 +66,6 @@ export default function MainPage() {
   const location = useGetLocation();
 
   const [{ data: influencersData }] = useGetMain();
-
   const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!authInfo.accessToken);
   const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(!!authInfo.accessToken);
   const { data: aroundVideoData } = useGetAroundVideo(
