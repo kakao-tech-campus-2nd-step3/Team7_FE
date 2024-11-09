@@ -25,7 +25,7 @@ jobs:
         run: npm test
 
   build-and-deploy:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master' || github.ref == 'hotfix/#78-debug-cicd'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master' || github.ref == 'refs/heads/hotfix/#78-debug-cicd'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
