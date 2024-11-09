@@ -1,4 +1,4 @@
-import { useSuspenseQueries } from '@tanstack/react-query';
+import { useQueries } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
 import { PageableData } from '@/types';
@@ -14,11 +14,11 @@ export const getNewVideo = async () => {
   const response = await fetchInstance.get<PageableData>(getNewVideoPath());
   return response.data;
 };
-export const useGetLogoutVideo = () => {
-  return useSuspenseQueries({
+export const useGetLogoutVideo = (enabled: boolean) => {
+  return useQueries({
     queries: [
-      { queryKey: ['coolVideo'], queryFn: getCoolVideo, staleTime: 1000 * 60 * 5 },
-      { queryKey: ['newVideo'], queryFn: getNewVideo, staleTime: 1000 * 60 * 5 },
+      { queryKey: ['coolVideo'], queryFn: getCoolVideo, staleTime: 1000 * 60 * 5, enabled },
+      { queryKey: ['newVideo'], queryFn: getNewVideo, staleTime: 1000 * 60 * 5, enabled },
     ],
   });
 };

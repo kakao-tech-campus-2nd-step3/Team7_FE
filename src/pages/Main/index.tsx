@@ -67,12 +67,12 @@ export default function MainPage() {
 
   const [{ data: influencersData }] = useGetMain();
 
-  const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo();
-  const { data: myInfluencerVideoData } = useGetMyInfluencerVideo();
+  const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!authInfo.accessToken);
+  const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(!!authInfo.accessToken);
   const { data: aroundVideoData } = useGetAroundVideo(
     location?.lat ?? 37.5665,
     location?.lng ?? 126.978,
-    !!location?.lat && !!location?.lng,
+    !!authInfo.accessToken && !!location?.lat && !!location?.lng,
   );
 
   return (
@@ -92,22 +92,28 @@ export default function MainPage() {
             prevSubText="내 "
             mainText="인플루언서"
             SubText="가 방문한 그곳!"
-            items={myInfluencerVideoData.content}
+            items={myInfluencerVideoData?.content || []}
           />
-          {location?.lat && location?.lng && aroundVideoData && (
+          {location?.lat && location?.lng && (
             <BaseLayout
               type="spot"
               prevSubText="내 "
               mainText="주변"
               SubText="에 있는 그곳!"
-              items={aroundVideoData.content}
+              items={aroundVideoData?.content || []}
             />
           )}
         </>
       ) : (
         <>
-          <BaseLayout type="spot" prevSubText="지금 " mainText="쿨" SubText=" 한 그곳!" items={coolVideoData.content} />
-          <BaseLayout type="spot" mainText="새로" SubText=" 등록된 그곳!" items={newVideoData.content} />
+          <BaseLayout
+            type="spot"
+            prevSubText="지금 "
+            mainText="쿨"
+            SubText=" 한 그곳!"
+            items={coolVideoData?.content || []}
+          />
+          <BaseLayout type="spot" mainText="새로" SubText=" 등록된 그곳!" items={newVideoData?.content || []} />
         </>
       )}
     </Wrapper>

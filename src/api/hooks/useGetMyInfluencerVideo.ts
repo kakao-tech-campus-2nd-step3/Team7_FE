@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
 import { PageableData } from '@/types';
@@ -9,10 +9,11 @@ export const getMyInfluencerVideo = async () => {
   const response = await fetchInstance.get<PageableData>(getMyInfluencerVideoPath());
   return response.data;
 };
-export const useGetMyInfluencerVideo = () => {
-  return useSuspenseQuery({
+export const useGetMyInfluencerVideo = (enabled: boolean) => {
+  return useQuery({
     queryKey: ['myInfluencerVideo'],
     queryFn: getMyInfluencerVideo,
     staleTime: 1000 * 60 * 5,
+    enabled,
   });
 };
