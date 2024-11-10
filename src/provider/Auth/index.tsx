@@ -7,6 +7,7 @@ type AuthInfo = {
   accessToken: string | null;
   refreshToken: string | null;
   tokensRefresh: () => Promise<void>;
+  handleLoginSuccess: () => Promise<void>;
   logout: () => void;
 };
 
@@ -48,6 +49,22 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const handleLoginSuccess = async () => {
+    const newAccessToken = Cookies.get('access_token');
+    const newRefreshToken = Cookies.get('refresh_token');
+
+    if (newAccessToken && newRefreshToken) {
+      setAccessToken(newAccessToken);
+      setRefreshToken(newRefreshToken);
+
+      const redirectPath = localStorage.getItem('redirectPath');
+      if (redirectPath) {
+        localStorage.removeItem('redirectPath');
+        navigate(redirectPath);
+      }
+    }
+  };
+
   const logout = () => {
     Cookies.remove('access_token');
     Cookies.remove('refresh_token');
@@ -67,6 +84,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       accessToken,
       refreshToken,
       tokensRefresh,
+      handleLoginSuccess,
       logout,
     }),
     [accessToken, refreshToken],

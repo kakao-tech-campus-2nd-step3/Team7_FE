@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
 
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
 
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
@@ -10,6 +11,7 @@ import { Text } from '@/components/common/typography/Text';
 import Logo from '@/assets/images/Logo.svg';
 
 import { BASE_URL } from '@/api/instance';
+import useAuth from '@/hooks/useAuth';
 
 type LoginModalProps = {
   children?: (openModal: () => void) => React.ReactNode;
@@ -27,16 +29,34 @@ export default function LoginModal({
   onLoginSuccess,
 }: LoginModalProps) {
   const [isOpen, setIsOpen] = useState(immediateOpen);
+  const { handleLoginSuccess } = useAuth();
 
   useEffect(() => {
     if (immediateOpen) setIsOpen(true);
   }, [immediateOpen]);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      if (Cookies.get('access_token')) {
+        await handleLoginSuccess();
+        if (onLoginSuccess) {
+          onLoginSuccess();
+        }
+        closeModal();
+      }
+    };
+
+    if (isOpen) {
+      checkLoginStatus();
+    }
+  }, [handleLoginSuccess, onLoginSuccess, isOpen]);
 
   const openModal = () => setIsOpen(true);
   const closeModal = () => {
     setIsOpen(false);
     if (onClose) onClose();
   };
+
   const handleKakaoLogin = () => {
     localStorage.setItem('redirectPath', currentPath);
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
