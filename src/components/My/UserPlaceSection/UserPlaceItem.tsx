@@ -12,7 +12,7 @@ import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 
 export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer, likes }: UserPlaceData) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -22,7 +22,7 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }

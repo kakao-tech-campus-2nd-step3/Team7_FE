@@ -1,12 +1,9 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 import { fetchInstance } from '@/api/instance';
 
 type AuthInfo = {
-  accessToken: string | null;
-  refreshToken: string | null;
-  tokensRefresh: () => Promise<void>;
+  isAuthenticated: boolean;
   handleLoginSuccess: () => Promise<void>;
   logout: () => void;
 };
@@ -18,58 +15,55 @@ interface AuthProviderProps {
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const [accessToken, setAccessToken] = useState<string | null>(Cookies.get('access_token') || null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(Cookies.get('refresh_token') || null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  // 토큰 상태 변경 감지
-  useEffect(() => {
-    const redirectPath = localStorage.getItem('redirectPath');
-    if (accessToken && redirectPath) {
-      localStorage.removeItem('redirectPath');
-      navigate(redirectPath);
-    }
-  }, [accessToken, navigate]);
-
-  const tokensRefresh = async () => {
-    if (!refreshToken) return;
-
+  const checkAuthStatus = async () => {
     try {
-      const response = await fetchInstance.get('/refresh-token', {
-        headers: {
-          Cookie: `refresh_token=${refreshToken}`,
-        },
-      });
-
-      if (response.status === 200) {
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-
-        // 브라우저 쿠키에 저장
-        Cookies.set('access_token', newAccessToken, { secure: true, sameSite: 'strict' });
-        Cookies.set('refresh_token', newRefreshToken, { secure: true, sameSite: 'strict' });
-      } else {
-        throw new Error('토큰 갱신 실패');
-      }
+      const response = await fetchInstance.get('/auth');
+      console.log('Auth check response status:', response.status);
+      setIsAuthenticated(response.status === 200);
+      return response.status === 200;
     } catch (error) {
-      console.error('토큰 갱신 오류:', error);
-      logout();
+      console.error('Auth check failed:', error);
+      setIsAuthenticated(false);
+      return false;
     }
   };
 
+  const refreshTokens = async () => {
+    try {
+      const response = await fetchInstance.get('/refresh-token', {
+        headers: {
+          Authorization: document.cookie,
+        },
+      });
+      return response.status === 200;
+    } catch (error) {
+      console.error('Token refresh failed:', error);
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    const redirectPath = localStorage.getItem('redirectPath');
+    if (isAuthenticated && redirectPath) {
+      localStorage.removeItem('redirectPath');
+      navigate(redirectPath);
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleLoginSuccess = async () => {
     try {
-      const newAccessToken = Cookies.get('access_token');
-      const newRefreshToken = Cookies.get('refresh_token');
-
-      if (!newAccessToken || !newRefreshToken) {
-        return await Promise.reject(new Error('No tokens found'));
+      const isSuccessful = await checkAuthStatus();
+      if (isSuccessful) {
+        return await Promise.resolve();
       }
-
-      setAccessToken(newAccessToken);
-      setRefreshToken(newRefreshToken);
-      return await Promise.resolve();
+      return await Promise.reject(new Error('Authentication failed'));
     } catch (error) {
       console.error('Login success handling failed:', error);
       return await Promise.reject(error);
@@ -77,29 +71,41 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const logout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    setAccessToken(null);
-    setRefreshToken(null);
-    navigate('/');
+    try {
+      setIsAuthenticated(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
-  // refreshToken으로 accessToken 갱신
   useEffect(() => {
-    if (!accessToken && refreshToken) {
-      tokensRefresh();
-    }
-  }, [accessToken, refreshToken]);
+    const interceptor = fetchInstance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error.response?.status === 401) {
+          const isRefreshed = await refreshTokens();
+          if (isRefreshed) {
+            return fetchInstance(error.config);
+          }
+          logout();
+        }
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      fetchInstance.interceptors.response.eject(interceptor);
+    };
+  }, []);
 
   const value = useMemo(
     () => ({
-      accessToken,
-      refreshToken,
-      tokensRefresh,
+      isAuthenticated,
       handleLoginSuccess,
       logout,
     }),
-    [accessToken, refreshToken],
+    [isAuthenticated],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

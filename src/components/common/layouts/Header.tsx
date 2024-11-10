@@ -9,7 +9,7 @@ import Logo from '@/assets/images/Logo.svg';
 import useAuth from '@/hooks/useAuth';
 
 export default function Header() {
-  const { accessToken, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
 
   return (
@@ -23,7 +23,7 @@ export default function Header() {
         </LogoContainer>
       </LogoLink>
       <Nav>
-        {accessToken ? (
+        {isAuthenticated ? (
           <>
             <DesktopOnlyNavItem to="/map">
               <Text size="xs" variant="white" weight="normal">

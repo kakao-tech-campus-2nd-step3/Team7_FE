@@ -62,16 +62,16 @@ const searchData = [
   '띄워쓰기 검사',
 ];
 export default function MainPage() {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useGetLocation();
 
   const [{ data: influencersData }] = useGetMain();
-  const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!authInfo.accessToken);
-  const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(!!authInfo.accessToken);
+  const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!isAuthenticated);
+  const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(isAuthenticated);
   const { data: aroundVideoData } = useGetAroundVideo(
     location?.lat ?? 37.5665,
     location?.lng ?? 126.978,
-    !!authInfo.accessToken && !!location?.lat && !!location?.lng,
+    isAuthenticated && !!location?.lat && !!location?.lng,
   );
 
   return (
@@ -84,7 +84,7 @@ export default function MainPage() {
         SubText=" 가 방문한 장소를 찾아볼까요?"
         items={influencersData.influencers}
       />
-      {authInfo.accessToken ? (
+      {isAuthenticated ? (
         <>
           <BaseLayout
             type="spot"

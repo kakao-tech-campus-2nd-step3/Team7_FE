@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
 
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
@@ -31,10 +30,10 @@ export default function LoginModal({
   useEffect(() => {
     const checkLoginStatus = async () => {
       try {
-        const token = Cookies.get('access_token');
-        console.log('Checking login status. Token:', token, 'Modal open:', isOpen);
+        const response = await fetch('/auth');
+        console.log('Login check response:', response.status);
 
-        if (token) {
+        if (response.status === 200) {
           console.log('Valid token found, processing login...');
           try {
             await handleLoginSuccess();

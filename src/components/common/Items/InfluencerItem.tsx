@@ -26,7 +26,7 @@ export default function InfluencerItem({
   useBackCard = true,
   useNav = true,
 }: InfluencerItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -36,7 +36,7 @@ export default function InfluencerItem({
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }

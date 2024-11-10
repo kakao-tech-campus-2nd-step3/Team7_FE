@@ -21,7 +21,7 @@ export default function ChoiceItem({
   onToggleLike,
   isSelected = false,
 }: ChoiceItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const location = useLocation();
 
@@ -30,14 +30,14 @@ export default function ChoiceItem({
       event.stopPropagation();
       event.preventDefault();
 
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
 
       onToggleLike(influencerId, !isSelected);
     },
-    [influencerId, isSelected, onToggleLike, authInfo.accessToken],
+    [influencerId, isSelected, onToggleLike, isAuthenticated],
   );
 
   return (
