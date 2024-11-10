@@ -7,7 +7,6 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
 import Logo from '@/assets/images/Logo.svg';
 import { BASE_URL } from '@/api/instance';
-import useAuth from '@/hooks/useAuth';
 
 type LoginModalProps = {
   children?: (openModal: () => void) => React.ReactNode;
@@ -25,38 +24,6 @@ export default function LoginModal({
   onLoginSuccess,
 }: LoginModalProps) {
   const [isOpen, setIsOpen] = useState(immediateOpen);
-  const { handleLoginSuccess } = useAuth();
-
-  useEffect(() => {
-    const checkLoginStatus = async () => {
-      try {
-        const response = await fetch('/auth');
-        console.log('Login check response:', response.status);
-
-        if (response.status === 200) {
-          console.log('Valid token found, processing login...');
-          try {
-            await handleLoginSuccess();
-            console.log('Login success handled');
-
-            if (onLoginSuccess) {
-              await Promise.resolve(onLoginSuccess());
-              console.log('Success callback completed');
-            }
-
-            closeModal();
-            console.log('Modal closed after login');
-          } catch (error) {
-            console.error('Error during login process:', error);
-          }
-        }
-      } catch (error) {
-        console.error('Error checking login status:', error);
-      }
-    };
-
-    checkLoginStatus();
-  }, [handleLoginSuccess, onLoginSuccess]);
 
   useEffect(() => {
     console.log('immediateOpen changed:', immediateOpen);
@@ -77,12 +44,17 @@ export default function LoginModal({
       onClose();
       console.log('Close callback executed');
     }
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
   };
 
   const handleKakaoLogin = () => {
     console.log('Starting Kakao login process');
     console.log('Current path:', currentPath);
     localStorage.setItem('redirectPath', currentPath);
+    const storedPath = localStorage.getItem('redirectPath');
+    console.log('Stored redirectPath in localStorage:', storedPath);
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
   };
 
