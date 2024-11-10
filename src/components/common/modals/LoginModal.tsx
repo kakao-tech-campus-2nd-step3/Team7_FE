@@ -41,11 +41,12 @@ export default function LoginModal({
       console.log('Current token:', token);
 
       if (token) {
+        console.log('Token found');
         await handleLoginSuccess();
         if (onLoginSuccess) {
-          console.log('Executing onLoginSuccess callback'); // 디버깅용
+          console.log('Executing onLoginSuccess callback');
           onLoginSuccess();
-          console.log('onLoginSuccess executed successfully'); // 디버깅용
+          console.log('onLoginSuccess executed successfully');
         }
         closeModal();
       }
@@ -68,9 +69,15 @@ export default function LoginModal({
   };
 
   useEffect(() => {
-    const isLoginSuccessful = new URLSearchParams(window.location.search).get('success') === 'true';
-    if (isLoginSuccessful && onLoginSuccess) {
-      onLoginSuccess();
+    console.log('Current path:', window.location.pathname);
+    const isLoginSuccessful = window.location.pathname === '/auth';
+
+    if (isLoginSuccessful) {
+      console.log('Login successful, path matches /auth');
+      if (onLoginSuccess) {
+        onLoginSuccess();
+        console.log('onLoginSuccess executed from path check');
+      }
     }
   }, [onLoginSuccess]);
 
