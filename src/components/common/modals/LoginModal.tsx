@@ -37,10 +37,15 @@ export default function LoginModal({
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      if (Cookies.get('access_token')) {
+      const token = Cookies.get('access_token');
+      console.log('Current token:', token);
+
+      if (token) {
         await handleLoginSuccess();
         if (onLoginSuccess) {
+          console.log('Executing onLoginSuccess callback'); // 디버깅용
           onLoginSuccess();
+          console.log('onLoginSuccess executed successfully'); // 디버깅용
         }
         closeModal();
       }
