@@ -34,7 +34,7 @@ export default function LoginModal({
         const token = Cookies.get('access_token');
         console.log('Checking login status. Token:', token, 'Modal open:', isOpen);
 
-        if (token && isOpen) {
+        if (token) {
           console.log('Valid token found, processing login...');
           try {
             await handleLoginSuccess();
@@ -56,10 +56,8 @@ export default function LoginModal({
       }
     };
 
-    if (isOpen) {
-      checkLoginStatus();
-    }
-  }, [handleLoginSuccess, onLoginSuccess, isOpen]);
+    checkLoginStatus();
+  }, [handleLoginSuccess, onLoginSuccess]);
 
   useEffect(() => {
     console.log('immediateOpen changed:', immediateOpen);
