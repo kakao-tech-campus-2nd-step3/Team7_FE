@@ -22,6 +22,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [refreshToken, setRefreshToken] = useState<string | null>(Cookies.get('refresh_token') || null);
   const navigate = useNavigate();
 
+  // 토큰 상태 변경 감지
+  useEffect(() => {
+    const redirectPath = localStorage.getItem('redirectPath');
+    if (accessToken && redirectPath) {
+      localStorage.removeItem('redirectPath');
+      navigate(redirectPath);
+    }
+  }, [accessToken, navigate]);
+
   const tokensRefresh = async () => {
     if (!refreshToken) return;
 
@@ -50,18 +59,20 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   };
 
   const handleLoginSuccess = async () => {
-    const newAccessToken = Cookies.get('access_token');
-    const newRefreshToken = Cookies.get('refresh_token');
+    try {
+      const newAccessToken = Cookies.get('access_token');
+      const newRefreshToken = Cookies.get('refresh_token');
 
-    if (newAccessToken && newRefreshToken) {
+      if (!newAccessToken || !newRefreshToken) {
+        return await Promise.reject(new Error('No tokens found'));
+      }
+
       setAccessToken(newAccessToken);
       setRefreshToken(newRefreshToken);
-
-      const redirectPath = localStorage.getItem('redirectPath');
-      if (redirectPath) {
-        localStorage.removeItem('redirectPath');
-        navigate(redirectPath);
-      }
+      return await Promise.resolve();
+    } catch (error) {
+      console.error('Login success handling failed:', error);
+      return await Promise.reject(error);
     }
   };
 
@@ -73,6 +84,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     navigate('/');
   };
 
+  // refreshToken으로 accessToken 갱신
   useEffect(() => {
     if (!accessToken && refreshToken) {
       tokensRefresh();
