@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
-
 import styled from 'styled-components';
 import Cookies from 'js-cookie';
 
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
-
 import Logo from '@/assets/images/Logo.svg';
-
 import { BASE_URL } from '@/api/instance';
 import useAuth from '@/hooks/useAuth';
 
@@ -32,23 +29,30 @@ export default function LoginModal({
   const { handleLoginSuccess } = useAuth();
 
   useEffect(() => {
-    if (immediateOpen) setIsOpen(true);
-  }, [immediateOpen]);
-
-  useEffect(() => {
     const checkLoginStatus = async () => {
-      const token = Cookies.get('access_token');
-      console.log('Current token:', token);
+      try {
+        const token = Cookies.get('access_token');
+        console.log('Checking login status. Token:', token, 'Modal open:', isOpen);
 
-      if (token) {
-        console.log('Token found');
-        await handleLoginSuccess();
-        if (onLoginSuccess) {
-          console.log('Executing onLoginSuccess callback');
-          onLoginSuccess();
-          console.log('onLoginSuccess executed successfully');
+        if (token && isOpen) {
+          console.log('Valid token found, processing login...');
+          try {
+            await handleLoginSuccess();
+            console.log('Login success handled');
+
+            if (onLoginSuccess) {
+              await Promise.resolve(onLoginSuccess());
+              console.log('Success callback completed');
+            }
+
+            closeModal();
+            console.log('Modal closed after login');
+          } catch (error) {
+            console.error('Error during login process:', error);
+          }
         }
-        closeModal();
+      } catch (error) {
+        console.error('Error checking login status:', error);
       }
     };
 
@@ -57,29 +61,33 @@ export default function LoginModal({
     }
   }, [handleLoginSuccess, onLoginSuccess, isOpen]);
 
-  const openModal = () => setIsOpen(true);
+  useEffect(() => {
+    console.log('immediateOpen changed:', immediateOpen);
+    if (immediateOpen) {
+      setIsOpen(true);
+    }
+  }, [immediateOpen]);
+
+  const openModal = () => {
+    console.log('Opening modal');
+    setIsOpen(true);
+  };
+
   const closeModal = () => {
+    console.log('Closing modal');
     setIsOpen(false);
-    if (onClose) onClose();
+    if (onClose) {
+      onClose();
+      console.log('Close callback executed');
+    }
   };
 
   const handleKakaoLogin = () => {
+    console.log('Starting Kakao login process');
+    console.log('Current path:', currentPath);
     localStorage.setItem('redirectPath', currentPath);
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
   };
-
-  useEffect(() => {
-    console.log('Current path:', window.location.pathname);
-    const isLoginSuccessful = window.location.pathname === '/auth';
-
-    if (isLoginSuccessful) {
-      console.log('Login successful, path matches /auth');
-      if (onLoginSuccess) {
-        onLoginSuccess();
-        console.log('onLoginSuccess executed from path check');
-      }
-    }
-  }, [onLoginSuccess]);
 
   return (
     <>
