@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
-
 import styled from 'styled-components';
 
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
-
 import Logo from '@/assets/images/Logo.svg';
-
 import { BASE_URL } from '@/api/instance';
 
 type LoginModalProps = {
@@ -29,25 +26,29 @@ export default function LoginModal({
   const [isOpen, setIsOpen] = useState(immediateOpen);
 
   useEffect(() => {
-    if (immediateOpen) setIsOpen(true);
+    if (immediateOpen) {
+      setIsOpen(true);
+    }
   }, [immediateOpen]);
 
-  const openModal = () => setIsOpen(true);
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
   const closeModal = () => {
     setIsOpen(false);
-    if (onClose) onClose();
+    if (onClose) {
+      onClose();
+    }
+    if (onLoginSuccess) {
+      onLoginSuccess();
+    }
   };
+
   const handleKakaoLogin = () => {
     localStorage.setItem('redirectPath', currentPath);
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
   };
-
-  useEffect(() => {
-    const isLoginSuccessful = new URLSearchParams(window.location.search).get('success') === 'true';
-    if (isLoginSuccessful && onLoginSuccess) {
-      onLoginSuccess();
-    }
-  }, [onLoginSuccess]);
 
   return (
     <>
