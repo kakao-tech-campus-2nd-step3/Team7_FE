@@ -29,7 +29,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const handleAuth = async () => {
-      if (window.location.pathname === '/auth') {
+      if (window.location.pathname.includes('/login/oauth2/code/kakao')) {
         try {
           await handleLoginSuccess();
           console.log('Login success handled');
