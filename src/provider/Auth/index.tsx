@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type AuthInfo = {
@@ -28,25 +28,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       return await Promise.reject(error);
     }
   };
-
-  useEffect(() => {
-    const handleAuth = async () => {
-      console.log('handleAuth 실행됨');
-      console.log('현재 경로:', window.location.pathname);
-      console.log('현재 전체 URL:', window.location.href);
-      if (window.location.pathname.includes('/auth')) {
-        console.log('auth 경로 감지, 로그인 처리 시작');
-        try {
-          console.log('entering handleAuth');
-          await handleLoginSuccess();
-          console.log('Login success handled');
-        } catch (error) {
-          console.error('Auth handling failed:', error);
-        }
-      }
-    };
-    handleAuth();
-  }, []);
 
   const logout = () => {
     try {
