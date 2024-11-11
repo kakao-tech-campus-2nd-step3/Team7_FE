@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 type AuthInfo = {
@@ -21,6 +21,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     try {
       console.log('handleLoginSuccess 실행됨');
       setIsAuthenticated(true);
+      localStorage.setItem('isAuthenticated', 'true');
       console.log('인증 상태 변경됨:', true);
       return await Promise.resolve();
     } catch (error) {
@@ -29,9 +30,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  useEffect(() => {
+    const savedAuthStatus = localStorage.getItem('isAuthenticated');
+    setIsAuthenticated(savedAuthStatus === 'true');
+  }, []);
+
   const logout = () => {
     try {
       setIsAuthenticated(false);
+      localStorage.removeItem('isAuthenticated');
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
