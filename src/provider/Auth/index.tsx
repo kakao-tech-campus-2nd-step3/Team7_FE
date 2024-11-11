@@ -19,7 +19,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const handleLoginSuccess = async () => {
     try {
+      console.log('handleLoginSuccess 실행됨');
       setIsAuthenticated(true);
+      console.log('인증 상태 변경됨:', true);
       return await Promise.resolve();
     } catch (error) {
       console.error('Login success handling failed:', error);
@@ -29,8 +31,13 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const handleAuth = async () => {
-      if (window.location.pathname.includes('/login/oauth2/code/kakao')) {
+      console.log('handleAuth 실행됨');
+      console.log('현재 경로:', window.location.pathname);
+      console.log('현재 전체 URL:', window.location.href);
+      if (window.location.pathname.includes('/auth')) {
+        console.log('auth 경로 감지, 로그인 처리 시작');
         try {
+          console.log('entering handleAuth');
           await handleLoginSuccess();
           console.log('Login success handled');
         } catch (error) {
