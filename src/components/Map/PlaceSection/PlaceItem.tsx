@@ -84,7 +84,9 @@ export default function PlaceItem({
           </LikeIcon>
         </CardContent>
       </PlaceCard>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }

@@ -59,7 +59,9 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
           {influencer}
         </Paragraph>
       </Wrapper>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }
