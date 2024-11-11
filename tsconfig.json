@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    
-    "target": "ES2022",
+    "target": "ES2020",
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
@@ -13,22 +12,20 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["kakao.maps.d.ts"],
+    "types": ["kakao.maps.d.ts", "jest"],
 
     /* Folder Link */
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"]
-    },
-
-    "allowSyntheticDefaultImports": true,
-
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
