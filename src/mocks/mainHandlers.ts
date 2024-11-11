@@ -290,7 +290,10 @@ export const mainHandlers = [
   }),
   http.get(`${BASE_URL}${getInfluencerPath()}`, () => {
     return HttpResponse.json({
-      influencers: [
+      totalPages: 0,
+      totalElements: 0,
+      size: 0,
+      content: [
         {
           influencerId: 1,
           influencerName: '성시경',
@@ -369,6 +372,28 @@ export const mainHandlers = [
           likes: false,
         },
       ],
+      number: 0,
+      sort: {
+        empty: true,
+        sorted: true,
+        unsorted: true,
+      },
+      numberOfElements: 0,
+      pageable: {
+        offset: 0,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        paged: true,
+        pageNumber: 0,
+        pageSize: 0,
+        unpaged: true,
+      },
+      first: true,
+      last: true,
+      empty: true,
     });
   }),
 ];

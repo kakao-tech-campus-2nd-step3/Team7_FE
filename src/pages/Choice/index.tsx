@@ -18,19 +18,19 @@ export default function ChoicePage() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const paginatedInfluencers = useMemo(() => {
-    if (!influencersData?.influencers) return [];
+    if (!influencersData?.content) return [];
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    return influencersData.influencers.slice(startIndex, endIndex);
-  }, [influencersData?.influencers, currentPage]);
+    return influencersData.content.slice(startIndex, endIndex);
+  }, [influencersData?.content, currentPage]);
 
   const totalPages = useMemo(() => {
-    if (!influencersData || !influencersData.influencers) {
+    if (!influencersData || !influencersData.content) {
       return 0;
     }
-    return Math.ceil(influencersData.influencers.length / ITEMS_PER_PAGE);
-  }, [influencersData?.influencers]);
+    return Math.ceil(influencersData.content.length / ITEMS_PER_PAGE);
+  }, [influencersData?.content]);
 
   const pageNumbers = useMemo(() => {
     if (totalPages <= MAX_PAGE_BUTTONS) {
