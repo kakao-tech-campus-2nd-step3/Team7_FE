@@ -5,6 +5,8 @@ import { RiKakaoTalkFill } from 'react-icons/ri';
 import styled from 'styled-components';
 
 import { useParams } from 'react-router-dom';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
 import Button from '@/components/common/Button';
 import { Text } from '@/components/common/typography/Text';
 import InfoTap from '@/components/Detail/InfoTap';
@@ -14,6 +16,7 @@ import VisitModal from '@/components/Detail/VisitModal';
 import useExtractYoutubeVideoId from '@/libs/youtube/useExtractYoutube';
 import { useGetPlaceInfo } from '@/api/hooks/useGetPlaceInfo';
 import Loading from '@/components/common/layouts/Loading';
+import Error from '@/components/common/layouts/Error';
 
 export default function DetailPage() {
   const [activeTab, setActiveTab] = useState<'info' | 'review'>('info');
@@ -71,12 +74,22 @@ export default function DetailPage() {
             latitude={infoData.latitude}
           />
         ) : (
-          <Suspense fallback={<Loading size={50} />}>
-            <ReviewTap placeLikes={infoData.placeLikes} id={id} />
-          </Suspense>
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary FallbackComponent={Error} onReset={reset}>
+                <Suspense fallback={<Loading size={50} />}>
+                  <ReviewTap placeLikes={infoData.placeLikes} id={id} />
+                </Suspense>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
         )}
       </InfoContainer>
-      {visitModal ? <VisitModal placeName={infoData.placeName} onClose={() => setVisitModal(false)} /> : null}
+      <Suspense fallback={<Loading size={50} />}>
+        {visitModal ? (
+          <VisitModal id={infoData.placeId} placeName={infoData.placeName} onClose={() => setVisitModal(false)} />
+        ) : null}
+      </Suspense>
     </Wrapper>
   );
 }

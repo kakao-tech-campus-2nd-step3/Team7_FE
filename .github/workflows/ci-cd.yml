@@ -25,7 +25,7 @@ jobs:
         run: npm test
 
   build-and-deploy:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master' || github.ref == 'refs/heads/hotfix/#78-debug-cicd'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -54,10 +54,16 @@ jobs:
         run: |
           if [ "${{ github.ref }}" == "refs/heads/develop" ]; then
             echo "Deploying to QA environment..."
+            # 두 버킷에 배포
             aws s3 sync dist/ s3://inplace.my --delete
+            aws s3 sync dist/ s3://www.inplace.my --delete
+            # CloudFront 캐시 무효화 필수
             aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
-          elif [ "${{ github.ref }}" == "refs/heads//Master" ]; then
+          elif [ "${{ github.ref }}" == "refs/heads/Master" ]; then
             echo "Deploying to Production environment..."
+            # 두 버킷에 배포
             aws s3 sync dist/ s3://inplace.my --delete
+            aws s3 sync dist/ s3://www.inplace.my --delete
+            # CloudFront 캐시 무효화 필수
             aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_ID }} --paths "/*"
           fi

@@ -136,6 +136,7 @@ export type ReviewData = {
   comment: string;
   userNickname: string;
   createdDate: Date;
+  mine: boolean;
 };
 
 export type OpenHourData = {
@@ -192,4 +193,14 @@ export type UserReviewData = {
 };
 export type UserReviewResponse = {
   reviews: [UserReviewData];
+};
+
+export type RequestPlaceReview = {
+  likes: boolean | null;
+  comments: string;
+};
+
+export type MultipleLikeRequest = {
+  influencerIds: number[];
+  likes: boolean;
 };

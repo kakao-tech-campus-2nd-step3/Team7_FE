@@ -1,23 +1,30 @@
 import styled from 'styled-components';
 import { UserReviewData } from '@/types';
 import UserReviewItem from './UserReviewItem';
+import NoItem from '@/components/common/layouts/NoItem';
 
 export default function UserReviewList({ items }: { items: UserReviewData[] }) {
   return (
     <ListContainer>
-      {items.map((review) => {
-        return (
-          <UserReviewItem
-            key={review.reviewId}
-            reviewId={review.reviewId}
-            userNickname={review.userNickname}
-            place={review.place}
-            likes={review.likes}
-            comment={review.comment}
-            createdDate={review.createdDate}
-          />
-        );
-      })}
+      {items.length === 0 ? (
+        <NoItem message="아직 리뷰가 없어요!" height={180} />
+      ) : (
+        <>
+          {items.map((review) => {
+            return (
+              <UserReviewItem
+                key={review.reviewId}
+                reviewId={review.reviewId}
+                userNickname={review.userNickname}
+                place={review.place}
+                likes={review.likes}
+                comment={review.comment}
+                createdDate={review.createdDate}
+              />
+            );
+          })}
+        </>
+      )}
     </ListContainer>
   );
 }
