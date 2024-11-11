@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/35</span>
+                <span class='fraction'>35/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/35</span>
+                <span class='fraction'>35/35</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -111,28 +111,28 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useSuspenseQueries } from '@tanstack/react-query';
 &nbsp;
 import { fetchInstance } from '../instance';
@@ -145,29 +145,29 @@ export const getInfluencerPath = () =&gt; `/influencers`;
 //   const response = await fetchInstance.get&lt;BannerResponse&gt;(getBannerPath());
 //   return response.data;
 // };
-export const getInfluencer = <span class="fstat-no" title="function not covered" >async () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  // await new Promise((resolve) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  //   setTimeout(resolve, 5000);</span>
-<span class="cstat-no" title="statement not covered" >  // });</span>
-<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;InfluencerResponse&gt;(getInfluencerPath());</span>
-<span class="cstat-no" title="statement not covered" >  return response.data;</span>
-<span class="cstat-no" title="statement not covered" >};</span>
-export const useGetMain = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return useSuspenseQueries({</span>
-<span class="cstat-no" title="statement not covered" >    queries: [</span>
-<span class="cstat-no" title="statement not covered" >      // {</span>
-<span class="cstat-no" title="statement not covered" >      //   queryKey: ['banners'],</span>
-<span class="cstat-no" title="statement not covered" >      //   queryFn: getBanner,</span>
-<span class="cstat-no" title="statement not covered" >      //   staleTime: 1000 * 60 * 5,</span>
-<span class="cstat-no" title="statement not covered" >      // },</span>
-<span class="cstat-no" title="statement not covered" >      {</span>
-<span class="cstat-no" title="statement not covered" >        queryKey: ['influencers'],</span>
-<span class="cstat-no" title="statement not covered" >        queryFn: getInfluencer,</span>
-<span class="cstat-no" title="statement not covered" >        staleTime: 1000 * 60 * 5,</span>
-<span class="cstat-no" title="statement not covered" >      },</span>
-<span class="cstat-no" title="statement not covered" >    ],</span>
-<span class="cstat-no" title="statement not covered" >  });</span>
-<span class="cstat-no" title="statement not covered" >};</span>
+export const getInfluencer = async () =&gt; {
+  // await new Promise((resolve) =&gt; {
+  //   setTimeout(resolve, 5000);
+  // });
+  const response = await fetchInstance.get&lt;InfluencerResponse&gt;(getInfluencerPath());
+  return response.data;
+};
+export const useGetMain = () =&gt; {
+  return useSuspenseQueries({
+    queries: [
+      // {
+      //   queryKey: ['banners'],
+      //   queryFn: getBanner,
+      //   staleTime: 1000 * 60 * 5,
+      // },
+      {
+        queryKey: ['influencers'],
+        queryFn: getInfluencer,
+        staleTime: 1000 * 60 * 5,
+      },
+    ],
+  });
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -175,7 +175,7 @@ export const useGetMain = <span class="fstat-no" title="function not covered" >(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-11T15:49:39.400Z
+                at 2024-11-11T16:26:09.406Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

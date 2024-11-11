@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>30/42</span>
+                <span class='fraction'>42/42</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">75% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
-                <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.42% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>30/42</span>
+                <span class='fraction'>42/42</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -116,18 +116,18 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -158,24 +158,24 @@ interface NoItemsMessageProps {
   alignItems?: string;
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >function NoItem({ message = '데이터가 없습니다!', height, logo = true, alignItems }: NoItemsMessageProps) {</span></span>
-<span class="cstat-no" title="statement not covered" >  return (</span>
-<span class="cstat-no" title="statement not covered" >    &lt;MessageContainer height={height}&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;TextWrapper alignItems={alignItems}&gt;</span>
-<span class="cstat-no" title="statement not covered" >        {logo &amp;&amp; &lt;LogoImage src={Logo} alt="인플레이스 로고" /&gt;}</span>
-<span class="cstat-no" title="statement not covered" >        &lt;Paragraph size="xs" weight="normal" variant="white"&gt;</span>
-<span class="cstat-no" title="statement not covered" >          {message}</span>
-<span class="cstat-no" title="statement not covered" >        &lt;/Paragraph&gt;</span>
-<span class="cstat-no" title="statement not covered" >      &lt;/TextWrapper&gt;</span>
-<span class="cstat-no" title="statement not covered" >    &lt;/MessageContainer&gt;</span>
-<span class="cstat-no" title="statement not covered" >  );</span>
-<span class="cstat-no" title="statement not covered" >}</span>
+function NoItem({ message = '데이터가 없습니다!', height, logo = true, alignItems }: NoItemsMessageProps) {
+  return (
+    &lt;MessageContainer height={height}&gt;
+      &lt;TextWrapper alignItems={alignItems}&gt;
+        {logo &amp;&amp; &lt;LogoImage src={Logo} alt="인플레이스 로고" /&gt;}
+        &lt;Paragraph size="xs" weight="normal" variant="white"&gt;
+          {message}
+        &lt;/Paragraph&gt;
+      &lt;/TextWrapper&gt;
+    &lt;/MessageContainer&gt;
+  );
+}
 &nbsp;
 const MessageContainer = styled.div&lt;{ height?: number }&gt;`
   width: 100%;
   margin: 20px 0;
   align-content: center;
-  height: ${({ height }) =&gt; (height ? `${height}px` : 'auto')};
+  height: ${({ height }) =&gt; (height ? `${height}px` <span class="branch-0 cbranch-no" title="branch not covered" >: 'auto')</span>};
 `;
 const TextWrapper = styled.div&lt;{ alignItems?: string }&gt;`
   display: flex;
@@ -196,7 +196,7 @@ export default NoItem;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-11T15:49:39.400Z
+                at 2024-11-11T16:26:09.406Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
