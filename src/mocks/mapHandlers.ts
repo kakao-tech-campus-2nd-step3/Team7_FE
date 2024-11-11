@@ -1,4 +1,4 @@
-import { HttpResponse, http } from 'msw';
+import { rest } from 'msw';
 import { BASE_URL } from '@/api/instance';
 import { PlaceData } from '@/types';
 
@@ -171,8 +171,8 @@ const dummyPlaces: PlaceData[] = [
 ];
 
 export const mapHandlers = [
-  http.get(`${BASE_URL}/places`, () => {
-    return HttpResponse.json({ places: dummyPlaces });
+  rest.get(`${BASE_URL}/places`, (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ places: dummyPlaces }));
   }),
 ];
 

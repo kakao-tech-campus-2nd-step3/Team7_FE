@@ -1,8 +1,8 @@
-import { setupWorker } from 'msw';
+import { setupServer } from 'msw/node';
 import { mainHandlers } from './mainHandlers';
 import { detailHandlers } from './detailHandlers';
 import { mapHandlers } from './mapHandlers';
 import { myHandlers } from './myPageHandlers';
 
-export const worker = setupWorker(...mainHandlers, ...detailHandlers, ...mapHandlers, ...myHandlers);
-export default worker;
+const server = setupServer(...mainHandlers, ...detailHandlers, ...mapHandlers, ...myHandlers);
+export default server;
