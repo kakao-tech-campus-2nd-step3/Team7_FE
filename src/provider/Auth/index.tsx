@@ -19,10 +19,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const handleLoginSuccess = async () => {
     try {
-      console.log('handleLoginSuccess 실행됨');
       setIsAuthenticated(true);
       localStorage.setItem('isAuthenticated', 'true');
-      console.log('인증 상태 변경됨:', true);
       return await Promise.resolve();
     } catch (error) {
       console.error('Login success handling failed:', error);

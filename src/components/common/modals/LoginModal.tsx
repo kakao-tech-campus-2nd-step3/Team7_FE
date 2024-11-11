@@ -26,23 +26,19 @@ export default function LoginModal({
   const [isOpen, setIsOpen] = useState(immediateOpen);
 
   useEffect(() => {
-    console.log('immediateOpen changed:', immediateOpen);
     if (immediateOpen) {
       setIsOpen(true);
     }
   }, [immediateOpen]);
 
   const openModal = () => {
-    console.log('Opening modal');
     setIsOpen(true);
   };
 
   const closeModal = () => {
-    console.log('Closing modal');
     setIsOpen(false);
     if (onClose) {
       onClose();
-      console.log('Close callback executed');
     }
     if (onLoginSuccess) {
       onLoginSuccess();
@@ -50,11 +46,7 @@ export default function LoginModal({
   };
 
   const handleKakaoLogin = () => {
-    console.log('Starting Kakao login process');
-    console.log('Current path:', currentPath);
     localStorage.setItem('redirectPath', currentPath);
-    const storedPath = localStorage.getItem('redirectPath');
-    console.log('Stored redirectPath in localStorage:', storedPath);
     window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;
   };
 
