@@ -131,7 +131,7 @@ export type Menu = {
 };
 
 export type ReviewData = {
-  reviewId?: number;
+  reviewId: number;
   likes: boolean;
   comment: string;
   userNickname: string;
