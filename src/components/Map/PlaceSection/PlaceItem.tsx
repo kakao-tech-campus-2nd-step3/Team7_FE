@@ -44,7 +44,6 @@ export default function PlaceItem({
         return;
       }
       const newLikeStatus = !isLike;
-      console.log('New like status:', newLikeStatus);
       postLike(
         { placeId, likes: newLikeStatus },
         {
@@ -79,8 +78,12 @@ export default function PlaceItem({
               </Text>
             </InfluencerName>
           </PlaceDetails>
-          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          <LikeIcon role="button" onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? (
+              <PiHeartFill color="#fe7373" size={32} data-testid="PiHeartFill" />
+            ) : (
+              <PiHeartLight color="white" size={32} data-testid="PiHeartLight" />
+            )}
           </LikeIcon>
         </CardContent>
       </PlaceCard>

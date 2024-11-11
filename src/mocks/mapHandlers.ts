@@ -174,6 +174,16 @@ export const mapHandlers = [
   rest.get(`${BASE_URL}/places`, (_, res, ctx) => {
     return res(ctx.status(200), ctx.json({ places: dummyPlaces }));
   }),
+  rest.post(`${BASE_URL}/places/likes`, (req, res, ctx) => {
+    const { placeId, likes } = req.body as { placeId: string; likes: boolean };
+    return res(
+      ctx.status(200),
+      ctx.json({
+        placeId,
+        likes,
+      }),
+    );
+  }),
 ];
 
 export default mapHandlers;

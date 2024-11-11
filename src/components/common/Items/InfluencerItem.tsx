@@ -60,8 +60,12 @@ export default function InfluencerItem({
     <>
       <Wrapper as={useNav ? Link : 'div'} to={useNav ? `/map?influencer=${encodeURIComponent(influencerName)}` : ''}>
         <ImageContainer>
-          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          <LikeIcon role="button" onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? (
+              <PiHeartFill color="#fe7373" size={32} data-testid="PiHeartFill" />
+            ) : (
+              <PiHeartLight color="white" size={32} data-testid="PiHeartLight" />
+            )}
           </LikeIcon>
           <FrontImage src={influencerImgUrl} alt={influencerName} />
           {useBackCard && useNav && (

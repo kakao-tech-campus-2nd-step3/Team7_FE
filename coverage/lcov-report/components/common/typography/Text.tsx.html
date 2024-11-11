@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.1% </span>
+                <span class="strong">89.36% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/47</span>
+                <span class='fraction'>42/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.94% </span>
+                <span class="strong">64.7% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>9/17</span>
+                <span class='fraction'>11/17</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.1% </span>
+                <span class="strong">89.36% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/47</span>
+                <span class='fraction'>42/47</span>
             </div>
         
             
@@ -122,40 +122,40 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-yes">30x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">64x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">66x</span>
+<span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import styled from 'styled-components';
 &nbsp;
@@ -176,10 +176,10 @@ export const Text = styled.span&lt;IText&gt;`
         return '16px';
       case 's':
         return '18px';
-<span class="branch-0 cbranch-no" title="branch not covered" >      case 'm':</span>
-<span class="cstat-no" title="statement not covered" >        return '20px';</span>
-<span class="branch-0 cbranch-no" title="branch not covered" >      case 'l':</span>
-<span class="cstat-no" title="statement not covered" >        return '24px';</span>
+      case 'm':
+        return '20px';
+      case 'l':
+        return '24px';
 <span class="branch-0 cbranch-no" title="branch not covered" >      case 'xl':</span>
 <span class="cstat-no" title="statement not covered" >        return '32px';</span>
 <span class="branch-0 cbranch-no" title="branch not covered" >      case 'xxl':</span>
@@ -211,7 +211,7 @@ export const Text = styled.span&lt;IText&gt;`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-11T15:02:57.046Z
+                at 2024-11-11T15:49:39.400Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

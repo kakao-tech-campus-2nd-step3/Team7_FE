@@ -389,14 +389,13 @@ export const mainHandlers = [
       }),
     );
   }),
-  rest.post('/influencers/likes', (req, res, ctx) => {
+  rest.post(`${BASE_URL}/influencers/likes`, (req, res, ctx) => {
     const { influencerId, likes } = req.body as { influencerId: string; likes: boolean };
-
     return res(
       ctx.status(200),
       ctx.json({
         influencerId,
-        likes, // This is just returning the new likes state as it is in a real API.
+        likes,
       }),
     );
   }),
