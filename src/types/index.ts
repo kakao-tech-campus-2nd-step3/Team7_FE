@@ -25,33 +25,33 @@ export type SpotData = {
     placeName: string;
   };
 };
-export type PageableData = {
-  totalPages: 0;
-  totalElements: 0;
-  size: 0;
-  content: [SpotData];
-  number: 0;
+export type PageableData<T> = {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: T[];
+  number: number;
   sort: {
-    empty: true;
-    sorted: true;
-    unsorted: true;
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
   };
-  numberOfElements: 0;
+  numberOfElements: number;
   pageable: {
-    offset: 0;
+    offset: number;
     sort: {
-      empty: true;
-      sorted: true;
-      unsorted: true;
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
     };
-    paged: true;
-    pageNumber: 0;
-    pageSize: 0;
-    unpaged: true;
+    paged: boolean;
+    pageNumber: number;
+    pageSize: number;
+    unpaged: boolean;
   };
-  first: true;
-  last: true;
-  empty: true;
+  first: boolean;
+  last: boolean;
+  empty: boolean;
 };
 
 export type AddressInfo = {

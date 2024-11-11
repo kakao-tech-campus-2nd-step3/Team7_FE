@@ -1,17 +1,17 @@
 import { useQueries } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
-import { PageableData } from '@/types';
+import { PageableData, SpotData } from '@/types';
 
 export const getCoolVideoPath = () => `/videos/cool`;
 export const getNewVideoPath = () => `/videos/new`;
 
 export const getCoolVideo = async () => {
-  const response = await fetchInstance.get<PageableData>(getCoolVideoPath());
+  const response = await fetchInstance.get<PageableData<SpotData>>(getCoolVideoPath());
   return response.data;
 };
 export const getNewVideo = async () => {
-  const response = await fetchInstance.get<PageableData>(getNewVideoPath());
+  const response = await fetchInstance.get<PageableData<SpotData>>(getNewVideoPath());
   return response.data;
 };
 export const useGetLogoutVideo = (enabled: boolean) => {

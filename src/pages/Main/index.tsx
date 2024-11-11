@@ -82,7 +82,7 @@ export default function MainPage() {
         type="influencer"
         mainText="인플루언서"
         SubText=" 가 방문한 장소를 찾아볼까요?"
-        items={influencersData.influencers}
+        items={influencersData.content}
       />
       {authInfo.accessToken ? (
         <>

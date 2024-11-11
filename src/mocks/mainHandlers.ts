@@ -307,10 +307,13 @@ export const mainHandlers = [
     return res(
       ctx.status(200),
       ctx.json({
-        influencers: [
+        totalPages: 0,
+        totalElements: 0,
+        size: 0,
+        content: [
           {
             influencerId: 1,
-            influencerName: '긴 문자열 테스트용입니다.',
+            influencerName: '성시경',
             influencerImgUrl: 'https://via.placeholder.com/100',
             influencerJob: '모델',
             likes: true,
@@ -386,6 +389,28 @@ export const mainHandlers = [
             likes: false,
           },
         ],
+        number: 0,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        numberOfElements: 0,
+        pageable: {
+          offset: 0,
+          sort: {
+            empty: true,
+            sorted: true,
+            unsorted: true,
+          },
+          paged: true,
+          pageNumber: 0,
+          pageSize: 0,
+          unpaged: true,
+        },
+        first: true,
+        last: true,
+        empty: true,
       }),
     );
   }),
