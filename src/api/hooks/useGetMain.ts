@@ -5,14 +5,15 @@ import { InfluencerResponse } from '@/types';
 
 export const getBannerPath = () => `/banners`;
 export const getInfluencerPath = () => `/influencers`;
-export const getCoolVideoPath = () => `/videos/cool`;
-export const getNewVideoPath = () => `/videos/new`;
 
 // export const getBanner = async () => {
 //   const response = await fetchInstance.get<BannerResponse>(getBannerPath());
 //   return response.data;
 // };
 export const getInfluencer = async () => {
+  // await new Promise((resolve) => {
+  //   setTimeout(resolve, 5000);
+  // });
   const response = await fetchInstance.get<InfluencerResponse>(getInfluencerPath());
   return response.data;
 };
