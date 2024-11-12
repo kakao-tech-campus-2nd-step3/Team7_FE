@@ -17,7 +17,6 @@ export default function Pagination({
   onPageChange,
   itemsPerPage,
 }: PaginationProps) {
-  // 페이지네이션 표시 여부 결정
   const shouldShowPagination = useMemo(() => {
     if (itemsPerPage && totalItems) {
       return totalItems > itemsPerPage;
@@ -25,7 +24,6 @@ export default function Pagination({
     return true;
   }, [itemsPerPage, totalItems]);
 
-  // 페이지 번호 배열 생성
   const pageNumbers = useMemo(() => {
     if (totalPages <= 5) {
       return Array.from({ length: totalPages }, (_, i) => i + 1);
@@ -41,11 +39,9 @@ export default function Pagination({
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
   }, [currentPage, totalPages]);
 
-  // 이전/다음 페이지 버튼 활성화 여부 결정
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 
-  // 페이지 변경 핸들러
   const handlePageChange = (pageNum: number) => {
     if (pageNum >= 1 && pageNum <= totalPages) {
       onPageChange(pageNum);
