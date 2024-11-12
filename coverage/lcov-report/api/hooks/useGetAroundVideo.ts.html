@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">68% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/25</span>
+                <span class='fraction'>17/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">68% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/25</span>
+                <span class='fraction'>17/25</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -106,17 +106,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useQuery } from '@tanstack/react-query';
 &nbsp;
 import { fetchInstance } from '../instance';
-import { PageableData } from '@/types';
+import { SpotData } from '@/types';
 &nbsp;
 export const getAroundVideoPath = () =&gt; `/videos`;
 &nbsp;
@@ -125,19 +125,19 @@ export const getAroundVideo = <span class="fstat-no" title="function not covered
 <span class="cstat-no" title="statement not covered" >    longitude: lng.toString(),</span>
 <span class="cstat-no" title="statement not covered" >    latitude: lat.toString(),</span>
 <span class="cstat-no" title="statement not covered" >  });</span>
-<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;PageableData&gt;(`${getAroundVideoPath()}?${params.toString()}`);</span>
+<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;SpotData[]&gt;(`${getAroundVideoPath()}?${params.toString()}`);</span>
 <span class="cstat-no" title="statement not covered" >  console.log(params.toString());</span>
 <span class="cstat-no" title="statement not covered" >  return response.data;</span>
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;
-export const useGetAroundVideo = <span class="fstat-no" title="function not covered" >(lat: number, lng: number, enabled: boolean) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return useQuery({</span>
-<span class="cstat-no" title="statement not covered" >    queryKey: ['aroundVideo', lat, lng],</span>
-<span class="cstat-no" title="statement not covered" >    queryFn: () =&gt; getAroundVideo(lat, lng),</span>
-<span class="cstat-no" title="statement not covered" >    staleTime: 1000 * 60 * 5,</span>
-<span class="cstat-no" title="statement not covered" >    enabled,</span>
-<span class="cstat-no" title="statement not covered" >  });</span>
-<span class="cstat-no" title="statement not covered" >};</span>
+export const useGetAroundVideo = (lat: number, lng: number, enabled: boolean) =&gt; {
+  return useQuery({
+    queryKey: ['aroundVideo', lat, lng],
+    queryFn: <span class="fstat-no" title="function not covered" >() =&gt; getAroundVideo(lat, lng),</span>
+    staleTime: 1000 * 60 * 5,
+    enabled,
+  });
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -145,7 +145,7 @@ export const useGetAroundVideo = <span class="fstat-no" title="function not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-11T16:26:09.406Z
+                at 2024-11-12T14:56:30.618Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
