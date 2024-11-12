@@ -15,19 +15,17 @@ test('사용자 위치 기반 내주변 비디오 호출 확인', async () => {
   jest.spyOn(locationHook, 'default').mockReturnValue(mockLocation);
 
   (api.useGetAroundVideo as jest.Mock).mockReturnValue({
-    data: {
-      content: [
-        {
-          videoId: 1,
-          videoAlias: 'Test Video',
-          videoUrl: 'https://example.com',
-          place: {
-            placeId: 0,
-            placeName: 'Test Place',
-          },
+    data: [
+      {
+        videoId: 1,
+        videoAlias: 'Test Video',
+        videoUrl: 'https://example.com',
+        place: {
+          placeId: 0,
+          placeName: 'Test Place',
         },
-      ],
-    },
+      },
+    ],
     isLoading: false,
     error: null,
     isError: false,
