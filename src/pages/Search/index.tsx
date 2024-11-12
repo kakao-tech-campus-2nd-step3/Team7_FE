@@ -29,9 +29,9 @@ export default function SearchPage() {
         검색 결과
       </Paragraph>
       <SplitLine />
-      <BaseLayout type="influencer" mainText="" SubText="인플루언서" items={influencersData.influencers} />
+      <BaseLayout type="influencer" mainText="" SubText="인플루언서" items={influencersData.content} />
       <SplitLine />
-      <BaseLayout type="spot" mainText="" SubText="바로 그곳" items={coolVideoData?.content || []} />
+      <BaseLayout type="spot" mainText="" SubText="바로 그곳" items={coolVideoData || []} />
       <SplitLine />
       <BaseLayout type="place" mainText="" SubText="관련 장소" items={places.places} />
     </Wrapper>
