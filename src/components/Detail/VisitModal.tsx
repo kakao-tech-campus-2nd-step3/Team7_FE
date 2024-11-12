@@ -28,7 +28,7 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
     }
     try {
       const response = await refetch();
-      if (response.data.success) {
+      if (response.status) {
         setMessage('완료되었습니다.');
       }
     } catch (error) {

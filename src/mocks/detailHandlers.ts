@@ -2,6 +2,7 @@ import { rest } from 'msw';
 import { BASE_URL } from '@/api/instance';
 import { getPlaceInfoPath } from '@/api/hooks/useGetPlaceInfo';
 import { getReviewPath } from '@/api/hooks/useGetReview';
+import { getSendInfoPath } from '@/api/hooks/useGetSendInfo';
 
 let reviews = [
   {
@@ -152,6 +153,9 @@ export const detailHandlers = [
     const normalizedId = Array.isArray(id) ? id[0] : id;
     reviews = reviews.filter((review) => review.reviewId !== parseInt(normalizedId, 10));
     return res(ctx.status(200), ctx.json({ message: '리뷰가 삭제되었습니다.' }));
+  }),
+  rest.get(`${BASE_URL}${getSendInfoPath('1')}`, (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ message: '완료되었습니다.' }));
   }),
 ];
 export default detailHandlers;
