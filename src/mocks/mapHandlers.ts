@@ -171,8 +171,45 @@ const dummyPlaces: PlaceData[] = [
 ];
 
 export const mapHandlers = [
-  http.get(`${BASE_URL}/places`, () => {
-    return HttpResponse.json({ content: dummyPlaces });
+  http.get(`${BASE_URL}/places`, ({ request }) => {
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get('page') ?? '0', 10);
+    const size = parseInt(url.searchParams.get('size') ?? '10', 10);
+
+    const totalElements = dummyPlaces.length;
+    const totalPages = Math.ceil(totalElements / size);
+    const startIndex = page * size;
+    const endIndex = Math.min(startIndex + size, totalElements);
+    const paginatedContent = dummyPlaces.slice(startIndex, endIndex);
+
+    return HttpResponse.json({
+      totalPages,
+      totalElements,
+      size,
+      content: paginatedContent,
+      number: page,
+      sort: {
+        empty: true,
+        sorted: true,
+        unsorted: true,
+      },
+      numberOfElements: paginatedContent.length,
+      pageable: {
+        offset: page * size,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        paged: true,
+        pageNumber: page,
+        pageSize: size,
+        unpaged: false,
+      },
+      first: page === 0,
+      last: page === totalPages - 1,
+      empty: paginatedContent.length === 0,
+    });
   }),
 ];
 
