@@ -8,5 +8,9 @@ export const getPlaceInfo = async (id: string) => {
   return response.data;
 };
 export const useGetPlaceInfo = (id: string) => {
-  return useSuspenseQuery({ queryKey: ['placeInfo', id], queryFn: () => getPlaceInfo(id) });
+  return useSuspenseQuery({
+    queryKey: ['placeInfo', id],
+    queryFn: () => getPlaceInfo(id),
+    staleTime: 1000 * 60 * 5,
+  });
 };
