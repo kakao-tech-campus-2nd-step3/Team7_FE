@@ -33,11 +33,19 @@ export default function PlaceSection({
   const navigate = useNavigate();
   const previousPlacesRef = useRef<PlaceData[]>([]);
 
-  const { data: places, isLoading, isError, error, refetch } = useGetPlaceList(mapBounds, filters, center, false);
+  const {
+    data: places,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetPlaceList(mapBounds, filters, center, 0, 10, false);
 
   const filteredPlaces = useMemo(() => {
-    const currentPlaces = places || previousPlacesRef.current;
-    if (!currentPlaces) return [];
+    const currentPlaces = places?.content || previousPlacesRef.current;
+    if (!currentPlaces) {
+      return [];
+    }
 
     const filtered = currentPlaces.filter((place: PlaceData) => {
       const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
