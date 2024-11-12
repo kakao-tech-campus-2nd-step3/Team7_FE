@@ -107,7 +107,7 @@ export default function DropdownMenu({
 
   return (
     <DropdownContainer ref={ref} type={type}>
-      <DropdownButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <DropdownButton $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         {displayValue}
         {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
       </DropdownButton>
@@ -133,7 +133,7 @@ const DropdownContainer = styled.div<{ type: 'location' | 'influencer' }>`
   max-width: ${(props) => (props.type === 'location' ? '400px' : '300px')};
 `;
 
-const DropdownButton = styled.button<{ isOpen: boolean }>`
+const DropdownButton = styled.button<{ $isOpen: boolean }>`
   width: 100%;
   padding: 10px 14px;
   background: #ffffff;
