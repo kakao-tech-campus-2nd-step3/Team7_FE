@@ -53,254 +53,146 @@ export const mainHandlers = [
   rest.get(`${BASE_URL}${getCoolVideoPath()}`, (_, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({
-        totalPages: 0,
-        totalElements: 0,
-        size: 0,
-        content: [
-          {
-            videoId: 1,
-            videoAlias: '정육왕 (이)가 추천하는 맛집! 다양한 메뉴를 즐길 수 있습니다.',
-            videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
-            place: {
-              placeId: 1,
-              placeName: '이선장네',
-            },
+      ctx.json([
+        {
+          videoId: 1,
+          videoAlias: '정육왕 (이)가 추천하는 맛집! 다양한 메뉴를 즐길 수 있습니다.',
+          videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+          place: {
+            placeId: 1,
+            placeName: '이선장네',
           },
-          {
-            videoId: 2,
-            videoAlias: '풍자가 기절한 바로 그곳',
-            videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-            place: {
-              placeId: 2,
-              placeName: '풍자또가',
-            },
-          },
-          {
-            videoId: 3,
-            videoAlias: '히밥이 다 못먹은 가성비 그곳',
-            videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
-            place: {
-              placeId: 3,
-              placeName: '가성비집',
-            },
-          },
-          {
-            videoId: 7,
-            videoAlias: '풍자가 기절한 바로 그곳',
-            videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-            place: {
-              placeId: 2,
-              placeName: '풍자또가',
-            },
-          },
-          {
-            videoId: 4,
-            videoAlias: '히밥이 다 못먹은 가성비 그곳',
-            videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
-            place: {
-              placeId: 3,
-              placeName: '가성비집',
-            },
-          },
-          {
-            videoId: 5,
-            videoAlias: '풍자가 기절한 바로 그곳',
-            videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-            place: {
-              placeId: 2,
-              placeName: '풍자또가',
-            },
-          },
-          {
-            videoId: 6,
-            videoAlias: '히밥이 다 못먹은 가성비 그곳',
-            videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
-            place: {
-              placeId: 3,
-              placeName: '가성비집',
-            },
-          },
-        ],
-        number: 0,
-        sort: {
-          empty: true,
-          sorted: true,
-          unsorted: true,
         },
-        numberOfElements: 0,
-        pageable: {
-          offset: 0,
-          sort: {
-            empty: true,
-            sorted: true,
-            unsorted: true,
+        {
+          videoId: 2,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
           },
-          paged: true,
-          pageNumber: 0,
-          pageSize: 0,
-          unpaged: true,
         },
-        first: true,
-        last: true,
-        empty: true,
-      }),
+        {
+          videoId: 3,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
+        },
+        {
+          videoId: 7,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
+          },
+        },
+        {
+          videoId: 4,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
+        },
+        {
+          videoId: 5,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
+          },
+        },
+        {
+          videoId: 6,
+          videoAlias: '히밥이 다 못먹은 가성비 그곳',
+          videoUrl: 'https://youtu.be/cz1EvePzqfM?si=L5ZsKV4DXikGIuEP',
+          place: {
+            placeId: 3,
+            placeName: '가성비집',
+          },
+        },
+      ]),
     );
   }),
   rest.get(`${BASE_URL}${getNewVideoPath()}`, (_, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({
-        totalPages: 0,
-        totalElements: 0,
-        size: 0,
-        content: [
-          {
-            videoId: 1,
-            videoAlias: '정육왕 (이)가 추천하는 맛집! 다양한 메뉴를 즐길 수 있습니다.',
-            videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
-            place: {
-              placeId: 1,
-              placeName: '이선장네',
-            },
+      ctx.json([
+        {
+          videoId: 1,
+          videoAlias: '정육왕 (이)가 추천하는 맛집! 다양한 메뉴를 즐길 수 있습니다.',
+          videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+          place: {
+            placeId: 1,
+            placeName: '이선장네',
           },
-          {
-            videoId: 2,
-            videoAlias: '풍자가 기절한 바로 그곳',
-            videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-            place: {
-              placeId: 2,
-              placeName: '풍자또가',
-            },
-          },
-        ],
-        number: 0,
-        sort: {
-          empty: true,
-          sorted: true,
-          unsorted: true,
         },
-        numberOfElements: 0,
-        pageable: {
-          offset: 0,
-          sort: {
-            empty: true,
-            sorted: true,
-            unsorted: true,
+        {
+          videoId: 2,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
           },
-          paged: true,
-          pageNumber: 0,
-          pageSize: 0,
-          unpaged: true,
         },
-        first: true,
-        last: true,
-        empty: true,
-      }),
+      ]),
     );
   }),
   rest.get(`${BASE_URL}${getMyInfluencerVideoPath()}`, (_, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({
-        totalPages: 0,
-        totalElements: 0,
-        size: 0,
-        content: [
-          {
-            videoId: 1,
-            videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
-            videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
-            place: {
-              placeId: 1,
-              placeName: '이선장네',
-            },
+      ctx.json([
+        {
+          videoId: 1,
+          videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
+          videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+          place: {
+            placeId: 1,
+            placeName: '이선장네',
           },
-          {
-            videoId: 2,
-            videoAlias: '풍자가 기절한 바로 그곳',
-            videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-            place: {
-              placeId: 2,
-              placeName: '풍자또가',
-            },
-          },
-        ],
-        number: 0,
-        sort: {
-          empty: true,
-          sorted: true,
-          unsorted: true,
         },
-        numberOfElements: 0,
-        pageable: {
-          offset: 0,
-          sort: {
-            empty: true,
-            sorted: true,
-            unsorted: true,
+        {
+          videoId: 2,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
           },
-          paged: true,
-          pageNumber: 0,
-          pageSize: 0,
-          unpaged: true,
         },
-        first: true,
-        last: true,
-        empty: true,
-      }),
+      ]),
     );
   }),
   rest.get(`${BASE_URL}${getAroundVideoPath()}`, (_, res, ctx) => {
     return res(
       ctx.status(200),
-      ctx.json({
-        totalPages: 0,
-        totalElements: 0,
-        size: 0,
-        content: [
-          {
-            videoId: 1,
-            videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
-            videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
-            place: {
-              placeId: 1,
-              placeName: '이선장네',
-            },
+      ctx.json([
+        {
+          videoId: 1,
+          videoAlias: '성시경이 갔다가 못 돌아온 바로 그곳',
+          videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+          place: {
+            placeId: 1,
+            placeName: '이선장네',
           },
-          {
-            videoId: 2,
-            videoAlias: '풍자가 기절한 바로 그곳',
-            videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
-            place: {
-              placeId: 2,
-              placeName: '풍자또가',
-            },
-          },
-        ],
-        number: 0,
-        sort: {
-          empty: true,
-          sorted: true,
-          unsorted: true,
         },
-        numberOfElements: 0,
-        pageable: {
-          offset: 0,
-          sort: {
-            empty: true,
-            sorted: true,
-            unsorted: true,
+        {
+          videoId: 2,
+          videoAlias: '풍자가 기절한 바로 그곳',
+          videoUrl: 'https://youtu.be/g5P0vpGSbng?si=RB71ZAx12kDas9a6',
+          place: {
+            placeId: 2,
+            placeName: '풍자또가',
           },
-          paged: true,
-          pageNumber: 0,
-          pageSize: 0,
-          unpaged: true,
         },
-        first: true,
-        last: true,
-        empty: true,
-      }),
+      ]),
     );
   }),
   rest.get(`${BASE_URL}${getInfluencerPath()}`, (_, res, ctx) => {
