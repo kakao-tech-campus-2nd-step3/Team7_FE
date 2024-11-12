@@ -91,7 +91,7 @@ export default function MainPage() {
             prevSubText="내 "
             mainText="인플루언서"
             SubText="가 방문한 그곳!"
-            items={myInfluencerVideoData?.content || []}
+            items={myInfluencerVideoData || []}
           />
           {location?.lat && location?.lng && (
             <BaseLayout
@@ -99,20 +99,14 @@ export default function MainPage() {
               prevSubText="내 "
               mainText="주변"
               SubText="에 있는 그곳!"
-              items={aroundVideoData?.content || []}
+              items={aroundVideoData || []}
             />
           )}
         </>
       ) : (
         <>
-          <BaseLayout
-            type="spot"
-            prevSubText="지금 "
-            mainText="쿨"
-            SubText=" 한 그곳!"
-            items={coolVideoData?.content || []}
-          />
-          <BaseLayout type="spot" mainText="새로" SubText=" 등록된 그곳!" items={newVideoData?.content || []} />
+          <BaseLayout type="spot" prevSubText="지금 " mainText="쿨" SubText=" 한 그곳!" items={coolVideoData || []} />
+          <BaseLayout type="spot" mainText="새로" SubText=" 등록된 그곳!" items={newVideoData || []} />
         </>
       )}
     </Wrapper>
