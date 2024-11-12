@@ -290,8 +290,8 @@ export const mainHandlers = [
   }),
   http.get(`${BASE_URL}${getInfluencerPath()}`, () => {
     return HttpResponse.json({
-      totalPages: 0,
-      totalElements: 0,
+      totalPages: 2,
+      totalElements: 11,
       size: 0,
       content: [
         {
@@ -388,11 +388,11 @@ export const mainHandlers = [
         },
         paged: true,
         pageNumber: 0,
-        pageSize: 0,
+        pageSize: 10,
         unpaged: true,
       },
       first: true,
-      last: true,
+      last: false,
       empty: true,
     });
   }),
