@@ -13,7 +13,8 @@ import LoginModal from '../common/modals/LoginModal';
 export default function VisitModal({ id, placeName, onClose }: { id: number; placeName: string; onClose: () => void }) {
   const authInfo = useAuth();
   const location = useLocation();
-  const { refetch } = useGetSendInfo(String(id));
+  const [isSend, setIsSend] = useState(false);
+  const { status } = useGetSendInfo(String(id), isSend);
   const [message, setMessage] = useState<string>('');
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -26,13 +27,17 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
       setMessage('로그인이 필요합니다.');
       return;
     }
+    setIsSend(true);
     try {
-      const response = await refetch();
-      if (response.status) {
+      if (status === 'success') {
         setMessage('완료되었습니다.');
+      } else {
+        setMessage('에러가 발생했습니다. 다시 시도해주세요.');
       }
     } catch (error) {
-      console.error('실패: 정보를 보내는 데 실패했습니다.');
+      setMessage('에러가 발생했습니다. 관리자에게 문의하세요.');
+    } finally {
+      setIsSend(false);
     }
   };
   return (
@@ -45,8 +50,8 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
               {message || `${placeName}에 대한 정보를\n 카카오톡으로 보내드릴까요?`}
             </Paragraph>
           </DescriptionSection>
-          <BtnContainer hasMessage={message === '완료되었습니다.' || message === '로그인이 필요합니다.'}>
-            {message === '완료되었습니다.' || message === '로그인이 필요합니다.' ? (
+          <BtnContainer $hasMessage={!!message}>
+            {message ? (
               <Button
                 variant="kakao"
                 style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
@@ -117,8 +122,8 @@ const DescriptionSection = styled.div`
     white-space: pre-line;
   }
 `;
-const BtnContainer = styled.div<{ hasMessage: boolean }>`
+const BtnContainer = styled.div<{ $hasMessage: boolean }>`
   display: flex;
-  justify-content: ${({ hasMessage }) => (hasMessage ? 'center' : 'space-between')};
+  justify-content: ${({ $hasMessage }) => ($hasMessage ? 'center' : 'space-between')};
   width: 382px;
 `;

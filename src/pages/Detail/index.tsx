@@ -85,11 +85,9 @@ export default function DetailPage() {
           </QueryErrorResetBoundary>
         )}
       </InfoContainer>
-      <ErrorBoundary FallbackComponent={Error}>
-        {visitModal ? (
-          <VisitModal id={infoData.placeId} placeName={infoData.placeName} onClose={() => setVisitModal(false)} />
-        ) : null}
-      </ErrorBoundary>
+      {visitModal && (
+        <VisitModal id={infoData.placeId} placeName={infoData.placeName} onClose={() => setVisitModal(false)} />
+      )}
     </Wrapper>
   );
 }
