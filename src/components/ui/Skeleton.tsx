@@ -19,7 +19,9 @@ const pulse = keyframes`
     opacity: 0.1;
   }
 `;
-const Wrapper = styled.div<Pick<SkeletonProps, 'width' | 'height' | 'borderRadius'>>`
+const Wrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['width', 'height', 'borderRadius'].includes(prop),
+})<SkeletonProps>`
   display: inline-block;
   background-color: #828282;
   width: ${({ width }) => `${width}`};
