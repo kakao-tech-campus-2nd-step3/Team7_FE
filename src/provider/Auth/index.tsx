@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 type AuthInfo = {
   isAuthenticated: boolean;
-  handleLoginSuccess: () => Promise<void>;
+  nickname: string | null;
+  handleLoginSuccess: (nickname: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -15,11 +16,14 @@ interface AuthProviderProps {
 
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [nickname, setNickname] = useState<string | null>(localStorage.getItem('nickname'));
   const navigate = useNavigate();
 
-  const handleLoginSuccess = async () => {
+  const handleLoginSuccess = async (userNickname: string) => {
     try {
+      setNickname(nickname);
       setIsAuthenticated(true);
+      localStorage.setItem('nickname', userNickname);
       localStorage.setItem('isAuthenticated', 'true');
       return await Promise.resolve();
     } catch (error) {
@@ -36,7 +40,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const logout = () => {
     try {
       setIsAuthenticated(false);
+      setNickname(null);
       localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('nickname');
       navigate('/');
     } catch (error) {
       console.error('Logout failed:', error);
@@ -46,10 +52,11 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const value = useMemo(
     () => ({
       isAuthenticated,
+      nickname,
       handleLoginSuccess,
       logout,
     }),
-    [isAuthenticated],
+    [isAuthenticated, nickname],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
