@@ -73,12 +73,14 @@ export default function InfluencerItem({
             </BackImageWrapper>
           )}
         </ImageContainer>
-        <Paragraph size="m" weight="bold" variant="white">
-          {influencerName}
-        </Paragraph>
-        <Paragraph size="xs" weight="normal" variant="white">
-          {influencerJob}
-        </Paragraph>
+        <TextWrapper>
+          <Paragraph size="m" weight="bold" variant="white">
+            {influencerName}
+          </Paragraph>
+          <Paragraph size="xs" weight="normal" variant="white">
+            {influencerJob}
+          </Paragraph>
+        </TextWrapper>
       </Wrapper>
       {showLoginModal && (
         <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
@@ -152,4 +154,10 @@ const LikeIcon = styled.div`
   top: 12px;
   z-index: 100;
   cursor: pointer;
+`;
+
+const TextWrapper = styled.div`
+  > *:not(:first-child) {
+    margin-top: 6px;
+  }
 `;
