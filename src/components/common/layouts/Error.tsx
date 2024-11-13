@@ -14,7 +14,6 @@ export default function Error({ resetErrorBoundary }: FallbackProps) {
 
   const handleRetry = () => {
     resetErrorBoundary();
-    window.location.reload();
   };
   const message = {
     title: '앗, 여기는 정보가 없는 것 같아요 🥲',

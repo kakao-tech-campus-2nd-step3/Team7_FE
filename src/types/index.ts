@@ -99,8 +99,8 @@ export type PlaceInfo = {
   likes: boolean;
   facilityInfo: FacilityInfo;
   menuInfos: {
-    menuImgUrls: [string];
-    menuList: [Menu];
+    menuImgUrls: string[];
+    menuList: Menu[];
     timeExp: Date;
   };
   openHour: OpenHourData;
@@ -131,7 +131,7 @@ export type Menu = {
 };
 
 export type ReviewData = {
-  reviewId?: number;
+  reviewId: number;
   likes: boolean;
   comment: string;
   userNickname: string;

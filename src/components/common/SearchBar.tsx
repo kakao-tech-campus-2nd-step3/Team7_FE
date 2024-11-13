@@ -59,7 +59,7 @@ export default function SearchBar({ placeholder = '키워드를 입력해주세�
 
   return (
     <SearchBarContainer>
-      <SearchInputWrapper isInputValue={inputValue !== ''}>
+      <SearchInputWrapper $isInputValue={inputValue !== ''}>
         <SearchInput
           type="text"
           value={inputValue}
@@ -107,14 +107,14 @@ const SearchBarContainer = styled.div`
   height: 44px;
 `;
 
-const SearchInputWrapper = styled.div<{ isInputValue: boolean }>`
+const SearchInputWrapper = styled.div<{ $isInputValue: boolean }>`
   display: flex;
   align-items: center;
   background: #414141;
   padding: 12px 16px;
   border: 1.5px solid #a5a5a5;
-  border-bottom: ${({ isInputValue }) => (isInputValue ? 'none' : null)};
-  border-radius: ${({ isInputValue }) => (isInputValue ? '16px 16px 0 0' : '16px')};
+  border-bottom: ${({ $isInputValue }) => ($isInputValue ? 'none' : null)};
+  border-radius: ${({ $isInputValue }) => ($isInputValue ? '16px 16px 0 0' : '16px')};
   z-index: 3;
 `;
 

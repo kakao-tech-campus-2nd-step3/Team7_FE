@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
-import { PageableData, SpotData } from '@/types';
+import { SpotData } from '@/types';
 
 export const getAroundVideoPath = () => `/videos`;
 
@@ -10,8 +10,7 @@ export const getAroundVideo = async (lat: number, lng: number) => {
     longitude: lng.toString(),
     latitude: lat.toString(),
   });
-  const response = await fetchInstance.get<PageableData<SpotData>>(`${getAroundVideoPath()}?${params.toString()}`);
-  console.log(params.toString());
+  const response = await fetchInstance.get<SpotData[]>(`${getAroundVideoPath()}?${params.toString()}`);
   return response.data;
 };
 
