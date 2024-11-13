@@ -2,15 +2,49 @@ import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 
 import styled from 'styled-components';
 
+import { useEffect, useState } from 'react';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 
 import BarGraph from './BarGraph';
 import Review from './Review';
-import { PlaceLikes } from '@/types';
+import { PlaceLikes, ReviewData } from '@/types';
 import { useGetReview } from '@/api/hooks/useGetReview';
+import Pagination from '@/components/common/Pagination';
 
-export default function ReviewTap({ placeLikes, id }: { placeLikes: PlaceLikes; id: string }) {
-  const { data: list } = useGetReview(id);
+export default function ReviewTap({ placeLikes, id: placeId }: { placeLikes: PlaceLikes; id: string }) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reviews, setReviews] = useState<ReviewData[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  const { data: list, refetch } = useGetReview({ page: currentPage - 1, size: 10, id: placeId });
+
+  useEffect(() => {
+    if (list) {
+      setReviews(list.content);
+      setTotalElements(list.totalElements);
+      setTotalPages(list.totalPages);
+    }
+  }, [list]);
+
+  const handlePageChange = (pageNum: number) => {
+    setCurrentPage(pageNum);
+  };
+
+  const handleDelete = async (id: number) => {
+    const updatedReviews = reviews.filter((review) => review.reviewId !== id);
+    setReviews(updatedReviews);
+    setTotalElements(totalElements - 1);
+
+    const newTotalPages = Math.ceil((totalElements - 1) / 10);
+    if (currentPage > newTotalPages) {
+      setCurrentPage(newTotalPages);
+    }
+    setTotalPages(newTotalPages);
+
+    await refetch();
+  };
+
   return (
     <Wrapper>
       <CountLike>
@@ -21,7 +55,14 @@ export default function ReviewTap({ placeLikes, id }: { placeLikes: PlaceLikes; 
       <Paragraph size="s" weight="bold" variant="white">
         <span style={{ color: '#55EBFF' }}>리뷰</span> 한마디
       </Paragraph>
-      <Review items={list} />
+      <Review items={reviews} onDelete={handleDelete} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={totalElements}
+        onPageChange={handlePageChange}
+        itemsPerPage={list.pageable.pageSize}
+      />
     </Wrapper>
   );
 }

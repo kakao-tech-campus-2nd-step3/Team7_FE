@@ -37,6 +37,86 @@ let reviews = [
     createdDate: new Date('2024-10-03T11:45:00Z'),
     mine: true,
   },
+  {
+    reviewId: 5,
+    likes: false,
+    comment: '서비스가 아쉬웠습니다',
+    userNickname: '사용자5',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 6,
+    likes: false,
+    comment: '서비스가 아쉬웠습니다',
+    userNickname: '사용자6',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 7,
+    likes: false,
+    comment: '서비스가 아쉬웠습니다',
+    userNickname: '사용자7',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 8,
+    likes: false,
+    comment: '서비스가 아쉬웠습니다',
+    userNickname: '사용자8',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 9,
+    likes: false,
+    comment: '서비스가 아쉬웠습니다',
+    userNickname: '사용자9',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 10,
+    likes: false,
+    comment: '서비스가 아쉬웠습니다',
+    userNickname: '사용자10',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 11,
+    likes: false,
+    comment: '11번입니다리',
+    userNickname: '사용자11',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 12,
+    likes: false,
+    comment: '12번입니다리',
+    userNickname: '사용자11',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 13,
+    likes: false,
+    comment: '11번입니다리',
+    userNickname: '사용자11',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
+  {
+    reviewId: 14,
+    likes: false,
+    comment: '11번입니다리',
+    userNickname: '사용자11',
+    createdDate: new Date('2024-10-03T11:45:00Z'),
+    mine: true,
+  },
 ];
 export const detailHandlers = [
   rest.get(`${BASE_URL}${getPlaceInfoPath('1')}`, (_, res, ctx) => {
@@ -145,8 +225,48 @@ export const detailHandlers = [
       }),
     );
   }),
-  rest.get(`${BASE_URL}${getReviewPath('1')}`, (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json(reviews));
+  rest.get(`${BASE_URL}${getReviewPath('1')}`, (req, res, ctx) => {
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get('page') ?? '0', 10);
+    const size = parseInt(url.searchParams.get('size') ?? '10', 10);
+
+    const totalElements = reviews.length;
+    const totalPages = Math.ceil(totalElements / size);
+    const startIndex = page * size;
+    const endIndex = Math.min(startIndex + size, totalElements);
+    const paginatedContent = reviews.slice(startIndex, endIndex);
+
+    return res(
+      ctx.status(200),
+      ctx.json({
+        totalPages,
+        totalElements,
+        size,
+        content: paginatedContent,
+        number: page,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        numberOfElements: paginatedContent.length,
+        pageable: {
+          offset: page * size,
+          sort: {
+            empty: true,
+            sorted: true,
+            unsorted: true,
+          },
+          paged: true,
+          pageNumber: page,
+          pageSize: size,
+          unpaged: false,
+        },
+        first: page === 0,
+        last: page === totalPages - 1,
+        empty: paginatedContent.length === 0,
+      }),
+    );
   }),
   rest.delete(`${BASE_URL}/reviews/:id`, (req, res, ctx) => {
     const { id } = req.params;
