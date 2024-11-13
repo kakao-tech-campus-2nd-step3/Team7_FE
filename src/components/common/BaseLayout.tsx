@@ -5,8 +5,7 @@ import { Text } from '@/components/common/typography/Text';
 import InfluencerSection from '@/components/Main/InfluencerSection';
 import InfluencerList from '@/components/Influencer/InfluencerList';
 import SpotSection from '@/components/Main/SpotSection';
-import { InfluencerData, SpotData, UserPlaceData } from '@/types';
-import UserPlaceSection from '@/components/My/UserPlaceSection';
+import { InfluencerData, SpotData } from '@/types';
 import ChoiceList from '@/components/Choice/ChoiceList';
 
 type Props = {
@@ -14,7 +13,7 @@ type Props = {
   prevSubText?: string;
   mainText: string;
   SubText: string;
-  items: InfluencerData[] | SpotData[] | UserPlaceData[];
+  items: InfluencerData[] | SpotData[];
   showMoreButton?: boolean;
   isChoice?: boolean;
 } & (
@@ -59,10 +58,7 @@ export default function BaseLayout({
     if (type === 'influencer') {
       return <InfluencerSection items={items as InfluencerData[]} />;
     }
-    if (type === 'spot') {
-      return <SpotSection items={items as SpotData[]} />;
-    }
-    return <UserPlaceSection items={items as UserPlaceData[]} />;
+    return <SpotSection items={items as SpotData[]} />;
   };
 
   return (
