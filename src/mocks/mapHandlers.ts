@@ -184,8 +184,47 @@ const dummyPlaces: PlaceData[] = [
 ];
 
 export const mapHandlers = [
-  rest.get(`${BASE_URL}/places`, (_, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ places: dummyPlaces }));
+  rest.get(`${BASE_URL}/places`, (req, res, ctx) => {
+    const url = new URL(req.url);
+    const page = parseInt(url.searchParams.get('page') ?? '0', 10);
+    const size = parseInt(url.searchParams.get('size') ?? '10', 10);
+
+    const totalElements = dummyPlaces.length;
+    const totalPages = Math.ceil(totalElements / size);
+    const startIndex = page * size;
+    const endIndex = Math.min(startIndex + size, totalElements);
+    const paginatedContent = dummyPlaces.slice(startIndex, endIndex);
+    return res(
+      ctx.status(200),
+      ctx.json({
+        totalPages,
+        totalElements,
+        size,
+        content: paginatedContent,
+        number: page,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        numberOfElements: paginatedContent.length,
+        pageable: {
+          offset: page * size,
+          sort: {
+            empty: true,
+            sorted: true,
+            unsorted: true,
+          },
+          paged: true,
+          pageNumber: page,
+          pageSize: size,
+          unpaged: false,
+        },
+        first: page === 0,
+        last: page === totalPages - 1,
+        empty: paginatedContent.length === 0,
+      }),
+    );
   }),
   rest.post(`${BASE_URL}/places/likes`, (req, res, ctx) => {
     const { placeId, likes } = req.body as { placeId: string; likes: boolean };
@@ -196,6 +235,9 @@ export const mapHandlers = [
         likes,
       }),
     );
+  }),
+  rest.get(`${BASE_URL}/influencers/names`, (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json(dummyInfluencers));
   }),
 ];
 
