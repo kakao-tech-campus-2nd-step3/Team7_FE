@@ -16,9 +16,8 @@ describe('좋아요/취소 기능 테스트', () => {
     render(
       <AuthContext.Provider
         value={{
-          accessToken: 'mock-access-token',
-          refreshToken: 'mock-refresh-token',
-          tokensRefresh: jest.fn(),
+          isAuthenticated: true,
+          handleLoginSuccess: jest.fn(),
           logout: jest.fn(),
         }}
       >
@@ -57,9 +56,8 @@ describe('좋아요/취소 기능 테스트', () => {
     render(
       <AuthContext.Provider
         value={{
-          accessToken: 'mock-access-token',
-          refreshToken: 'mock-refresh-token',
-          tokensRefresh: jest.fn(),
+          isAuthenticated: true,
+          handleLoginSuccess: jest.fn(),
           logout: jest.fn(),
         }}
       >

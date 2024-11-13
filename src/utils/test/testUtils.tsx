@@ -11,9 +11,8 @@ export function renderWithQueryClient(children: React.ReactNode) {
   return render(
     <AuthContext.Provider
       value={{
-        accessToken: 'mock-access-token',
-        refreshToken: 'mock-refresh-token',
-        tokensRefresh: jest.fn(),
+        isAuthenticated: true,
+        handleLoginSuccess: jest.fn(),
         logout: jest.fn(),
       }}
     >

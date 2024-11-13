@@ -35,9 +35,8 @@ test('사용자 위치 기반 내주변 비디오 호출 확인', async () => {
   render(
     <AuthContext.Provider
       value={{
-        accessToken: 'mock-access-token',
-        refreshToken: 'mock-refresh-token',
-        tokensRefresh: jest.fn(),
+        isAuthenticated: true,
+        handleLoginSuccess: jest.fn(),
         logout: jest.fn(),
       }}
     >
