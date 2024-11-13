@@ -1,4 +1,4 @@
-import { HttpResponse, http } from 'msw';
+import { rest } from 'msw';
 import { BASE_URL } from '@/api/instance';
 import { getInfluencerPath } from '@/api/hooks/useGetMain';
 
@@ -83,8 +83,8 @@ const mockInfluencers = [
 ];
 
 export const InfluencerHandlers = [
-  http.get(`${BASE_URL}${getInfluencerPath()}`, ({ request }) => {
-    const url = new URL(request.url);
+  rest.get(`${BASE_URL}${getInfluencerPath()}`, (req, res, ctx) => {
+    const url = new URL(req.url);
     const page = parseInt(url.searchParams.get('page') ?? '0', 10);
     const size = parseInt(url.searchParams.get('size') ?? '10', 10);
 
@@ -94,34 +94,37 @@ export const InfluencerHandlers = [
     const endIndex = Math.min(startIndex + size, totalElements);
     const paginatedContent = mockInfluencers.slice(startIndex, endIndex);
 
-    return HttpResponse.json({
-      totalPages,
-      totalElements,
-      size,
-      content: paginatedContent,
-      number: page,
-      sort: {
-        empty: true,
-        sorted: true,
-        unsorted: true,
-      },
-      numberOfElements: paginatedContent.length,
-      pageable: {
-        offset: page * size,
+    return res(
+      ctx.status(200),
+      ctx.json({
+        totalPages,
+        totalElements,
+        size,
+        content: paginatedContent,
+        number: page,
         sort: {
           empty: true,
           sorted: true,
           unsorted: true,
         },
-        paged: true,
-        pageNumber: page,
-        pageSize: size,
-        unpaged: false,
-      },
-      first: page === 0,
-      last: page === totalPages - 1,
-      empty: paginatedContent.length === 0,
-    });
+        numberOfElements: paginatedContent.length,
+        pageable: {
+          offset: page * size,
+          sort: {
+            empty: true,
+            sorted: true,
+            unsorted: true,
+          },
+          paged: true,
+          pageNumber: page,
+          pageSize: size,
+          unpaged: false,
+        },
+        first: page === 0,
+        last: page === totalPages - 1,
+        empty: paginatedContent.length === 0,
+      }),
+    );
   }),
 ];
 
