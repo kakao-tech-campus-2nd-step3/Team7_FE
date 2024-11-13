@@ -11,6 +11,7 @@ import { InfluencerData } from '@/types';
 import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import FallbackImage from './FallbackImage';
 
 interface InfluencerItemProps extends InfluencerData {
   useBackCard?: boolean;
@@ -63,7 +64,7 @@ export default function InfluencerItem({
           <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
             {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
           </LikeIcon>
-          <FrontImage src={influencerImgUrl} alt={influencerName} />
+          <FallbackImage src={influencerImgUrl} alt={influencerName} />
           {useBackCard && useNav && (
             <BackImageWrapper>
               <MdLocationOn size={50} color="#55EBFF" />
@@ -116,18 +117,6 @@ const ImageContainer = styled.div`
       opacity: 1;
     }
   }
-`;
-
-const FrontImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  transition: opacity 0.6s ease-in-out;
 `;
 
 const BackImageWrapper = styled.div`
