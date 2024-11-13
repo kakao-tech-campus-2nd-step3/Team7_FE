@@ -6,6 +6,7 @@ import { InfluencerData } from '@/types';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 import { Paragraph } from '@/components/common/typography/Paragraph';
+import FallbackImage from './FallbackImage';
 
 interface ChoiceItemProps
   extends Pick<InfluencerData, 'influencerId' | 'influencerName' | 'influencerImgUrl' | 'influencerJob'> {
@@ -21,7 +22,7 @@ export default function ChoiceItem({
   onToggleLike,
   isSelected = false,
 }: ChoiceItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const location = useLocation();
 
@@ -30,14 +31,14 @@ export default function ChoiceItem({
       event.stopPropagation();
       event.preventDefault();
 
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
 
       onToggleLike(influencerId, !isSelected);
     },
-    [influencerId, isSelected, onToggleLike, authInfo.accessToken],
+    [influencerId, isSelected, onToggleLike, isAuthenticated],
   );
 
   return (
@@ -47,7 +48,7 @@ export default function ChoiceItem({
           <LikeIcon onClick={handleClickLike}>
             {isSelected ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
           </LikeIcon>
-          <FrontImage src={influencerImgUrl} alt={influencerName} />
+          <FallbackImage src={influencerImgUrl} alt={influencerName} />
         </ImageContainer>
         <Paragraph size="m" weight="bold" variant="white">
           {influencerName}
@@ -56,7 +57,9 @@ export default function ChoiceItem({
           {influencerJob}
         </Paragraph>
       </Wrapper>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }
@@ -78,17 +81,6 @@ const ImageContainer = styled.div`
   border-radius: 6px;
   overflow: hidden;
   margin-bottom: auto;
-`;
-
-const FrontImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin-bottom: 8px;
-  border-radius: 6px;
 `;
 
 const LikeIcon = styled.div`

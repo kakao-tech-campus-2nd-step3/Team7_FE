@@ -11,6 +11,7 @@ import { InfluencerData } from '@/types';
 import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import FallbackImage from './FallbackImage';
 
 interface InfluencerItemProps extends InfluencerData {
   useBackCard?: boolean;
@@ -26,7 +27,7 @@ export default function InfluencerItem({
   useBackCard = true,
   useNav = true,
 }: InfluencerItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -36,7 +37,7 @@ export default function InfluencerItem({
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
@@ -67,7 +68,7 @@ export default function InfluencerItem({
               <PiHeartLight color="white" size={32} data-testid="PiHeartLight" />
             )}
           </LikeIcon>
-          <FrontImage src={influencerImgUrl} alt={influencerName} />
+          <FallbackImage src={influencerImgUrl} alt={influencerName} />
           {useBackCard && useNav && (
             <BackImageWrapper>
               <MdLocationOn size={50} color="#55EBFF" />
@@ -77,14 +78,18 @@ export default function InfluencerItem({
             </BackImageWrapper>
           )}
         </ImageContainer>
-        <Paragraph size="m" weight="bold" variant="white">
-          {influencerName}
-        </Paragraph>
-        <Paragraph size="xs" weight="normal" variant="white">
-          {influencerJob}
-        </Paragraph>
+        <TextWrapper>
+          <Paragraph size="m" weight="bold" variant="white">
+            {influencerName}
+          </Paragraph>
+          <Paragraph size="xs" weight="normal" variant="white">
+            {influencerJob}
+          </Paragraph>
+        </TextWrapper>
       </Wrapper>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }
@@ -118,18 +123,6 @@ const ImageContainer = styled.div`
   }
 `;
 
-const FrontImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  transition: opacity 0.6s ease-in-out;
-`;
-
 const BackImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -154,4 +147,10 @@ const LikeIcon = styled.div`
   top: 12px;
   z-index: 100;
   cursor: pointer;
+`;
+
+const TextWrapper = styled.div`
+  > *:not(:first-child) {
+    margin-top: 6px;
+  }
 `;

@@ -62,7 +62,7 @@ const searchData = [
   '띄워쓰기 검사',
 ];
 export default function MainPage() {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useGetLocation();
 
   const [{ data: influencersData }] = useGetMain();
@@ -84,7 +84,7 @@ export default function MainPage() {
         SubText=" 가 방문한 장소를 찾아볼까요?"
         items={influencersData.content}
       />
-      {authInfo.accessToken ? (
+      {isAuthenticated ? (
         <>
           <BaseLayout
             type="spot"

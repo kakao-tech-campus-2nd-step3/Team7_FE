@@ -66,7 +66,7 @@ const Container = styled.div`
   min-height: 100vh;
   background-color: #1c1c1c;
   color: white;
-  width: 430px;
+  width: min(100%, 700px);
   margin: 0 auto;
 `;
 

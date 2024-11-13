@@ -11,7 +11,6 @@ export const getAroundVideo = async (lat: number, lng: number) => {
     latitude: lat.toString(),
   });
   const response = await fetchInstance.get<SpotData[]>(`${getAroundVideoPath()}?${params.toString()}`);
-  console.log(params.toString());
   return response.data;
 };
 

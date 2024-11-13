@@ -8,7 +8,7 @@ type PrivatedRouteProps = {
 };
 
 export default function PrivatedRoute({ children }: PrivatedRouteProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,7 +23,7 @@ export default function PrivatedRoute({ children }: PrivatedRouteProps) {
     navigate(0);
   };
 
-  if (!authInfo?.accessToken) {
+  if (!isAuthenticated) {
     return (
       <LoginModal
         currentPath={location.pathname}

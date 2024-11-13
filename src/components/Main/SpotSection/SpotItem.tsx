@@ -7,14 +7,18 @@ import { Paragraph } from '@/components/common/typography/Paragraph';
 
 import useExtractYoutubeVideoId from '@/libs/youtube/useExtractYoutube';
 import { SpotData } from '@/types';
+import FallbackImage from '@/components/common/Items/FallbackImage';
+import BasicImage from '@/assets/images/basic-image.png';
 
 export default function SpotItem({ videoId, videoAlias, videoUrl, place }: SpotData) {
+  const extractedVideoId = useExtractYoutubeVideoId(videoUrl || '');
+  const thumbnailUrl = videoUrl ? `https://img.youtube.com/vi/${extractedVideoId}/maxresdefault.jpg` : BasicImage;
+
   return (
     <Wrapper to={`/detail/${place.placeId}`}>
-      <Image
-        src={`https://img.youtube.com/vi/${useExtractYoutubeVideoId(videoUrl)}/maxresdefault.jpg`}
-        alt={String(videoId)}
-      />
+      <ImageWrapper>
+        <FallbackImage src={thumbnailUrl} alt={String(videoId)} />
+      </ImageWrapper>
       <Paragraph size="m" weight="bold" variant="white">
         {videoAlias}
       </Paragraph>
@@ -37,10 +41,10 @@ const Wrapper = styled(Link)`
   }
 `;
 
-const Image = styled.img`
+const ImageWrapper = styled.div`
   width: 340px;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
   margin-bottom: 10px;
   border-radius: 6px;
+  overflow: hidden;
 `;

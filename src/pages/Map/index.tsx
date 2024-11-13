@@ -7,12 +7,13 @@ import PlaceSection from '@/components/Map/PlaceSection';
 import ToggleButton from '@/components/Map/ToggleButton';
 import { Text } from '@/components/common/typography/Text';
 import locationOptions from '@/utils/constants/LocationOptions';
-import influencerOptions from '@/utils/constants/InfluencerOptions';
 import { LocationData, PlaceData } from '@/types';
+import useGetDropdownName from '@/api/hooks/useGetDropdownName';
 
 export default function MapPage() {
   const [searchParams] = useSearchParams();
   const influencerParam = searchParams.get('influencer');
+  const { data: influencerOptions = [], isLoading: isLoadingInfluencers } = useGetDropdownName();
 
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>(influencerParam || '');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
@@ -102,9 +103,9 @@ export default function MapPage() {
           type="location"
         />
         <DropdownMenu
-          options={influencerOptions}
+          options={isLoadingInfluencers ? [] : influencerOptions}
           onChange={handleInfluencerChange}
-          placeholder="인플루언서"
+          placeholder={isLoadingInfluencers ? '로딩 중' : '인플루언서'}
           type="influencer"
           defaultValue={influencerParam ? { main: influencerParam } : undefined}
         />

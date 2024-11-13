@@ -1,12 +1,9 @@
 import { createContext, useEffect, useMemo, useState } from 'react';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { fetchInstance } from '@/api/instance';
 
 type AuthInfo = {
-  accessToken: string | null;
-  refreshToken: string | null;
-  tokensRefresh: () => Promise<void>;
+  isAuthenticated: boolean;
+  handleLoginSuccess: () => Promise<void>;
   logout: () => void;
 };
 
@@ -17,59 +14,42 @@ interface AuthProviderProps {
 }
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const [accessToken, setAccessToken] = useState<string | null>(Cookies.get('access_token') || null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(Cookies.get('refresh_token') || null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const tokensRefresh = async () => {
-    if (!refreshToken) return;
-
+  const handleLoginSuccess = async () => {
     try {
-      const response = await fetchInstance.get('/refresh-token', {
-        headers: {
-          Cookie: `refresh_token=${refreshToken}`,
-        },
-      });
-
-      if (response.status === 200) {
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-
-        // 브라우저 쿠키에 저장
-        Cookies.set('access_token', newAccessToken, { secure: true, sameSite: 'strict' });
-        Cookies.set('refresh_token', newRefreshToken, { secure: true, sameSite: 'strict' });
-      } else {
-        throw new Error('토큰 갱신 실패');
-      }
+      setIsAuthenticated(true);
+      localStorage.setItem('isAuthenticated', 'true');
+      return await Promise.resolve();
     } catch (error) {
-      console.error('토큰 갱신 오류:', error);
-      logout();
+      console.error('Login success handling failed:', error);
+      return await Promise.reject(error);
     }
-  };
-
-  const logout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    setAccessToken(null);
-    setRefreshToken(null);
-    navigate('/');
   };
 
   useEffect(() => {
-    if (!accessToken && refreshToken) {
-      tokensRefresh();
+    const savedAuthStatus = localStorage.getItem('isAuthenticated');
+    setIsAuthenticated(savedAuthStatus === 'true');
+  }, []);
+
+  const logout = () => {
+    try {
+      setIsAuthenticated(false);
+      localStorage.removeItem('isAuthenticated');
+      navigate('/');
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
-  }, [accessToken, refreshToken]);
+  };
 
   const value = useMemo(
     () => ({
-      accessToken,
-      refreshToken,
-      tokensRefresh,
+      isAuthenticated,
+      handleLoginSuccess,
       logout,
     }),
-    [accessToken, refreshToken],
+    [isAuthenticated],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
