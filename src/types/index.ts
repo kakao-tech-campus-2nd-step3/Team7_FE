@@ -191,10 +191,6 @@ export type UserReviewData = {
   comment: string;
   createdDate: Date;
 };
-export type UserReviewResponse = {
-  reviews: [UserReviewData];
-};
-
 export type RequestPlaceReview = {
   likes: boolean | null;
   comments: string;
