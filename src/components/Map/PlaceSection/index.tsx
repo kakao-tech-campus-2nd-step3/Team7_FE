@@ -31,8 +31,9 @@ export default function PlaceSection({
   onFetchComplete,
 }: PlaceSectionProps) {
   const navigate = useNavigate();
-  const sectionRef = useRef<HTMLDivElement>(null);  // 무한 스크롤을 위한 ref와 observer 설정
-  const { ref: loadMoreRef, inView } = useInView({ // useInView = Intersection Oberser API를 react hook으로 구현한 것
+  const sectionRef = useRef<HTMLDivElement>(null); // 무한 스크롤을 위한 ref와 observer 설정
+  const { ref: loadMoreRef, inView } = useInView({
+    // useInView = Intersection Oberser API를 react hook으로 구현한 것
     root: sectionRef.current,
     rootMargin: '0px',
     threshold: 0, // 요소가 조금이라도 보이면 감지
