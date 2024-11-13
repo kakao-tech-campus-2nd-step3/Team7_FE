@@ -11,7 +11,7 @@ import useAuth from '@/hooks/useAuth';
 import LoginModal from '../common/modals/LoginModal';
 
 export default function VisitModal({ id, placeName, onClose }: { id: number; placeName: string; onClose: () => void }) {
-  const authInfo = useAuth();
+  const isAuthenticated = useAuth();
   const location = useLocation();
   const [isSend, setIsSend] = useState(false);
   const { status } = useGetSendInfo(String(id), isSend);
@@ -23,7 +23,7 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
   };
   const handleSendInfo = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    if (!authInfo.accessToken) {
+    if (!isAuthenticated) {
       setMessage('로그인이 필요합니다.');
       return;
     }

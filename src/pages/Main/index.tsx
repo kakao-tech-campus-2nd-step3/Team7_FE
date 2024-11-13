@@ -66,12 +66,12 @@ export default function MainPage() {
   const location = useGetLocation();
 
   const [{ data: influencersData }] = useGetMain();
-  const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!authInfo.accessToken);
-  const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(!!authInfo.accessToken);
+  const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!isAuthenticated);
+  const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(!!isAuthenticated);
   const { data: aroundVideoData } = useGetAroundVideo(
     location?.lat ?? 37.5665,
     location?.lng ?? 126.978,
-    !!authInfo.accessToken && !!location?.lat && !!location?.lng,
+    !!isAuthenticated && !!location?.lat && !!location?.lng,
   );
 
   return (
