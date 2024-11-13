@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import styled from 'styled-components';
@@ -32,10 +32,15 @@ export default function DropdownMenu({
   const [isOpen, setIsOpen] = useState(false);
   const ref = useDetectClose({ onDetected: () => setIsOpen(false) });
   const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(() => {
-    if (defaultValue) {
-      return options.find((option) => option.label === defaultValue.main) || null;
+    try {
+      if (defaultValue && options) {
+        const foundOption = options.find((option) => option?.label === defaultValue.main);
+        return foundOption || null;
+      }
+      return null;
+    } catch {
+      return null;
     }
-    return null;
   });
   const [selectedSubOption, setSelectedSubOption] = useState<Option | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,7 +56,13 @@ export default function DropdownMenu({
     }
   }, []);
 
-  const filteredOptions = options.filter((option) => option.label.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredOptions = useMemo(() => {
+    try {
+      return options?.filter((option) => option?.label?.toLowerCase().includes(searchTerm.toLowerCase())) || [];
+    } catch {
+      return [];
+    }
+  }, [options, searchTerm]);
 
   const handleMainOptionClick = (option: Option) => {
     setSelectedMainOption(option);
@@ -107,7 +118,7 @@ export default function DropdownMenu({
 
   return (
     <DropdownContainer ref={ref} type={type}>
-      <DropdownButton isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
+      <DropdownButton $isOpen={isOpen} onClick={() => setIsOpen(!isOpen)}>
         {displayValue}
         {isOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
       </DropdownButton>
@@ -133,7 +144,7 @@ const DropdownContainer = styled.div<{ type: 'location' | 'influencer' }>`
   max-width: ${(props) => (props.type === 'location' ? '400px' : '300px')};
 `;
 
-const DropdownButton = styled.button<{ isOpen: boolean }>`
+const DropdownButton = styled.button<{ $isOpen: boolean }>`
   width: 100%;
   padding: 10px 14px;
   background: #ffffff;

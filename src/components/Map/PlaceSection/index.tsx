@@ -1,11 +1,12 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useInView } from 'react-intersection-observer';
 import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
-import { PlaceData, LocationData } from '@/types';
-import { useGetPlaceList } from '@/api/hooks/useGetPlaceList';
+import { PlaceData, LocationData, PageableData } from '@/types';
 import Loading from '@/components/common/layouts/Loading';
 import NoItem from '@/components/common/layouts/NoItem';
+import { useGetInfinitePlaceList } from '@/api/hooks/useGetInfinitePlaceList';
 
 interface PlaceSectionProps {
   mapBounds: LocationData;
@@ -28,45 +29,62 @@ export default function PlaceSection({
   center,
   shouldFetchPlaces,
   onFetchComplete,
-  initialLocation,
 }: PlaceSectionProps) {
   const navigate = useNavigate();
-  const previousPlacesRef = useRef<PlaceData[]>([]);
+  const sectionRef = useRef<HTMLDivElement>(null); // 무한 스크롤을 위한 ref와 observer 설정
+  const { ref: loadMoreRef, inView } = useInView({
+    // useInView = Intersection Oberser API를 react hook으로 구현한 것
+    root: sectionRef.current,
+    rootMargin: '0px',
+    threshold: 0, // 요소가 조금이라도 보이면 감지
+  });
 
-  const { data: places, isLoading, isError, error, refetch } = useGetPlaceList(mapBounds, filters, center, false);
+  // 데이터 fetching hook
+  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useGetInfinitePlaceList(
+    {
+      location: mapBounds,
+      filters,
+      center,
+      size: 10, // 한 페이지에 보여줄 아이템 개수; 변경하며 api 잘 받아오는지 확인 가능
+    },
+    shouldFetchPlaces,
+  );
 
   const filteredPlaces = useMemo(() => {
-    const currentPlaces = places || previousPlacesRef.current;
-    if (!currentPlaces) return [];
+    if (!data?.pages) return [];
 
-    const filtered = currentPlaces.filter((place: PlaceData) => {
-      const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
-      const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
-      const locationMatch = (() => {
-        if (!filters.location.main) return true;
-        const mainMatch =
-          place.address.address1.includes(filters.location.main) ||
-          place.address.address2.includes(filters.location.main);
-        const subMatch = filters.location.sub
-          ? place.address.address2.includes(filters.location.sub) ||
-            (place.address.address3 && place.address.address3.includes(filters.location.sub))
-          : true;
-        return mainMatch && subMatch;
-      })();
-      return categoryMatch && influencerMatch && locationMatch;
+    return data.pages.flatMap((page: PageableData<PlaceData>) => {
+      return page.content.filter((place: PlaceData) => {
+        const categoryMatch = filters.categories.length === 0 || filters.categories.includes(place.category);
+        const influencerMatch = filters.influencers.length === 0 || filters.influencers.includes(place.influencerName);
+        const locationMatch = (() => {
+          if (!filters.location.main) return true;
+          const mainMatch =
+            place.address.address1.includes(filters.location.main) ||
+            place.address.address2.includes(filters.location.main);
+          const subMatch = filters.location.sub
+            ? place.address.address2.includes(filters.location.sub) ||
+              (place.address.address3 && place.address.address3.includes(filters.location.sub))
+            : true;
+          return mainMatch && subMatch;
+        })();
+        return categoryMatch && influencerMatch && locationMatch;
+      });
     });
+  }, [data, filters]);
 
-    previousPlacesRef.current = filtered;
-    return filtered;
-  }, [places, filters]);
+  // 스크롤이 LoadMoreTrigger에 도달하면 다음 페이지 로드
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   useEffect(() => {
-    if (initialLocation || shouldFetchPlaces) {
-      refetch().then(() => {
-        onFetchComplete();
-      });
+    if (!isLoading && shouldFetchPlaces) {
+      onFetchComplete();
     }
-  }, [shouldFetchPlaces, refetch, onFetchComplete, initialLocation]);
+  }, [isLoading, shouldFetchPlaces, onFetchComplete]);
 
   useEffect(() => {
     if (!isLoading) {
@@ -74,27 +92,97 @@ export default function PlaceSection({
     }
   }, [filteredPlaces, onPlacesUpdate, isLoading]);
 
-  const handlePlaceClick = (placeId: number) => {
-    navigate(`/detail/${placeId}`);
-  };
+  const handlePlaceClick = useCallback(
+    (placeId: number) => {
+      navigate(`/detail/${placeId}`);
+    },
+    [navigate],
+  );
 
-  if (isLoading) return <Loading size={50} />;
-  if (isError) return <div>Error: {(error as Error).message}</div>;
+  if (isLoading && !isFetchingNextPage) {
+    return (
+      <SectionContainer>
+        <LoadingContainer>
+          <Loading size={50} />
+        </LoadingContainer>
+      </SectionContainer>
+    );
+  }
 
-  return filteredPlaces.length === 0 ? (
-    <NoItem message="장소 정보가 없어요!" height={400} />
-  ) : (
-    <ListContainer>
-      {filteredPlaces.map((place) => (
-        <PlaceItem key={place.placeId} {...place} onClick={() => handlePlaceClick(place.placeId)} />
-      ))}
-    </ListContainer>
+  if (isError) {
+    return (
+      <SectionContainer>
+        <ErrorContainer>Error: {(error as Error).message}</ErrorContainer>
+      </SectionContainer>
+    );
+  }
+
+  return (
+    <SectionContainer ref={sectionRef}>
+      {filteredPlaces.length === 0 ? (
+        <NoItem message="장소 정보가 없어요!" height={400} />
+      ) : (
+        <ContentContainer>
+          <PlacesGrid>
+            {filteredPlaces.map((place) => (
+              <PlaceItem key={place.placeId} {...place} onClick={() => handlePlaceClick(place.placeId)} />
+            ))}
+          </PlacesGrid>
+          {(hasNextPage || isFetchingNextPage) && (
+            <LoadMoreTrigger ref={loadMoreRef}>
+              <Loading size={30} />
+            </LoadMoreTrigger>
+          )}
+        </ContentContainer>
+      )}
+    </SectionContainer>
   );
 }
 
-const ListContainer = styled.div`
+const SectionContainer = styled.div`
+  height: 600px;
+  width: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #d9d9d9;
+    border-radius: 3px;
+  }
+`;
+
+const ContentContainer = styled.div`
+  width: 100%;
+`;
+
+const PlacesGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 40px 20px;
+  gap: 16px;
+`;
+
+const LoadMoreTrigger = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px;
+  margin-top: 20px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
+const ErrorContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: red;
 `;

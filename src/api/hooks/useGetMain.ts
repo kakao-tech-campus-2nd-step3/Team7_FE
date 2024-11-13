@@ -1,7 +1,7 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
-import { InfluencerResponse } from '@/types';
+import { InfluencerData, PageableData } from '@/types';
 
 export const getBannerPath = () => `/banners`;
 export const getInfluencerPath = () => `/influencers`;
@@ -13,8 +13,13 @@ export const getNewVideoPath = () => `/videos/new`;
 //   return response.data;
 // };
 export const getInfluencer = async () => {
-  const response = await fetchInstance.get<InfluencerResponse>(getInfluencerPath());
-  return response.data;
+  const response = await fetchInstance.get<PageableData<InfluencerData>>(getInfluencerPath());
+
+  const limitedContent = response.data.content.slice(0, 10);
+  return {
+    ...response.data,
+    content: limitedContent,
+  };
 };
 export const useGetMain = () => {
   return useSuspenseQueries({
