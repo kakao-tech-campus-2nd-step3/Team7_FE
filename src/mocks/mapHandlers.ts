@@ -2,6 +2,19 @@ import { HttpResponse, http } from 'msw';
 import { BASE_URL } from '@/api/instance';
 import { PlaceData } from '@/types';
 
+const dummyInfluencers = [
+  { influencerName: '성시경' },
+  { influencerName: '풍자' },
+  { influencerName: '아이유' },
+  { influencerName: '이영자' },
+  { influencerName: '정해인' },
+  { influencerName: '황정민' },
+  { influencerName: '히밥' },
+  { influencerName: '백종원' },
+  { influencerName: '안성재' },
+  { influencerName: '임영웅' },
+];
+
 const dummyPlaces: PlaceData[] = [
   {
     placeId: 1,
@@ -171,8 +184,49 @@ const dummyPlaces: PlaceData[] = [
 ];
 
 export const mapHandlers = [
-  http.get(`${BASE_URL}/places`, () => {
-    return HttpResponse.json({ places: dummyPlaces });
+  http.get(`${BASE_URL}/influencers/names`, () => {
+    return HttpResponse.json(dummyInfluencers);
+  }),
+
+  http.get(`${BASE_URL}/places`, ({ request }) => {
+    const url = new URL(request.url);
+    const page = parseInt(url.searchParams.get('page') ?? '0', 10);
+    const size = parseInt(url.searchParams.get('size') ?? '10', 10);
+
+    const totalElements = dummyPlaces.length;
+    const totalPages = Math.ceil(totalElements / size);
+    const startIndex = page * size;
+    const endIndex = Math.min(startIndex + size, totalElements);
+    const paginatedContent = dummyPlaces.slice(startIndex, endIndex);
+
+    return HttpResponse.json({
+      totalPages,
+      totalElements,
+      size,
+      content: paginatedContent,
+      number: page,
+      sort: {
+        empty: true,
+        sorted: true,
+        unsorted: true,
+      },
+      numberOfElements: paginatedContent.length,
+      pageable: {
+        offset: page * size,
+        sort: {
+          empty: true,
+          sorted: true,
+          unsorted: true,
+        },
+        paged: true,
+        pageNumber: page,
+        pageSize: size,
+        unpaged: false,
+      },
+      first: page === 0,
+      last: page === totalPages - 1,
+      empty: paginatedContent.length === 0,
+    });
   }),
 ];
 
