@@ -61,8 +61,12 @@ export default function InfluencerItem({
     <>
       <Wrapper as={useNav ? Link : 'div'} to={useNav ? `/map?influencer=${encodeURIComponent(influencerName)}` : ''}>
         <ImageContainer>
-          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          <LikeIcon role="button" onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? (
+              <PiHeartFill color="#fe7373" size={32} data-testid="PiHeartFill" />
+            ) : (
+              <PiHeartLight color="white" size={32} data-testid="PiHeartLight" />
+            )}
           </LikeIcon>
           <FallbackImage src={influencerImgUrl} alt={influencerName} />
           {useBackCard && useNav && (
@@ -92,12 +96,12 @@ export default function InfluencerItem({
 
 const Wrapper = styled(Link)`
   width: 170px;
-  height: 278px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   text-decoration: none;
+  gap: 10px;
 `;
 
 const ImageContainer = styled.div`
@@ -106,7 +110,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: auto;
+  margin-bottom: 4px;
 
   &:hover {
     & > div:nth-child(2) {

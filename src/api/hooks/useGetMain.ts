@@ -5,8 +5,6 @@ import { InfluencerData, PageableData } from '@/types';
 
 export const getBannerPath = () => `/banners`;
 export const getInfluencerPath = () => `/influencers`;
-export const getCoolVideoPath = () => `/videos/cool`;
-export const getNewVideoPath = () => `/videos/new`;
 
 // export const getBanner = async () => {
 //   const response = await fetchInstance.get<BannerResponse>(getBannerPath());

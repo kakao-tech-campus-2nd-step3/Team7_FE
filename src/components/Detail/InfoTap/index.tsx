@@ -15,8 +15,8 @@ type Props = {
   facilityInfo: FacilityInfo;
   openHour: OpenHourData;
   menuInfos: {
-    menuImgUrls: [string];
-    menuList: [Menu];
+    menuImgUrls: string[];
+    menuList: Menu[];
     timeExp: Date;
   };
   longitude: string;

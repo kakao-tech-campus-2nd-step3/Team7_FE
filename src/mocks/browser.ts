@@ -1,4 +1,4 @@
-import { setupWorker } from 'msw/browser';
+import { setupWorker } from 'msw';
 import { mainHandlers } from './mainHandlers';
 import { detailHandlers } from './detailHandlers';
 import { mapHandlers } from './mapHandlers';

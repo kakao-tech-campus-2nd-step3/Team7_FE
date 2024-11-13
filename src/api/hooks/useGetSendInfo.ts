@@ -6,6 +6,6 @@ export const getSendInfo = async (id: string) => {
   const response = await fetchInstance.get(getSendInfoPath(id));
   return response.data;
 };
-export const useGetSendInfo = (id: string) => {
-  return useQuery({ queryKey: ['sendInfo', id], queryFn: () => getSendInfo(id), enabled: false });
+export const useGetSendInfo = (id: string, enabled: boolean) => {
+  return useQuery({ queryKey: ['sendInfo', id], queryFn: () => getSendInfo(id), enabled });
 };

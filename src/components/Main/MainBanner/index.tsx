@@ -38,7 +38,7 @@ export default function MainBanner({ items }: { items: BannerData[] }) {
             <GrNext size={40} />
           </NextBtn>
           <CarouselWrapper>
-            <CarouselContainer currentIndex={currentIndex}>
+            <CarouselContainer $currentIndex={currentIndex}>
               {items.map((item) => (
                 <BannerItem
                   key={item.bannerId}
@@ -90,9 +90,9 @@ const CarouselWrapper = styled.div`
   overflow: hidden;
 `;
 
-const CarouselContainer = styled.div<{ currentIndex: number }>`
+const CarouselContainer = styled.div<{ $currentIndex: number }>`
   display: flex;
   transition: transform 0.5s ease-in-out;
-  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 100}%)`};
+  transform: ${({ $currentIndex }) => `translateX(-${$currentIndex * 100}%)`};
   width: 100%;
 `;
