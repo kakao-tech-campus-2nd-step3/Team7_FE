@@ -15,9 +15,15 @@ export default function PrivatedRoute({ children }: PrivatedRouteProps) {
   const location = useLocation();
   const { data: userInfo } = useGetUserInfo();
 
+  const directRedirectPaths = ['/choice', 'auth'];
   useEffect(() => {
     const processAuth = async () => {
-      if (userInfo?.nickname) {
+      if (directRedirectPaths.includes(location.pathname) && !isAuthenticated) {
+        navigate('/');
+        return;
+      }
+
+      if (userInfo.nickname) {
         try {
           await authLoginSuccess(userInfo.nickname);
           if (!isAuthenticated) {
@@ -30,7 +36,7 @@ export default function PrivatedRoute({ children }: PrivatedRouteProps) {
       }
     };
     processAuth();
-  }, [userInfo?.nickname, isAuthenticated, authLoginSuccess]);
+  }, [userInfo.nickname, isAuthenticated, authLoginSuccess, location.pathname, navigate]);
 
   const handleCloseModal = () => {
     if (window.history.length > 2)
