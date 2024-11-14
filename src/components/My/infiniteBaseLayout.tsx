@@ -70,7 +70,7 @@ export default function InfiniteBaseLayout({
           {SubText}
         </Text>
       </TitleContainer>
-      <InfiniteScrollSection
+      <InfiniteScrollSection<InfluencerData | UserPlaceData>
         items={items}
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}

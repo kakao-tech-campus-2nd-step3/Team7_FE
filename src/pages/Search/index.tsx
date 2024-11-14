@@ -6,7 +6,6 @@ import SearchBar from '@/components/common/SearchBar';
 import BaseLayout from '@/components/common/BaseLayout';
 import { useGetMain } from '@/api/hooks/useGetMain';
 import { useGetLogoutVideo } from '@/api/hooks/useGetLogoutVideo';
-import { useGetUserPlace } from '@/api/hooks/useGetUserPlace';
 
 export default function SearchPage() {
   const [searchParams] = useSearchParams();
@@ -16,7 +15,6 @@ export default function SearchPage() {
   /* todo - api 개발되면 검색결과, searchData 호출 추가 */
   const [{ data: influencersData }] = useGetMain();
   const [{ data: coolVideoData }] = useGetLogoutVideo(true);
-  const { data: places } = useGetUserPlace();
 
   /* todo - api 개발되면 렌더 내용 추가 */
   return (
@@ -33,7 +31,6 @@ export default function SearchPage() {
       <SplitLine />
       <BaseLayout type="spot" mainText="" SubText="바로 그곳" items={coolVideoData || []} />
       <SplitLine />
-      <BaseLayout type="place" mainText="" SubText="관련 장소" items={places.places} />
     </Wrapper>
   );
 }

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">28% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>7/25</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">28% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>7/25</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -75,7 +75,20 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -84,20 +97,46 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useSuspenseQuery } from '@tanstack/react-query';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
-import { UserReviewResponse } from '@/types';
+import { PageableData, UserReviewData } from '@/types';
 &nbsp;
 export const getUserReviewPath = () =&gt; `/users/reviews`;
-export const getUserReview = <span class="fstat-no" title="function not covered" >async () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;UserReviewResponse&gt;(getUserReviewPath());</span>
+export const getUserReview = <span class="fstat-no" title="function not covered" >async (page: number, size: number) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const params = new URLSearchParams({</span>
+<span class="cstat-no" title="statement not covered" >    page: page.toString(),</span>
+<span class="cstat-no" title="statement not covered" >    size: size.toString(),</span>
+<span class="cstat-no" title="statement not covered" >  });</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;PageableData&lt;UserReviewData&gt;&gt;(`${getUserReviewPath()}?${params}`);</span>
 <span class="cstat-no" title="statement not covered" >  return response.data;</span>
 <span class="cstat-no" title="statement not covered" >};</span>
-export const useGetUserReview = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return useSuspenseQuery({ queryKey: ['UserReview'], queryFn: () =&gt; getUserReview() });</span>
+export const useGetUserReview = <span class="fstat-no" title="function not covered" >(size: number) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return useSuspenseInfiniteQuery({</span>
+<span class="cstat-no" title="statement not covered" >    queryKey: ['UserReview', size],</span>
+<span class="cstat-no" title="statement not covered" >    queryFn: ({ pageParam = 0 }) =&gt; getUserReview(pageParam, size),</span>
+<span class="cstat-no" title="statement not covered" >    initialPageParam: 0,</span>
+<span class="cstat-no" title="statement not covered" >    getNextPageParam: (lastPage) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      return lastPage.last ? undefined : lastPage.number + 1;</span>
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="cstat-no" title="statement not covered" >    staleTime: 1000 * 60 * 5,</span>
+<span class="cstat-no" title="statement not covered" >  });</span>
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;</pre></td></tr></table></pre>
 
@@ -106,7 +145,7 @@ export const useGetUserReview = <span class="fstat-no" title="function not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-12T14:56:30.618Z
+                at 2024-11-14T10:29:05.645Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

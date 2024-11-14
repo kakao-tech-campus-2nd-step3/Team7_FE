@@ -16,7 +16,7 @@ export default function ReviewItem({
   createdDate,
   mine,
   handleDelete,
-}: ReviewData & { handleDelete: (id: number) => void }) {
+}: ReviewData & { handleDelete: (id: string) => void }) {
   const { mutate: deleteReview } = useDeleteReview();
   const handleDeleteReview = () => {
     const isConfirm = window.confirm('삭제하시겠습니까?');
@@ -25,7 +25,7 @@ export default function ReviewItem({
     deleteReview(String(reviewId), {
       onSuccess: () => {
         alert('삭제되었습니다.');
-        handleDelete(reviewId);
+        handleDelete(String(reviewId));
       },
       onError: () => {
         alert('리뷰를 삭제하지 못했어요. 다시 시도해주세요!');

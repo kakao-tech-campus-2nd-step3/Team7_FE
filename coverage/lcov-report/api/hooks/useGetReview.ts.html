@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">56.52% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>13/23</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">56.52% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>13/23</span>
             </div>
         
             
@@ -75,12 +75,34 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -89,15 +111,26 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useSuspenseQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
-import { ReviewData } from '@/types';
+import { PageableData, ReviewData } from '@/types';
 &nbsp;
-export const getReviewPath = (id: string) =&gt; `/places/${id}/reviews&amp;page`;
-export const getReview = <span class="fstat-no" title="function not covered" >async (id: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;ReviewData[]&gt;(getReviewPath(id));</span>
+interface GetReviewParams {
+  page: number;
+  size: number;
+  id: string;
+}
+&nbsp;
+export const getReviewPath = (id: string) =&gt; `/places/${id}/reviews`;
+export const getReview = <span class="fstat-no" title="function not covered" >async ({ page, size, id }: GetReviewParams) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const params = new URLSearchParams({</span>
+<span class="cstat-no" title="statement not covered" >    page: page.toString(),</span>
+<span class="cstat-no" title="statement not covered" >    size: size.toString(),</span>
+<span class="cstat-no" title="statement not covered" >  });</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const response = await fetchInstance.get&lt;PageableData&lt;ReviewData&gt;&gt;(`${getReviewPath(id)}?${params}`);</span>
 <span class="cstat-no" title="statement not covered" >  return response.data;</span>
 <span class="cstat-no" title="statement not covered" >};</span>
-export const useGetReview = <span class="fstat-no" title="function not covered" >(id: string) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return useSuspenseQuery({ queryKey: ['review', id], queryFn: () =&gt; getReview(id) });</span>
+export const useGetReview = <span class="fstat-no" title="function not covered" >({ page, size, id }: GetReviewParams) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  return useSuspenseQuery({ queryKey: ['review', id, page, size], queryFn: () =&gt; getReview({ page, size, id }) });</span>
 <span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;</pre></td></tr></table></pre>
 
@@ -106,7 +139,7 @@ export const useGetReview = <span class="fstat-no" title="function not covered" 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-12T14:56:30.618Z
+                at 2024-11-14T10:29:05.645Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

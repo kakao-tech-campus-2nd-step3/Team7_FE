@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.68% </span>
+                <span class="strong">26.78% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>18/76</span>
+                <span class='fraction'>15/56</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.68% </span>
+                <span class="strong">26.78% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>18/76</span>
+                <span class='fraction'>15/56</span>
             </div>
         
             
@@ -119,27 +119,7 @@
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
 <a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L57'></a><a href='#L57'>57</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -154,26 +134,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -216,14 +176,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createContext, useEffect, useMemo, useState } from 'react';
-import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-import { fetchInstance } from '@/api/instance';
 &nbsp;
 type AuthInfo = {
-  accessToken: string | null;
-  refreshToken: string | null;
-  tokensRefresh: () =&gt; Promise&lt;void&gt;;
+  isAuthenticated: boolean;
+  handleLoginSuccess: () =&gt; Promise&lt;void&gt;;
   logout: () =&gt; void;
 };
 &nbsp;
@@ -234,59 +191,42 @@ interface AuthProviderProps {
 }
 &nbsp;
 <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >export default function AuthProvider({ children }: AuthProviderProps) {</span></span>
-<span class="cstat-no" title="statement not covered" >  const [accessToken, setAccessToken] = useState&lt;string | null&gt;(Cookies.get('access_token') || null);</span>
-<span class="cstat-no" title="statement not covered" >  const [refreshToken, setRefreshToken] = useState&lt;string | null&gt;(Cookies.get('refresh_token') || null);</span>
+<span class="cstat-no" title="statement not covered" >  const [isAuthenticated, setIsAuthenticated] = useState&lt;boolean&gt;(false);</span>
 <span class="cstat-no" title="statement not covered" >  const navigate = useNavigate();</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const tokensRefresh = async () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!refreshToken) return;</span>
-<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const handleLoginSuccess = async () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      const response = await fetchInstance.get('/refresh-token', {</span>
-<span class="cstat-no" title="statement not covered" >        headers: {</span>
-<span class="cstat-no" title="statement not covered" >          Cookie: `refresh_token=${refreshToken}`,</span>
-<span class="cstat-no" title="statement not covered" >        },</span>
-<span class="cstat-no" title="statement not covered" >      });</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >      if (response.status === 200) {</span>
-<span class="cstat-no" title="statement not covered" >        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;</span>
-<span class="cstat-no" title="statement not covered" >        setAccessToken(newAccessToken);</span>
-<span class="cstat-no" title="statement not covered" >        setRefreshToken(newRefreshToken);</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >        // 브라우저 쿠키에 저장</span>
-<span class="cstat-no" title="statement not covered" >        Cookies.set('access_token', newAccessToken, { secure: true, sameSite: 'strict' });</span>
-<span class="cstat-no" title="statement not covered" >        Cookies.set('refresh_token', newRefreshToken, { secure: true, sameSite: 'strict' });</span>
-<span class="cstat-no" title="statement not covered" >      } else {</span>
-<span class="cstat-no" title="statement not covered" >        throw new Error('토큰 갱신 실패');</span>
-<span class="cstat-no" title="statement not covered" >      }</span>
+<span class="cstat-no" title="statement not covered" >      setIsAuthenticated(true);</span>
+<span class="cstat-no" title="statement not covered" >      localStorage.setItem('isAuthenticated', 'true');</span>
+<span class="cstat-no" title="statement not covered" >      return await Promise.resolve();</span>
 <span class="cstat-no" title="statement not covered" >    } catch (error) {</span>
-<span class="cstat-no" title="statement not covered" >      console.error('토큰 갱신 오류:', error);</span>
-<span class="cstat-no" title="statement not covered" >      logout();</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Login success handling failed:', error);</span>
+<span class="cstat-no" title="statement not covered" >      return await Promise.reject(error);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  };</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const logout = () =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    Cookies.remove('access_token');</span>
-<span class="cstat-no" title="statement not covered" >    Cookies.remove('refresh_token');</span>
-<span class="cstat-no" title="statement not covered" >    setAccessToken(null);</span>
-<span class="cstat-no" title="statement not covered" >    setRefreshToken(null);</span>
-<span class="cstat-no" title="statement not covered" >    navigate('/');</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (!accessToken &amp;&amp; refreshToken) {</span>
-<span class="cstat-no" title="statement not covered" >      tokensRefresh();</span>
+<span class="cstat-no" title="statement not covered" >    const savedAuthStatus = localStorage.getItem('isAuthenticated');</span>
+<span class="cstat-no" title="statement not covered" >    setIsAuthenticated(savedAuthStatus === 'true');</span>
+<span class="cstat-no" title="statement not covered" >  }, []);</span>
+<span class="cstat-no" title="statement not covered" ></span>
+<span class="cstat-no" title="statement not covered" >  const logout = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    try {</span>
+<span class="cstat-no" title="statement not covered" >      setIsAuthenticated(false);</span>
+<span class="cstat-no" title="statement not covered" >      localStorage.removeItem('isAuthenticated');</span>
+<span class="cstat-no" title="statement not covered" >      navigate('/');</span>
+<span class="cstat-no" title="statement not covered" >    } catch (error) {</span>
+<span class="cstat-no" title="statement not covered" >      console.error('Logout failed:', error);</span>
 <span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [accessToken, refreshToken]);</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const value = useMemo(</span>
 <span class="cstat-no" title="statement not covered" >    () =&gt; ({</span>
-<span class="cstat-no" title="statement not covered" >      accessToken,</span>
-<span class="cstat-no" title="statement not covered" >      refreshToken,</span>
-<span class="cstat-no" title="statement not covered" >      tokensRefresh,</span>
+<span class="cstat-no" title="statement not covered" >      isAuthenticated,</span>
+<span class="cstat-no" title="statement not covered" >      handleLoginSuccess,</span>
 <span class="cstat-no" title="statement not covered" >      logout,</span>
 <span class="cstat-no" title="statement not covered" >    }),</span>
-<span class="cstat-no" title="statement not covered" >    [accessToken, refreshToken],</span>
+<span class="cstat-no" title="statement not covered" >    [isAuthenticated],</span>
 <span class="cstat-no" title="statement not covered" >  );</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  return &lt;AuthContext.Provider value={value}&gt;{children}&lt;/AuthContext.Provider&gt;;</span>
@@ -298,7 +238,7 @@ interface AuthProviderProps {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-12T14:56:30.618Z
+                at 2024-11-14T10:29:05.645Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

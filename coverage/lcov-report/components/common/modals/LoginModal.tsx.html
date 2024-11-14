@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.74% </span>
+                <span class="strong">60.38% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>96/153</span>
+                <span class='fraction'>93/154</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.74% </span>
+                <span class="strong">60.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>96/153</span>
+                <span class='fraction'>93/154</span>
             </div>
         
             
@@ -216,7 +216,8 @@
 <a name='L151'></a><a href='#L151'>151</a>
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
-<a name='L154'></a><a href='#L154'>154</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -234,9 +235,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -372,14 +374,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useState } from 'react';
 import * as ReactDOM from 'react-dom';
 import { FaComment } from 'react-icons/fa';
-&nbsp;
 import styled from 'styled-components';
 &nbsp;
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
-&nbsp;
 import Logo from '@/assets/images/Logo.svg';
-&nbsp;
 import { BASE_URL } from '@/api/instance';
 &nbsp;
 type LoginModalProps = {
@@ -400,25 +399,29 @@ type LoginModalProps = {
 <span class="cstat-no" title="statement not covered" >  const [isOpen, setIsOpen] = useState(immediateOpen);</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    if (immediateOpen) setIsOpen(true);</span>
+<span class="cstat-no" title="statement not covered" >    if (immediateOpen) {</span>
+<span class="cstat-no" title="statement not covered" >      setIsOpen(true);</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  }, [immediateOpen]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  const openModal = () =&gt; setIsOpen(true);</span>
+<span class="cstat-no" title="statement not covered" >  const openModal = () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    setIsOpen(true);</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const closeModal = () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setIsOpen(false);</span>
-<span class="cstat-no" title="statement not covered" >    if (onClose) onClose();</span>
+<span class="cstat-no" title="statement not covered" >    if (onClose) {</span>
+<span class="cstat-no" title="statement not covered" >      onClose();</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
+<span class="cstat-no" title="statement not covered" >    if (onLoginSuccess) {</span>
+<span class="cstat-no" title="statement not covered" >      onLoginSuccess();</span>
+<span class="cstat-no" title="statement not covered" >    }</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
+<span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  const handleKakaoLogin = () =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    localStorage.setItem('redirectPath', currentPath);</span>
 <span class="cstat-no" title="statement not covered" >    window.location.href = `${BASE_URL}/oauth2/authorization/kakao`;</span>
 <span class="cstat-no" title="statement not covered" >  };</span>
-<span class="cstat-no" title="statement not covered" ></span>
-<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    const isLoginSuccessful = new URLSearchParams(window.location.search).get('success') === 'true';</span>
-<span class="cstat-no" title="statement not covered" >    if (isLoginSuccessful &amp;&amp; onLoginSuccess) {</span>
-<span class="cstat-no" title="statement not covered" >      onLoginSuccess();</span>
-<span class="cstat-no" title="statement not covered" >    }</span>
-<span class="cstat-no" title="statement not covered" >  }, [onLoginSuccess]);</span>
 <span class="cstat-no" title="statement not covered" ></span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
 <span class="cstat-no" title="statement not covered" >    &lt;&gt;</span>
@@ -529,7 +532,7 @@ const KakaoLoginButton = styled.button`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-12T14:56:30.618Z
+                at 2024-11-14T10:29:05.645Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

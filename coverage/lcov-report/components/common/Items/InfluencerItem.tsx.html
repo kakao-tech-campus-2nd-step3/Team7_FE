@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.45% </span>
+                <span class="strong">96.79% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>153/157</span>
+                <span class='fraction'>151/156</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.45% </span>
+                <span class="strong">96.79% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>153/157</span>
+                <span class='fraction'>151/156</span>
             </div>
         
             
@@ -219,8 +219,8 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -309,13 +309,11 @@
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -390,6 +388,7 @@ import { InfluencerData } from '@/types';
 import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import FallbackImage from './FallbackImage';
 &nbsp;
 interface InfluencerItemProps extends InfluencerData {
   useBackCard?: boolean;
@@ -405,7 +404,7 @@ export default function InfluencerItem({
   useBackCard = true,
   useNav = true,
 }: InfluencerItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -415,7 +414,7 @@ export default function InfluencerItem({
     (event: React.MouseEvent&lt;HTMLDivElement&gt;) =&gt; {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
+      if (!isAuthenticated) <span class="branch-0 cbranch-no" title="branch not covered" >{</span>
 <span class="cstat-no" title="statement not covered" >        setShowLoginModal(true);</span>
 <span class="cstat-no" title="statement not covered" >        return;</span>
 <span class="cstat-no" title="statement not covered" >      }</span>
@@ -446,7 +445,7 @@ export default function InfluencerItem({
               &lt;PiHeartLight color="white" size={32} data-testid="PiHeartLight" /&gt;
             )}
           &lt;/LikeIcon&gt;
-          &lt;FrontImage src={influencerImgUrl} alt={influencerName} /&gt;
+          &lt;FallbackImage src={influencerImgUrl} alt={influencerName} /&gt;
           {useBackCard &amp;&amp; useNav &amp;&amp; (
             &lt;BackImageWrapper&gt;
               &lt;MdLocationOn size={50} color="#55EBFF" /&gt;
@@ -456,14 +455,18 @@ export default function InfluencerItem({
             &lt;/BackImageWrapper&gt;
           )}
         &lt;/ImageContainer&gt;
-        &lt;Paragraph size="m" weight="bold" variant="white"&gt;
-          {influencerName}
-        &lt;/Paragraph&gt;
-        &lt;Paragraph size="xs" weight="normal" variant="white"&gt;
-          {influencerJob}
-        &lt;/Paragraph&gt;
+        &lt;TextWrapper&gt;
+          &lt;Paragraph size="m" weight="bold" variant="white"&gt;
+            {influencerName}
+          &lt;/Paragraph&gt;
+          &lt;Paragraph size="xs" weight="normal" variant="white"&gt;
+            {influencerJob}
+          &lt;/Paragraph&gt;
+        &lt;/TextWrapper&gt;
       &lt;/Wrapper&gt;
-      {showLoginModal<span class="branch-0 cbranch-no" title="branch not covered" > &amp;&amp; &lt;LoginModal currentPath={location.pathname} onClose={<span class="fstat-no" title="function not covered" >() =&gt; setShowLoginModal(false)}</span> /&gt;}</span>
+      {showLoginModal<span class="branch-0 cbranch-no" title="branch not covered" > &amp;&amp; (</span>
+<span class="cstat-no" title="statement not covered" >        &lt;LoginModal immediateOpen currentPath={location.pathname} onClose={<span class="fstat-no" title="function not covered" >() =&gt; setShowLoginModal(false)}</span> /&gt;</span>
+      )}
     &lt;/&gt;
   );
 }
@@ -497,18 +500,6 @@ const ImageContainer = styled.div`
   }
 `;
 &nbsp;
-const FrontImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  transition: opacity 0.6s ease-in-out;
-`;
-&nbsp;
 const BackImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -534,6 +525,12 @@ const LikeIcon = styled.div`
   z-index: 100;
   cursor: pointer;
 `;
+&nbsp;
+const TextWrapper = styled.div`
+  &gt; *:not(:first-child) {
+    margin-top: 6px;
+  }
+`;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -541,7 +538,7 @@ const LikeIcon = styled.div`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-11-12T14:56:30.618Z
+                at 2024-11-14T10:29:05.645Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
