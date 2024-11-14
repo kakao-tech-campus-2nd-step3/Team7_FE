@@ -165,7 +165,7 @@ export type UserPlaceData = {
   placeId: number;
   placeName: string;
   imageUrl: string;
-  influencer: string;
+  influencer?: string;
   likes: boolean;
 };
 export type UserPlaceResponse = {
@@ -203,4 +203,10 @@ export type RequestPlaceReview = {
 export type MultipleLikeRequest = {
   influencerIds: number[];
   likes: boolean;
+};
+
+export type SearchComplete = {
+  result: string;
+  score: number;
+  searchType: string;
 };
