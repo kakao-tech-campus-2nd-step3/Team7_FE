@@ -4,9 +4,14 @@ import { UserInfoData } from '@/types';
 
 export const getUserInfoPath = () => `/users/info`;
 export const getUserInfo = async () => {
-  const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), { withCredentials: true });
-  return response.data;
+  try {
+    const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), { withCredentials: true });
+    return response.data;
+  } catch (error) {
+    console.error('Failed to fetch user info:', error);
+    return null;
+  }
 };
-export const useGetUserInfo = () => {
-  return useSuspenseQuery({ queryKey: ['UserInfo'], queryFn: () => getUserInfo() });
+export const useGetUserInfo = (options = {}) => {
+  return useSuspenseQuery({ queryKey: ['UserInfo'], queryFn: () => getUserInfo(), retry: false, ...options });
 };
