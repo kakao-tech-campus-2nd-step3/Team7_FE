@@ -110,7 +110,7 @@ export default function MapPage() {
           defaultValue={influencerParam ? { main: influencerParam } : undefined}
         />
       </DropdownContainer>
-      <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
+      <ToggleButton options={['CAFE', 'JAPANESE', 'KOREAN', 'RESTAURANT', 'WESTERN']} onSelect={handleCategorySelect} />
       <MapWindow
         onBoundsChange={handleBoundsChange}
         onCenterChange={handleCenterChange}
