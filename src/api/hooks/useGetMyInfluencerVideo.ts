@@ -6,7 +6,7 @@ import { SpotData } from '@/types';
 export const getMyInfluencerVideoPath = () => `/videos/my`;
 
 export const getMyInfluencerVideo = async () => {
-  const response = await fetchInstance.get<SpotData[]>(getMyInfluencerVideoPath());
+  const response = await fetchInstance.get<SpotData[]>(getMyInfluencerVideoPath(), { withCredentials: true });
   return response.data;
 };
 export const useGetMyInfluencerVideo = (enabled: boolean) => {

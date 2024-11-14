@@ -15,7 +15,9 @@ export const getReview = async ({ page, size, id }: GetReviewParams) => {
     size: size.toString(),
   });
 
-  const response = await fetchInstance.get<PageableData<ReviewData>>(`${getReviewPath(id)}?${params}`);
+  const response = await fetchInstance.get<PageableData<ReviewData>>(`${getReviewPath(id)}?${params}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 export const useGetReview = ({ page, size, id }: GetReviewParams) => {

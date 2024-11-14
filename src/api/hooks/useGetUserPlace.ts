@@ -8,7 +8,9 @@ export const getUserPlace = async (page: number, size: number) => {
     page: page.toString(),
     size: size.toString(),
   });
-  const response = await fetchInstance.get<PageableData<UserPlaceData>>(`${getUserPlacePath()}?${params}`);
+  const response = await fetchInstance.get<PageableData<UserPlaceData>>(`${getUserPlacePath()}?${params}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 export const useGetUserPlace = (size: number) => {
