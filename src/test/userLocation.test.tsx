@@ -8,11 +8,12 @@ import * as api from '@/api/hooks/useGetAroundVideo';
 
 jest.mock('@/api/hooks/useGetAroundVideo');
 jest.mock('@/hooks/useGetLocation');
+
 const queryClient = new QueryClient();
 
 test('사용자 위치 기반 내주변 비디오 호출 확인', async () => {
   const mockLocation = { lat: 37.5665, lng: 126.978 };
-  jest.spyOn(locationHook, 'default').mockReturnValue(mockLocation);
+  (locationHook.default as jest.Mock).mockReturnValue(mockLocation);
 
   (api.useGetAroundVideo as jest.Mock).mockReturnValue({
     data: [
@@ -40,7 +41,7 @@ test('사용자 위치 기반 내주변 비디오 호출 확인', async () => {
         logout: jest.fn(),
       }}
     >
-      <MemoryRouter future={{ v7_relativeSplatPath: true }}>
+      <MemoryRouter>
         <QueryClientProvider client={queryClient}>
           <MainPage />
         </QueryClientProvider>
