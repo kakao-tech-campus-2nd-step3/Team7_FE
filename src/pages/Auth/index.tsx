@@ -11,9 +11,9 @@ export default function AuthPage() {
 
   useEffect(() => {
     const processAuth = async () => {
-      if (!hasRedirected && userInfo.nickname) {
+      if (!hasRedirected && userInfo?.nickname) {
         try {
-          await handleLoginSuccess(userInfo.nickname);
+          await handleLoginSuccess(userInfo?.nickname);
 
           const redirectPath = localStorage.getItem('redirectPath');
           if (redirectPath) {
@@ -27,8 +27,6 @@ export default function AuthPage() {
           localStorage.setItem('isAuthenticated', 'false');
           navigate('/');
         }
-      } else {
-        navigate('/');
       }
     };
 
