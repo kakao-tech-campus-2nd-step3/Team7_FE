@@ -95,7 +95,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  position: relative;
 `;
 const ImageContainer = styled.div`
   position: relative;
@@ -116,7 +115,7 @@ const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
+  z-index: 1;
 `;
 const Tap = styled.button<{ $active: boolean }>`
   width: 100%;
@@ -151,6 +150,6 @@ const GradientOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.9) 100%);
-  z-index: 9;
+  z-index: 0;
   pointer-events: none;
 `;

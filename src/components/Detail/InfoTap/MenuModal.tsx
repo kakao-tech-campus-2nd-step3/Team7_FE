@@ -40,7 +40,7 @@ export default function MenuModal({ images }: { images: string[] }) {
           />
         ))}
       </ImageWrapper>
-      <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={closeModal} isCentered>
+      <Modal blockScrollOnMount isOpen={isOpen} onClose={closeModal} isCentered>
         <ModalOverlay />
         <ModalContent
           maxWidth="800px"
@@ -48,7 +48,7 @@ export default function MenuModal({ images }: { images: string[] }) {
           backgroundColor="white"
           height="700px"
           margin="50px auto"
-          position="relative"
+          zIndex={20000}
         >
           <ModalHeader padding="20px 0px" fontSize="20px">
             Menu {currentImageIndex + 1}/{images.length}
