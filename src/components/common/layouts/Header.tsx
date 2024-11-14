@@ -9,7 +9,7 @@ import Logo from '@/assets/images/Logo.svg';
 import useAuth from '@/hooks/useAuth';
 
 export default function Header() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, handleLogout } = useAuth();
   const location = useLocation();
 
   return (
@@ -40,7 +40,7 @@ export default function Header() {
                 마이페이지
               </Text>
             </NavItem>
-            <LoginButton onClick={logout}>로그아웃</LoginButton>
+            <LoginButton onClick={handleLogout}>로그아웃</LoginButton>
           </>
         ) : (
           <>
