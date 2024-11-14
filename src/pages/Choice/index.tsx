@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import BaseLayout from '@/components/common/BaseLayout';
@@ -7,6 +7,8 @@ import { usePostMultipleInfluencerLike } from '@/api/hooks/usePostMultipleInflue
 import Button from '@/components/common/Button';
 import Pagination from '@/components/common/Pagination';
 import SearchBar from '@/components/common/SearchBar';
+import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
+import useAuth from '@/hooks/useAuth';
 
 export default function ChoicePage() {
   const navigate = useNavigate();
@@ -14,10 +16,29 @@ export default function ChoicePage() {
   const [selectedInfluencers, setSelectedInfluencers] = useState<Set<number>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
 
+  const { handleLoginSuccess } = useAuth();
+  const { data: userInfo } = useGetUserInfo();
+
   const { data: PageableData } = useGetAllInfluencers({
     page: currentPage - 1,
     size: 10,
   });
+
+  useEffect(() => {
+    const processLogin = async () => {
+      if (userInfo.nickname) {
+        try {
+          await handleLoginSuccess(userInfo.nickname);
+        } catch (error) {
+          console.error('ChoicePage: 로그인 처리 실패', error);
+          localStorage.removeItem('nickname');
+          localStorage.setItem('isAuthenticated', 'false');
+          navigate('/');
+        }
+      }
+    };
+    processLogin();
+  }, [userInfo, navigate, handleLoginSuccess]);
 
   const handlePageChange = (pageNum: number) => {
     setCurrentPage(pageNum);
