@@ -64,7 +64,7 @@ export default function DropdownMenu({
 
     updates();
     isInitialized.current = true;
-  }, [defaultValue, options, selectedMainOption]);
+  }, [defaultValue, options, onChange]);
 
   const filteredOptions = useMemo(() => {
     try {
@@ -123,7 +123,6 @@ export default function DropdownMenu({
   };
 
   const displayValue = useMemo(() => {
-    // 7. 표시값 계산 로직 최적화
     if (selectedSubOption && selectedMainOption) {
       return `${selectedMainOption.label} ${selectedSubOption.label}`;
     }
