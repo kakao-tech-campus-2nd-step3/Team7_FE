@@ -3,7 +3,7 @@ import { FaCheck } from 'react-icons/fa';
 import styled from 'styled-components';
 
 const categoryMapping = {
-  RESTAURANT: '레스토랑',
+  RESTAURANT: '음식점',
   CAFE: '카페',
   JAPANESE: '일식',
   KOREAN: '한식',
@@ -55,7 +55,7 @@ const ToggleButtonContainer = styled.div`
 
 const Button = styled.button<{ $isActive: boolean }>`
   position: relative;
-  min-width: 84px;
+  padding: 0 49px;
   height: 40px;
   border: none;
   background: ${(props) => (props.$isActive ? '#DBFBFF' : '#F9F9F9')};
