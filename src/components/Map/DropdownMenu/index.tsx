@@ -75,11 +75,17 @@ export default function DropdownMenu({
   }, [options, searchTerm]);
 
   const handleMainOptionClick = (option: Option) => {
-    setSelectedMainOption(option);
-    setSelectedSubOption(null);
-    onChange({ main: option.label, lat: option.lat, lng: option.lng });
-    if (!multiLevel || !option.subOptions) {
-      setIsOpen(false);
+    if (option.label === '없음') {
+      setSelectedMainOption(null);
+      setSelectedSubOption(null);
+      onChange({ main: '', sub: undefined, lat: undefined, lng: undefined });
+    } else {
+      setSelectedMainOption(option);
+      setSelectedSubOption(null);
+      onChange({ main: option.label, lat: option.lat, lng: option.lng });
+      if (!multiLevel || !option.subOptions) {
+        setIsOpen(false);
+      }
     }
   };
 
@@ -99,7 +105,7 @@ export default function DropdownMenu({
   };
 
   const renderMainOptions = () => {
-    return filteredOptions.map((option) => (
+    return [{ label: '없음', lat: undefined, lng: undefined }, ...filteredOptions].map((option) => (
       <DropdownItem
         key={option.label}
         label={option.label}
