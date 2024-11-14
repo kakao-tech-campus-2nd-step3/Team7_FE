@@ -37,7 +37,6 @@ const Container = styled.div`
   flex-direction: column;
   gap: 30px;
   max-height: 500px;
-  overflow-y: auto;
 `;
 const TitleContainer = styled.div`
   display: flex;
