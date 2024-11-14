@@ -37,7 +37,6 @@ const initialReviews = [
     mine: true,
   },
 ];
-
 const queryClient = new QueryClient();
 
 function TestComponent() {

@@ -1,5 +1,4 @@
 import { AiFillLike, AiFillDislike } from 'react-icons/ai';
-
 import styled from 'styled-components';
 
 import { Paragraph } from '@/components/common/typography/Paragraph';

@@ -5,15 +5,16 @@ import { Text } from '@/components/common/typography/Text';
 import InfluencerSection from '@/components/Main/InfluencerSection';
 import InfluencerList from '@/components/Influencer/InfluencerList';
 import SpotSection from '@/components/Main/SpotSection';
-import { InfluencerData, SpotData } from '@/types';
+import { InfluencerData, SpotData, UserPlaceData } from '@/types';
 import ChoiceList from '@/components/Choice/ChoiceList';
+import UserPlaceSection from '../My/UserPlaceSection';
 
 type Props = {
   type: string;
   prevSubText?: string;
   mainText: string;
   SubText: string;
-  items: InfluencerData[] | SpotData[];
+  items: InfluencerData[] | SpotData[] | UserPlaceData[];
   showMoreButton?: boolean;
   isChoice?: boolean;
 } & (
@@ -58,9 +59,11 @@ export default function BaseLayout({
     if (type === 'influencer') {
       return <InfluencerSection items={items as InfluencerData[]} />;
     }
-    return <SpotSection items={items as SpotData[]} />;
+    if (type === 'spot') {
+      return <SpotSection items={items as SpotData[]} />;
+    }
+    return <UserPlaceSection items={items as UserPlaceData[]} />;
   };
-
   return (
     <Container>
       <TitleContainer>

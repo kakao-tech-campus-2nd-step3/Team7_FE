@@ -50,17 +50,7 @@ const bannerData = {
     },
   ],
 };
-const searchData = [
-  'apple',
-  'banana',
-  'coding',
-  'Javascript',
-  '원티드',
-  '프리온보딩',
-  '프론트엔드',
-  '12료코',
-  '띄워쓰기 검사',
-];
+
 export default function MainPage() {
   const { isAuthenticated } = useAuth();
   const location = useGetLocation();
@@ -76,7 +66,7 @@ export default function MainPage() {
 
   return (
     <Wrapper>
-      <SearchBar placeholder="인플루언서, 장소를 검색해주세요!" data={searchData} />
+      <SearchBar placeholder="인플루언서, 장소를 검색해주세요!" />
       <MainBanner items={bannerData.banners} />
       <BaseLayout
         type="influencer"
