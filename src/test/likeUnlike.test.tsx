@@ -4,6 +4,30 @@ import { MemoryRouter } from 'react-router-dom';
 import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { AuthContext } from '@/provider/Auth';
 import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
+import * as api from '@/api/hooks/useGetAllInfluencers';
+
+jest.mock('@/api/hooks/useGetAllInfluencers');
+(api.useGetAllInfluencers as jest.Mock).mockReturnValue({
+  data: {
+    totalElement: 2,
+    content: [
+      {
+        influencerId: 1,
+        influencerName: '성시경',
+        influencerImgUrl: 'https://via.placeholder.com/100',
+        influencerJob: '모델',
+        likes: true,
+      },
+      {
+        influencerId: 2,
+        influencerName: '풍자',
+        influencerImgUrl: 'https://via.placeholder.com/100',
+        influencerJob: '배우',
+        likes: false,
+      },
+    ],
+  },
+});
 
 describe('좋아요/취소 기능 테스트', () => {
   let queryClient: QueryClient;
