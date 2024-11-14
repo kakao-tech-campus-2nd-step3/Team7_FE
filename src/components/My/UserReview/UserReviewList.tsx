@@ -15,7 +15,6 @@ export default function UserReviewList({ items = [] }: { items: UserReviewData[]
               <UserReviewItem
                 key={review.reviewId}
                 reviewId={review.reviewId}
-                userNickname={review.userNickname}
                 place={review.place}
                 likes={review.likes}
                 comment={review.comment}

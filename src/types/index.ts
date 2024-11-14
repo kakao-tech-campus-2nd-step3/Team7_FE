@@ -171,9 +171,9 @@ export type RequestPlaceLike = {
 };
 export type UserReviewData = {
   reviewId: number;
-  userNickname: string;
   place: {
     placeId: number;
+    placeName: string;
     imgUrl: string;
     address: {
       address1: string;
