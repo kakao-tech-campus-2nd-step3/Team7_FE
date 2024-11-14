@@ -39,7 +39,6 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
 
   const directRedirectPaths = ['/choice', '/auth'];
 
-  const directRedirectPaths = ['/choice', 'auth'];
   useEffect(() => {
     const processAuth = async () => {
       if (isLoading) return;
