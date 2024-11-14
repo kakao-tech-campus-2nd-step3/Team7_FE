@@ -91,7 +91,6 @@ export default function ChoicePage() {
           isChoice
           onToggleLike={handleToggleLike}
           selectedInfluencers={selectedInfluencers}
-          totalElement={PageableData.totalElements}
         />
         <Pagination
           currentPage={currentPage}

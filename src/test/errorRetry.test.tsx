@@ -3,7 +3,6 @@ import { useGetPlaceInfo } from '@/api/hooks/useGetPlaceInfo';
 import MainPage from '@/pages/Main';
 import { useGetLogoutVideo } from '@/api/hooks/useGetLogoutVideo';
 import { testErrorBoundaryBehavior } from '@/utils/test/testUtils';
-import * as api from '@/api/hooks/useGetAllInfluencers';
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -12,29 +11,6 @@ beforeAll(() => {
 
 afterAll(() => {
   (console.error as jest.Mock).mockRestore();
-});
-
-jest.mock('@/api/hooks/useGetAllInfluencers');
-(api.useGetAllInfluencers as jest.Mock).mockReturnValue({
-  data: {
-    totalElement: 2,
-    content: [
-      {
-        influencerId: 1,
-        influencerName: '성시경',
-        influencerImgUrl: 'https://via.placeholder.com/100',
-        influencerJob: '모델',
-        likes: true,
-      },
-      {
-        influencerId: 2,
-        influencerName: '풍자',
-        influencerImgUrl: 'https://via.placeholder.com/100',
-        influencerJob: '배우',
-        likes: false,
-      },
-    ],
-  },
 });
 
 jest.mock('@/api/hooks/useGetLogoutVideo', () => ({

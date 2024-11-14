@@ -25,14 +25,7 @@ export default function InfluencerPage() {
       </Text>
       <SearchBar />
       <LayoutWrapper>
-        <BaseLayout
-          type="influencer"
-          mainText=""
-          SubText=""
-          items={pageableData?.content}
-          showMoreButton={false}
-          totalElement={pageableData.totalElements}
-        />
+        <BaseLayout type="influencer" mainText="" SubText="" items={pageableData?.content} showMoreButton={false} />
       </LayoutWrapper>
       <Pagination
         currentPage={currentPage}
