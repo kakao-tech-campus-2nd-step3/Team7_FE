@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import styled from 'styled-components';
@@ -31,30 +31,40 @@ export default function DropdownMenu({
 }: DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useDetectClose({ onDetected: () => setIsOpen(false) });
-  const [selectedMainOption, setSelectedMainOption] = useState<Option | null>(() => {
-    try {
-      if (defaultValue && options) {
-        const foundOption = options.find((option) => option?.label === defaultValue.main);
-        return foundOption || null;
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  });
+  const [selectedMainOption, setSelectedMainOption] = useState<Option | null>();
   const [selectedSubOption, setSelectedSubOption] = useState<Option | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const isInitialized = useRef(false);
 
   useEffect(() => {
-    if (defaultValue && selectedMainOption) {
-      onChange({
-        main: selectedMainOption.label,
-        sub: undefined,
-        lat: undefined,
-        lng: undefined,
-      });
+    if (isInitialized.current || !defaultValue?.main || !options?.length) {
+      return;
     }
-  }, []);
+
+    const mainOption = options.find((option) => option.label === defaultValue.main);
+    if (!mainOption) {
+      return;
+    }
+    const updates = () => {
+      setSelectedMainOption(mainOption);
+      if (defaultValue.sub && mainOption.subOptions) {
+        const subOption = mainOption.subOptions.find((sub) => sub.label === defaultValue.sub);
+        if (subOption) {
+          setSelectedSubOption(subOption);
+        }
+      }
+
+      onChange({
+        main: mainOption.label,
+        sub: undefined,
+        lat: mainOption.lat,
+        lng: mainOption.lng,
+      });
+    };
+
+    updates();
+    isInitialized.current = true;
+  }, [defaultValue, options, onChange]);
 
   const filteredOptions = useMemo(() => {
     try {
@@ -65,11 +75,17 @@ export default function DropdownMenu({
   }, [options, searchTerm]);
 
   const handleMainOptionClick = (option: Option) => {
-    setSelectedMainOption(option);
-    setSelectedSubOption(null);
-    onChange({ main: option.label, lat: option.lat, lng: option.lng });
-    if (!multiLevel || !option.subOptions) {
-      setIsOpen(false);
+    if (option.label === '없음') {
+      setSelectedMainOption(null);
+      setSelectedSubOption(null);
+      onChange({ main: '', sub: undefined, lat: undefined, lng: undefined });
+    } else {
+      setSelectedMainOption(option);
+      setSelectedSubOption(null);
+      onChange({ main: option.label, lat: option.lat, lng: option.lng });
+      if (!multiLevel || !option.subOptions) {
+        setIsOpen(false);
+      }
     }
   };
 
@@ -89,7 +105,7 @@ export default function DropdownMenu({
   };
 
   const renderMainOptions = () => {
-    return filteredOptions.map((option) => (
+    return [{ label: '없음', lat: undefined, lng: undefined }, ...filteredOptions].map((option) => (
       <DropdownItem
         key={option.label}
         label={option.label}
@@ -112,9 +128,12 @@ export default function DropdownMenu({
     ));
   };
 
-  const displayValue = selectedSubOption
-    ? `${selectedMainOption?.label} ${selectedSubOption?.label}`
-    : selectedMainOption?.label || placeholder;
+  const displayValue = useMemo(() => {
+    if (selectedSubOption && selectedMainOption) {
+      return `${selectedMainOption.label} ${selectedSubOption.label}`;
+    }
+    return selectedMainOption?.label || placeholder;
+  }, [selectedMainOption, selectedSubOption, placeholder]);
 
   return (
     <DropdownContainer ref={ref} type={type}>

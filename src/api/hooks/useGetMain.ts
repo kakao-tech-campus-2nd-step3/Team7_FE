@@ -31,6 +31,7 @@ export const useGetMain = () => {
         queryKey: ['influencers'],
         queryFn: getInfluencer,
         staleTime: 1000 * 60 * 5,
+        refetchOnMount: 'always',
       },
     ],
   });
