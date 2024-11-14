@@ -3,8 +3,7 @@ import { getRefreshToken } from '@/api/hooks/useGetRefreshToken';
 
 type AuthInfo = {
   isAuthenticated: boolean;
-  nickname: string | null;
-  handleLoginSuccess: (nickname: string) => Promise<void>;
+  handleLoginSuccess: (userNickname: string) => Promise<void>;
   logout: () => void;
 };
 
@@ -18,12 +17,10 @@ const ACCESS_TOKEN_REFRESH_INTERVAL = 9 * 60 * 1000;
 
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [nickname, setNickname] = useState<string | null>(localStorage.getItem('nickname'));
 
   const logout = useCallback(() => {
     try {
       setIsAuthenticated(false);
-      setNickname(null);
       localStorage.removeItem('isAuthenticated');
       localStorage.removeItem('nickname');
     } catch (error) {
@@ -43,7 +40,6 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const handleLoginSuccess = useCallback(async (userNickname: string) => {
     try {
-      setNickname(userNickname);
       setIsAuthenticated(true);
       localStorage.setItem('nickname', userNickname);
       localStorage.setItem('isAuthenticated', 'true');
@@ -71,11 +67,10 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const value = useMemo(
     () => ({
       isAuthenticated,
-      nickname,
       handleLoginSuccess,
       logout,
     }),
-    [isAuthenticated, nickname, handleLoginSuccess, logout],
+    [isAuthenticated, handleLoginSuccess, logout],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
