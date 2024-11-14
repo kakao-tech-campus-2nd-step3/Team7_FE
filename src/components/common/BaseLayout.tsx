@@ -6,8 +6,8 @@ import InfluencerSection from '@/components/Main/InfluencerSection';
 import InfluencerList from '@/components/Influencer/InfluencerList';
 import SpotSection from '@/components/Main/SpotSection';
 import { InfluencerData, SpotData, UserPlaceData } from '@/types';
-import UserPlaceSection from '@/components/My/UserPlaceSection';
 import ChoiceList from '@/components/Choice/ChoiceList';
+import UserPlaceSection from '../My/UserPlaceSection';
 
 type Props = {
   type: string;
@@ -64,7 +64,6 @@ export default function BaseLayout({
     }
     return <UserPlaceSection items={items as UserPlaceData[]} />;
   };
-
   return (
     <Container>
       <TitleContainer>

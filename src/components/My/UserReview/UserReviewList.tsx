@@ -3,7 +3,7 @@ import { UserReviewData } from '@/types';
 import UserReviewItem from './UserReviewItem';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function UserReviewList({ items }: { items: UserReviewData[] }) {
+export default function UserReviewList({ items = [] }: { items: UserReviewData[] }) {
   return (
     <ListContainer>
       {items.length === 0 ? (
