@@ -14,7 +14,6 @@ const useGetDropdownName = () => {
         label: influencer.influencerName,
       }));
     },
-    staleTime: 1000 * 60 * 5,
   });
 };
 

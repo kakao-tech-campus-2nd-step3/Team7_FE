@@ -35,7 +35,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 2,
     placeName: '긴자료코 홍대본점',
     address: {
-      address1: '서울특별시',
+      address1: '서울',
       address2: '마포구',
       address3: '서교동',
     },
@@ -50,7 +50,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 3,
     placeName: '맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-9',
     },
@@ -65,7 +65,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 4,
     placeName: '4맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현로19길 38-1',
     },
@@ -80,7 +80,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 5,
     placeName: '5맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-9',
     },
@@ -95,7 +95,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 6,
     placeName: '6맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-9',
     },
@@ -110,7 +110,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 7,
     placeName: '7맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-9',
     },
@@ -125,7 +125,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 8,
     placeName: '8맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-7',
     },
@@ -140,7 +140,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 9,
     placeName: '맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-8',
     },
@@ -155,7 +155,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 10,
     placeName: '10맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-10',
     },
@@ -170,7 +170,7 @@ const dummyPlaces: PlaceData[] = [
     placeId: 11,
     placeName: '11맘스터치 대구대현점',
     address: {
-      address1: '대구광역시',
+      address1: '대구',
       address2: '북구',
       address3: '대현동 119-11',
     },

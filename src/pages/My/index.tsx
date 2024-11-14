@@ -1,5 +1,4 @@
 import { styled } from 'styled-components';
-import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { useGetUserInfluencer } from '@/api/hooks/useGetUserInfluencer';
 import BaseLayout from '@/components/common/BaseLayout';
@@ -9,16 +8,16 @@ import { useGetUserReview } from '@/api/hooks/useGetUserReview';
 import MyReview from '@/components/My/UserReview';
 
 export default function MyPage() {
-  const { data: nickname } = useGetUserInfo();
   const { data: items } = useGetUserInfluencer();
   const { data: places } = useGetUserPlace();
   const { data: reviews } = useGetUserReview();
+  const userNickname = localStorage.getItem('nickname');
   return (
     <Wrapper>
       <TitleWrapper>
         <Text size="l" weight="bold" variant="white">
           <Text size="xl" weight="bold" variant="mint">
-            {nickname.nickname}
+            {userNickname}
           </Text>
           님, 안녕하세요!
         </Text>
