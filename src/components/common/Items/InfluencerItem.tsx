@@ -4,7 +4,7 @@ import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
 import styled from 'styled-components';
 
 import { MdLocationOn } from 'react-icons/md';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import backCard from '@/assets/images/back-card.png';
 import { InfluencerData } from '@/types';
@@ -56,6 +56,10 @@ export default function InfluencerItem({
     },
     [isLike, influencerId, postLike],
   );
+
+  useEffect(() => {
+    setIsLike(likes);
+  }, [likes]);
 
   return (
     <>
