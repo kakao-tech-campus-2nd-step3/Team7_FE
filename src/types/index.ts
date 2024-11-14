@@ -1,12 +1,6 @@
 export type BannerData = {
-  bannerId: number;
-  placeId: string;
-  description: string;
-  bannerImg: string;
-  title: string;
-};
-export type BannerResponse = {
-  banners: [BannerData];
+  id: number;
+  imageUrl: string;
 };
 export type InfluencerData = {
   influencerId: number;
@@ -171,9 +165,9 @@ export type RequestPlaceLike = {
 };
 export type UserReviewData = {
   reviewId: number;
-  userNickname: string;
   place: {
     placeId: number;
+    placeName: string;
     imgUrl: string;
     address: {
       address1: string;

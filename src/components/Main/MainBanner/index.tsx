@@ -8,7 +8,7 @@ import BannerItem from '@/components/Main/MainBanner/BannerItem';
 import { BannerData } from '@/types';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function MainBanner({ items }: { items: BannerData[] }) {
+export default function MainBanner({ items = [] }: { items: BannerData[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -40,14 +40,7 @@ export default function MainBanner({ items }: { items: BannerData[] }) {
           <CarouselWrapper>
             <CarouselContainer $currentIndex={currentIndex}>
               {items.map((item) => (
-                <BannerItem
-                  key={item.bannerId}
-                  bannerId={item.bannerId}
-                  placeId={item.placeId}
-                  description={item.description}
-                  bannerImg={item.bannerImg}
-                  title={item.title}
-                />
+                <BannerItem key={item.id} id={item.id} imageUrl={item.imageUrl} />
               ))}
             </CarouselContainer>
           </CarouselWrapper>

@@ -53,12 +53,14 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
           </LikeIcon>
           <FallbackImage src={imageUrl} alt={String(placeId)} />
         </ImageContainer>
-        <Paragraph size="m" weight="bold" variant="white">
-          {placeName}
-        </Paragraph>
-        <Paragraph size="xs" weight="normal" variant="white">
-          {influencer}
-        </Paragraph>
+        <TextWrapper>
+          <Paragraph size="m" weight="bold" variant="white">
+            {placeName}
+          </Paragraph>
+          <Paragraph size="xs" weight="normal" variant="white">
+            {influencer}
+          </Paragraph>
+        </TextWrapper>
       </Wrapper>
       {showLoginModal && (
         <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
@@ -72,7 +74,8 @@ const Wrapper = styled(Link)`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  line-height: 30px;
+  text-decoration: none;
+  gap: 10px;
 `;
 const ImageContainer = styled.div`
   width: 168px;
@@ -80,6 +83,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
+  margin-bottom: 4px;
 `;
 const LikeIcon = styled.div`
   position: absolute;
@@ -89,4 +93,9 @@ const LikeIcon = styled.div`
   top: 12px;
   z-index: 100;
   cursor: pointer;
+`;
+const TextWrapper = styled.div`
+  > *:not(:first-child) {
+    margin-top: 6px;
+  }
 `;

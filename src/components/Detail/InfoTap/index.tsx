@@ -69,6 +69,7 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, 
           style={{
             width: '90%',
             height: '410px',
+            zIndex: 0,
           }}
           level={3}
         >
