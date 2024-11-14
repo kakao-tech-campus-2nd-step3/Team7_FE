@@ -11,7 +11,9 @@ export const getBanner = async () => {
   return response.data;
 };
 export const getInfluencer = async () => {
-  const response = await fetchInstance.get<PageableData<InfluencerData>>(getInfluencerPath());
+  const response = await fetchInstance.get<PageableData<InfluencerData>>(getInfluencerPath(), {
+    withCredentials: true,
+  });
 
   const limitedContent = response.data.content.slice(0, 10);
   return {
