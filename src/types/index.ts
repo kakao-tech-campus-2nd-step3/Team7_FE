@@ -158,18 +158,12 @@ export type RequestInfluencerLike = {
 export type UserInfoData = {
   nickname: string;
 };
-export type InfluencerResponse = {
-  influencers: [InfluencerData];
-};
 export type UserPlaceData = {
   placeId: number;
   placeName: string;
   imageUrl: string;
   influencer?: string;
   likes: boolean;
-};
-export type UserPlaceResponse = {
-  places: [UserPlaceData];
 };
 export type RequestPlaceLike = {
   placeId: number;
@@ -191,10 +185,6 @@ export type UserReviewData = {
   comment: string;
   createdDate: Date;
 };
-export type UserReviewResponse = {
-  reviews: [UserReviewData];
-};
-
 export type RequestPlaceReview = {
   likes: boolean | null;
   comments: string;
