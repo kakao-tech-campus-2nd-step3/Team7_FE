@@ -43,7 +43,6 @@ export default function MyPage() {
     hasNextPage,
     isFetchingNextPage,
   });
-
   const userNickname = localStorage.getItem('nickname');
   return (
     <Wrapper>
