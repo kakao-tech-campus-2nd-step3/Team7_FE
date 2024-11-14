@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthContext } from '@/provider/Auth';
-import { PlaceInfo } from '@/types';
+import { PlaceInfo, SpotData } from '@/types';
 import Error from '@/components/common/layouts/Error';
 
 export function renderWithQueryClient(children: React.ReactNode) {
@@ -11,7 +11,7 @@ export function renderWithQueryClient(children: React.ReactNode) {
   return render(
     <AuthContext.Provider
       value={{
-        isAuthenticated: true,
+        isAuthenticated: false,
         handleLoginSuccess: jest.fn(),
         logout: jest.fn(),
       }}
@@ -32,7 +32,7 @@ export async function testErrorBoundaryBehavior({
 }: {
   renderComponent: () => React.ReactNode;
   mockFunction: jest.Mock;
-  mockSuccessData: { data: { id: number; name: string }[]; error: null }[] | { data: PlaceInfo; error: null };
+  mockSuccessData: { data: SpotData[]; error: null }[] | { data: PlaceInfo; error: null };
 }) {
   mockFunction.mockReturnValueOnce({ error: new ErrorEvent('Intentional Error'), data: [] });
 

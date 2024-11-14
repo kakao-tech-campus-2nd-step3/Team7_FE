@@ -3,6 +3,7 @@ import { useGetPlaceInfo } from '@/api/hooks/useGetPlaceInfo';
 import MainPage from '@/pages/Main';
 import { useGetLogoutVideo } from '@/api/hooks/useGetLogoutVideo';
 import { testErrorBoundaryBehavior } from '@/utils/test/testUtils';
+import * as api from '@/api/hooks/useGetAllInfluencers';
 
 beforeAll(() => {
   jest.clearAllMocks();
@@ -11,6 +12,29 @@ beforeAll(() => {
 
 afterAll(() => {
   (console.error as jest.Mock).mockRestore();
+});
+
+jest.mock('@/api/hooks/useGetAllInfluencers');
+(api.useGetAllInfluencers as jest.Mock).mockReturnValue({
+  data: {
+    totalElement: 2,
+    content: [
+      {
+        influencerId: 1,
+        influencerName: '성시경',
+        influencerImgUrl: 'https://via.placeholder.com/100',
+        influencerJob: '모델',
+        likes: true,
+      },
+      {
+        influencerId: 2,
+        influencerName: '풍자',
+        influencerImgUrl: 'https://via.placeholder.com/100',
+        influencerJob: '배우',
+        likes: false,
+      },
+    ],
+  },
 });
 
 jest.mock('@/api/hooks/useGetLogoutVideo', () => ({
@@ -25,8 +49,34 @@ describe('메인페이지 ErrorBoundary 테스트', () => {
       renderComponent: () => <MainPage />,
       mockFunction: mockUseGetLogoutVideo,
       mockSuccessData: [
-        { data: [{ id: 1, name: 'Cool Video' }], error: null },
-        { data: [{ id: 2, name: 'New Video' }], error: null },
+        {
+          data: [
+            {
+              videoId: 1,
+              videoAlias: 'Cool Video',
+              videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+              place: {
+                placeId: 1,
+                placeName: '이선장네',
+              },
+            },
+          ],
+          error: null,
+        },
+        {
+          data: [
+            {
+              videoId: 2,
+              videoAlias: 'New Video',
+              videoUrl: 'https://youtu.be/qbqquv_8wM0?si=j7LiU5DSfTVpKa1I',
+              place: {
+                placeId: 1,
+                placeName: '이선장네',
+              },
+            },
+          ],
+          error: null,
+        },
       ],
     });
   });

@@ -6,7 +6,13 @@ import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { InfluencerData } from '@/types';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function InfluencerSection({ items = [] }: { items: InfluencerData[] }) {
+export default function InfluencerSection({
+  items = [],
+  totalElement,
+}: {
+  items: InfluencerData[];
+  totalElement: number;
+}) {
   const listRef = useRef<HTMLDivElement | null>(null);
   const scrollList = (direction: 'left' | 'right') => {
     if (listRef.current) {
@@ -33,6 +39,7 @@ export default function InfluencerSection({ items = [] }: { items: InfluencerDat
                   influencerName={influencer.influencerName}
                   influencerImgUrl={influencer.influencerImgUrl}
                   influencerJob={influencer.influencerJob}
+                  totalElement={totalElement}
                   likes={influencer.likes}
                 />
               );

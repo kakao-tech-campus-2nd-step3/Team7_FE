@@ -7,17 +7,17 @@ import { Text } from '@/components/common/typography/Text';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import FallbackImage from '@/components/common/Items/FallbackImage';
 
-export default function UserReviewItem({ likes, comment, userNickname, place, createdDate }: UserReviewData) {
+export default function UserReviewItem({ likes, comment, place, createdDate }: UserReviewData) {
   const address = `${place.address.address1} ${place.address.address2} ${place.address.address3}`;
   return (
     <Wrapper to={`/detail/${place.placeId}`}>
       <ImageContainer>
-        <FallbackImage src={place.imgUrl} alt={userNickname} />
+        <FallbackImage src={place.imgUrl} alt={place.placeName} />
       </ImageContainer>
       <TextContainer>
         <Title>
           <Text size="s" weight="bold" variant="white">
-            {userNickname}
+            {place.placeName}
           </Text>
           {likes ? <AiFillLike size={26} color="#fe7373" /> : <AiFillDislike size={26} color="#6F6CFF" />}
         </Title>

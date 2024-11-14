@@ -4,58 +4,17 @@ import MainBanner from '@/components/Main/MainBanner';
 
 import { useGetMain } from '@/api/hooks/useGetMain';
 import SearchBar from '@/components/common/SearchBar';
-import BannerImg from '@/assets/images/bannerImg.png';
 import useAuth from '@/hooks/useAuth';
 import { useGetLogoutVideo } from '@/api/hooks/useGetLogoutVideo';
 import { useGetMyInfluencerVideo } from '@/api/hooks/useGetMyInfluencerVideo';
 import useGetLocation from '@/hooks/useGetLocation';
 import { useGetAroundVideo } from '@/api/hooks/useGetAroundVideo';
 
-const bannerData = {
-  banners: [
-    {
-      bannerId: 1,
-      placeId: '1',
-      description: '9.9 - 9.20',
-      bannerImg: BannerImg,
-      title: '도구리 팝업스토어',
-    },
-    {
-      bannerId: 2,
-      placeId: '2',
-      description: '9.9 - 9.20',
-      bannerImg: BannerImg,
-      title: '숲속 캠핑',
-    },
-    {
-      bannerId: 3,
-      placeId: '3',
-      description: '9.9 - 9.20',
-      bannerImg: BannerImg,
-      title: '도시 탐방',
-    },
-    {
-      bannerId: 4,
-      placeId: '4',
-      description: '9.9 - 9.20',
-      bannerImg: BannerImg,
-      title: '산악 트레킹',
-    },
-    {
-      bannerId: 5,
-      placeId: '5',
-      description: '9.9 - 9.20',
-      bannerImg: BannerImg,
-      title: '바다에서의 하루',
-    },
-  ],
-};
-
 export default function MainPage() {
   const { isAuthenticated } = useAuth();
   const location = useGetLocation();
 
-  const [{ data: influencersData }] = useGetMain();
+  const [{ data: bannerData }, { data: influencersData }] = useGetMain();
   const [{ data: coolVideoData }, { data: newVideoData }] = useGetLogoutVideo(!isAuthenticated);
   const { data: myInfluencerVideoData } = useGetMyInfluencerVideo(!!isAuthenticated);
   const { data: aroundVideoData } = useGetAroundVideo(
@@ -67,12 +26,13 @@ export default function MainPage() {
   return (
     <Wrapper>
       <SearchBar placeholder="인플루언서, 장소를 검색해주세요!" />
-      <MainBanner items={bannerData.banners} />
+      <MainBanner items={bannerData} />
       <BaseLayout
         type="influencer"
         mainText="인플루언서"
         SubText=" 가 방문한 장소를 찾아볼까요?"
         items={influencersData.content}
+        totalElement={influencersData.totalElements}
       />
       {isAuthenticated ? (
         <>
