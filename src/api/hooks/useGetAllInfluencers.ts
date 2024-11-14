@@ -16,7 +16,9 @@ export const getAllInfluencers = async ({ page, size }: GetAllInfluencersParams)
     size: size.toString(),
   });
 
-  const response = await fetchInstance.get<PageableData<InfluencerData>>(`${getInfluencerPath()}?${params}`);
+  const response = await fetchInstance.get<PageableData<InfluencerData>>(`${getInfluencerPath()}?${params}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 
