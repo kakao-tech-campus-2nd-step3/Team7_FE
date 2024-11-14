@@ -30,7 +30,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     onError: (error: AxiosError<ApiErrorResponse>) => {
       console.error('사용자 정보 요청 실패:', error);
       if (directRedirectPaths.includes(location.pathname)) {
-        navigate('/');
+        navigate('/', { replace: true });
       } else {
         setShouldShowModal(true);
       }
@@ -43,36 +43,24 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     const processAuth = async () => {
       if (isLoading) return;
 
-      if (directRedirectPaths.includes(location.pathname)) {
-        if (!isAuthenticated || userInfoError || !userInfo?.nickname) {
-          navigate('/');
-          return;
-        }
+      const isProtectedPath = directRedirectPaths.includes(location.pathname);
+      const hasValidAuth = isAuthenticated && userInfo?.nickname;
+
+      if (isProtectedPath && !hasValidAuth) {
+        navigate('/', { replace: true });
+        return;
       }
 
-      if (userInfo?.nickname) {
+      if (userInfo?.nickname && !isAuthenticated) {
         try {
           await authLoginSuccess(userInfo.nickname);
-          if (!isAuthenticated) {
-            if (directRedirectPaths.includes(location.pathname)) {
-              navigate('/');
-            } else {
-              setShouldShowModal(true);
-            }
-          }
         } catch (error) {
           console.error('인증 처리 실패:', error);
-          if (directRedirectPaths.includes(location.pathname)) {
-            navigate('/');
+          if (isProtectedPath) {
+            navigate('/', { replace: true });
           } else {
             setShouldShowModal(true);
           }
-        }
-      } else if (!isAuthenticated) {
-        if (directRedirectPaths.includes(location.pathname)) {
-          navigate('/');
-        } else {
-          setShouldShowModal(true);
         }
       }
     };

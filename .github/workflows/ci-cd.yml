@@ -26,7 +26,7 @@ jobs:
         run: npm test
 
   build-and-deploy:
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/Master' || github.ref == 'refs/heads/hotfix/#122-redirect-control'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code

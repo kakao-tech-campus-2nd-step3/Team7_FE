@@ -19,13 +19,13 @@ export default function AuthPage() {
           if (redirectPath) {
             localStorage.removeItem('redirectPath');
             setHasRedirected(true);
-            navigate(redirectPath);
+            navigate(redirectPath, { replace: true });
           }
         } catch (error) {
           console.error('AuthPage: 로그인 처리 실패', error);
           localStorage.removeItem('nickname');
           localStorage.setItem('isAuthenticated', 'false');
-          navigate('/');
+          navigate('/', { replace: true });
         }
       }
     };

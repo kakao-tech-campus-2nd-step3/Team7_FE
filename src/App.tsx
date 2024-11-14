@@ -43,7 +43,14 @@ function App() {
               }
             />
           </Route>
-          <Route path="/auth" element={<AuthPage />} />
+          <Route
+            path="/auth"
+            element={
+              <PrivatedRoute>
+                <AuthPage />
+              </PrivatedRoute>
+            }
+          />
           <Route path="/places/:id/reviews" element={<ReviewPage />} />
         </Routes>
       </AuthProvider>
