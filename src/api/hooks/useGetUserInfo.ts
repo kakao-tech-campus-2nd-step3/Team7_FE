@@ -4,7 +4,7 @@ import { UserInfoData } from '@/types';
 
 export const getUserInfoPath = () => `/users/info`;
 export const getUserInfo = async () => {
-  const response = await fetchInstance.get<UserInfoData>(getUserInfoPath());
+  const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), { withCredentials: true });
   return response.data;
 };
 export const useGetUserInfo = () => {
