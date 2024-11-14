@@ -21,6 +21,11 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
+  console.log('[PrivateRoute] Current state:', {
+    path: location.pathname,
+    isAuthenticated,
+  });
+
   const {
     data: userInfo,
     isError: userInfoError,
@@ -29,10 +34,16 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     retry: false,
     onError: (error: AxiosError<ApiErrorResponse>) => {
       console.error('사용자 정보 요청 실패:', error);
-      if (directRedirectPaths.includes(location.pathname)) {
-        navigate('/', { replace: true });
-      } else {
-        setShouldShowModal(true);
+      const contentType = error.response?.headers?.['content-type'];
+      const isHtmlResponse = contentType?.includes('text/html');
+
+      if (isHtmlResponse || error.response?.status === 401) {
+        if (directRedirectPaths.includes(location.pathname)) {
+          console.log('[PrivateRoute] Protected path, redirecting to home');
+          navigate('/', { replace: true });
+        } else {
+          setShouldShowModal(true);
+        }
       }
     },
   });
@@ -45,6 +56,12 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
 
       const isProtectedPath = directRedirectPaths.includes(location.pathname);
       const hasValidAuth = isAuthenticated && userInfo?.nickname;
+
+      console.log('[PrivateRoute] Processing auth:', {
+        isProtectedPath,
+        hasValidAuth,
+        hasUserInfo: !!userInfo?.nickname,
+      });
 
       if (isProtectedPath && !hasValidAuth) {
         navigate('/', { replace: true });

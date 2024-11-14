@@ -7,8 +7,15 @@ export const getUserInfo = async () => {
   try {
     const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), {
       withCredentials: true,
-      validateStatus: (status) => status === 200,
     });
+
+    const contentType = response.headers['content-type'];
+    console.log('[UserInfo] Response type:', contentType);
+
+    if (contentType?.includes('text/html')) {
+      console.log('[UserInfo] Received HTML instead of JSON, throwing error');
+      throw new Error('Authentication required');
+    }
     return response.data;
   } catch (error) {
     console.error('Failed to fetch user info:', error);
