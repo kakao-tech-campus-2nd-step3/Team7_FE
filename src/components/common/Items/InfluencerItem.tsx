@@ -17,7 +17,7 @@ import { useGetAllInfluencers } from '@/api/hooks/useGetAllInfluencers';
 interface InfluencerItemProps extends InfluencerData {
   useBackCard?: boolean;
   useNav?: boolean;
-  totalElement: number;
+  totalElement?: number;
 }
 
 export default function InfluencerItem({
@@ -26,7 +26,7 @@ export default function InfluencerItem({
   influencerImgUrl,
   influencerJob,
   likes,
-  totalElement,
+  totalElement = 0,
   useBackCard = true,
   useNav = true,
 }: InfluencerItemProps) {
