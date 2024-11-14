@@ -49,6 +49,7 @@ export default function MapWindow({
   const handleResetCenter = useCallback(() => {
     if (mapRef.current && userLocation) {
       mapRef.current.setCenter(new kakao.maps.LatLng(userLocation.lat, userLocation.lng));
+      mapRef.current.setLevel(4);
       updateBounds();
     }
   }, [userLocation, updateBounds]);
