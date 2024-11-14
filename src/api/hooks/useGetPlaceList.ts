@@ -25,7 +25,7 @@ export const getPlaceList = async (
     influencers: influencers.join(','),
   });
 
-  const response = await fetchInstance.get<PageableData<PlaceData>>(`/places?${params}`);
+  const response = await fetchInstance.get<PageableData<PlaceData>>(`/places?${params}`, { withCredentials: true });
   return response.data;
 };
 

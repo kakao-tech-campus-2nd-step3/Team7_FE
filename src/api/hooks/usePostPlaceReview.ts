@@ -5,10 +5,14 @@ import { RequestPlaceReview } from '@/types';
 
 export const postPlaceReviewPath = (id: string) => `/places/${id}/reviews`;
 const postPlaceReview = async (id: string, { likes, comments }: RequestPlaceReview) => {
-  const response = await fetchInstance.post(postPlaceReviewPath(id), {
-    likes,
-    comments,
-  });
+  const response = await fetchInstance.post(
+    postPlaceReviewPath(id),
+    {
+      likes,
+      comments,
+    },
+    { withCredentials: true },
+  );
   return response.data;
 };
 
