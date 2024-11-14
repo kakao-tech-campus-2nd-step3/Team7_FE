@@ -14,7 +14,7 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
   const isAuthenticated = useAuth();
   const location = useLocation();
   const [isSend, setIsSend] = useState(false);
-  const { status } = useGetSendInfo(String(id), isSend);
+  const { refetch } = useGetSendInfo(String(id), false);
   const [message, setMessage] = useState<string>('');
   const [showLoginModal, setShowLoginModal] = useState(false);
 
@@ -28,7 +28,9 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
       return;
     }
     setIsSend(true);
+    console.log(isSend);
     try {
+      const { status } = await refetch();
       if (status === 'success') {
         setMessage('완료되었습니다.');
       } else {
