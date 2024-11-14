@@ -93,7 +93,7 @@ export const myHandlers = [
               placeId: '1',
               imgUrl: 'https://via.placeholder.com/100',
               address: {
-                address1: '대구광역시',
+                address1: '대구',
                 address2: '북구',
                 address3: '대현로',
               },
@@ -109,7 +109,7 @@ export const myHandlers = [
               placeId: '2',
               imgUrl: 'https://via.placeholder.com/100',
               address: {
-                address1: '경상북도',
+                address1: '경북',
                 address2: '경주시',
                 address3: '황리단길',
               },
