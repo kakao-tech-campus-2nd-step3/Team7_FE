@@ -23,7 +23,7 @@ export default function InfluencerPage() {
       <Text size="l" weight="bold" variant="white">
         인플루언서
       </Text>
-      <SearchBar data={[]} />
+      <SearchBar />
       <LayoutWrapper>
         <BaseLayout type="influencer" mainText="" SubText="" items={pageableData?.content} showMoreButton={false} />
       </LayoutWrapper>

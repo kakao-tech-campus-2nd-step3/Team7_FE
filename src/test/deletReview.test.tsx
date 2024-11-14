@@ -1,8 +1,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useState } from 'react';
 import Review from '@/components/Detail/ReviewTap/Review';
 
-const mockReviews = [
+const initialReviews = [
   {
     reviewId: 1,
     likes: true,
@@ -38,15 +39,26 @@ const mockReviews = [
 ];
 const queryClient = new QueryClient();
 
+function TestComponent() {
+  const [reviews, setReviews] = useState(initialReviews);
+
+  const handleDelete = (id: number) => {
+    setReviews((prevReviews) => prevReviews.filter((review) => review.reviewId !== id));
+    window.alert('삭제되었습니다.');
+  };
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Review items={reviews} onDelete={handleDelete} />
+    </QueryClientProvider>
+  );
+}
+
 test('리뷰 삭제가 반영되는지 확인', async () => {
   window.confirm = jest.fn().mockImplementation(() => true);
   window.alert = jest.fn();
 
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Review items={mockReviews} />
-    </QueryClientProvider>,
-  );
+  render(<TestComponent />);
 
   expect(screen.getByText('정말 좋았어요! 다음에 또 오고 싶습니다')).toBeInTheDocument();
 
