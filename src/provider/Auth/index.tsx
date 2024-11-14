@@ -1,7 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 import { getRefreshToken } from '@/api/hooks/useGetRefreshToken';
 import { useDeleteToken } from '@/api/hooks/useDeleteToken';
-import { useDeleteDB } from '@/api/hooks/useDeleteDB';
 
 type AuthInfo = {
   isAuthenticated: boolean;
@@ -21,11 +20,9 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const { mutate: logout } = useDeleteToken();
-  const { mutate: delDB } = useDeleteDB();
 
   const handleLogout = useCallback(() => {
     logout();
-    delDB();
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('nickname');

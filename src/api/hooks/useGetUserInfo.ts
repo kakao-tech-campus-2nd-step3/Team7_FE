@@ -5,11 +5,14 @@ import { UserInfoData } from '@/types';
 export const getUserInfoPath = () => `/users/info`;
 export const getUserInfo = async () => {
   try {
-    const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), { withCredentials: true });
+    const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), {
+      withCredentials: true,
+      validateStatus: (status) => status === 200,
+    });
     return response.data;
   } catch (error) {
     console.error('Failed to fetch user info:', error);
-    return null;
+    throw error;
   }
 };
 export const useGetUserInfo = (options = {}) => {
