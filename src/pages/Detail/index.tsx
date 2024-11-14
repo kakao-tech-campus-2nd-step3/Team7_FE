@@ -17,19 +17,24 @@ import useExtractYoutubeVideoId from '@/libs/youtube/useExtractYoutube';
 import { useGetPlaceInfo } from '@/api/hooks/useGetPlaceInfo';
 import Loading from '@/components/common/layouts/Loading';
 import Error from '@/components/common/layouts/Error';
+import FallbackImage from '@/components/common/Items/FallbackImage';
+import BasicThumb from '@/assets/images/basic-thumb.png';
 
 export default function DetailPage() {
   const [activeTab, setActiveTab] = useState<'info' | 'review'>('info');
   const [visitModal, setVisitModal] = useState(false);
   const { id } = useParams() as { id: string };
   const { data: infoData } = useGetPlaceInfo(id);
+  const extractedVideoId = useExtractYoutubeVideoId(infoData.videoUrl || '');
+  const thumbnailUrl = infoData.videoUrl
+    ? `https://img.youtube.com/vi/${extractedVideoId}/maxresdefault.jpg`
+    : BasicThumb;
   return (
     <Wrapper>
       <ImageContainer>
-        <Image
-          src={`https://img.youtube.com/vi/${useExtractYoutubeVideoId(infoData.videoUrl)}/maxresdefault.jpg`}
-          alt="장소사진"
-        />
+        <ImageWrapper>
+          <FallbackImage src={thumbnailUrl} alt="장소 사진" />
+        </ImageWrapper>
         <GradientOverlay />
         <TitleContainer>
           <Text size="26px" weight="bold" variant="white">
@@ -99,7 +104,7 @@ const Wrapper = styled.div`
 const ImageContainer = styled.div`
   position: relative;
 `;
-const Image = styled.img`
+const ImageWrapper = styled.div`
   width: 100%;
   aspect-ratio: 3 / 1;
   object-fit: cover;

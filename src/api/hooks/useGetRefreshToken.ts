@@ -4,7 +4,7 @@ import { fetchInstance } from '../instance';
 export const getRefreshTokenPath = () => '/refresh-token';
 
 export const getRefreshToken = async () => {
-  await fetchInstance.get(getRefreshTokenPath());
+  await fetchInstance.get(getRefreshTokenPath(), { withCredentials: true });
   return null;
 };
 

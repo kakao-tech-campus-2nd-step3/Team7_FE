@@ -70,6 +70,10 @@ export default function InfluencerItem({
     [isLike, influencerId, postLike],
   );
 
+  useEffect(() => {
+    setIsLike(likes);
+  }, [likes]);
+
   return (
     <>
       <Wrapper as={useNav ? Link : 'div'} to={useNav ? `/map?influencer=${encodeURIComponent(influencerName)}` : ''}>

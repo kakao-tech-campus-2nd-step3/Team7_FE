@@ -9,7 +9,9 @@ export const getUserInfluencer = async (page: number, size: number) => {
     size: size.toString(),
   });
 
-  const response = await fetchInstance.get<PageableData<InfluencerData>>(`${getUserInfluencerPath()}?${params}`);
+  const response = await fetchInstance.get<PageableData<InfluencerData>>(`${getUserInfluencerPath()}?${params}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 export const useGetUserInfluencer = (size: number) => {

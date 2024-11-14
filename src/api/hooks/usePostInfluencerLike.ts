@@ -5,10 +5,14 @@ import { RequestInfluencerLike } from '@/types';
 
 export const postInfluencerLikePath = () => `/influencers/likes`;
 const postInfluencerLike = async ({ influencerId, likes }: RequestInfluencerLike) => {
-  const response = await fetchInstance.post(postInfluencerLikePath(), {
-    influencerId,
-    likes,
-  });
+  const response = await fetchInstance.post(
+    postInfluencerLikePath(),
+    {
+      influencerId,
+      likes,
+    },
+    { withCredentials: true },
+  );
   return response.data;
 };
 

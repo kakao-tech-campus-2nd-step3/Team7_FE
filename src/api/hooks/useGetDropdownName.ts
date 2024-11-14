@@ -14,6 +14,7 @@ const useGetDropdownName = () => {
         label: influencer.influencerName,
       }));
     },
+    refetchOnMount: 'always',
   });
 };
 

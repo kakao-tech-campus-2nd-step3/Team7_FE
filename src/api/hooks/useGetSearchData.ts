@@ -11,7 +11,9 @@ export const getSearchInfluencers = async (value: string) => {
     value: value.toString(),
   });
 
-  const response = await fetchInstance.get<InfluencerData[]>(`${getSearchInfluencerPath()}?${params}`);
+  const response = await fetchInstance.get<InfluencerData[]>(`${getSearchInfluencerPath()}?${params}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 export const getSearchVideos = async (value: string) => {
@@ -27,7 +29,9 @@ export const getSearchPlaces = async (value: string) => {
     value: value.toString(),
   });
 
-  const response = await fetchInstance.get<UserPlaceData[]>(`${getSearchPlacePath()}?${params}`);
+  const response = await fetchInstance.get<UserPlaceData[]>(`${getSearchPlacePath()}?${params}`, {
+    withCredentials: true,
+  });
   return response.data;
 };
 export const useGetSearchData = (value: string) => {
