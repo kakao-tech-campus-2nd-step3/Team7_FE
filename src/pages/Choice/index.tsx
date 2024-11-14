@@ -6,6 +6,7 @@ import { useGetAllInfluencers } from '@/api/hooks/useGetAllInfluencers';
 import { usePostMultipleInfluencerLike } from '@/api/hooks/usePostMultipleInfluencerLike';
 import Button from '@/components/common/Button';
 import Pagination from '@/components/common/Pagination';
+import SearchBar from '@/components/common/SearchBar';
 
 export default function ChoicePage() {
   const navigate = useNavigate();
@@ -56,6 +57,9 @@ export default function ChoicePage() {
   return (
     <PageContainer>
       <LayoutWrapper>
+        <SearchBarWrapper>
+          <SearchBar />
+        </SearchBarWrapper>
         <BaseLayout
           type="influencer"
           prevSubText="관심 있는 "
@@ -111,4 +115,8 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
   width: 960px;
   margin-bottom: 30px;
+`;
+
+const SearchBarWrapper = styled.div`
+  margin: 20px 0;
 `;
