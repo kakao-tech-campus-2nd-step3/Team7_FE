@@ -44,7 +44,7 @@ export default function InfluencerItem({
         setIsLike(influencer.likes);
       }
     }
-  }, [influencersData, influencerId]);
+  }, [influencersData, influencerId, likes]);
 
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
