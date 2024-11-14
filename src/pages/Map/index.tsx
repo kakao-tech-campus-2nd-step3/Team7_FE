@@ -13,7 +13,7 @@ import useGetDropdownName from '@/api/hooks/useGetDropdownName';
 export default function MapPage() {
   const [searchParams] = useSearchParams();
   const influencerParam = searchParams.get('influencer');
-  const { data: influencerOptions = [], isLoading: isLoadingInfluencers } = useGetDropdownName();
+  const { data: influencerOptions } = useGetDropdownName();
 
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>(influencerParam || '');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
@@ -103,9 +103,9 @@ export default function MapPage() {
           type="location"
         />
         <DropdownMenu
-          options={isLoadingInfluencers ? [] : influencerOptions}
+          options={influencerOptions}
           onChange={handleInfluencerChange}
-          placeholder={isLoadingInfluencers ? '로딩 중' : '인플루언서'}
+          placeholder="인플루언서"
           type="influencer"
           defaultValue={influencerParam ? { main: influencerParam } : undefined}
         />

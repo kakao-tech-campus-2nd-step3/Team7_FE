@@ -6,13 +6,10 @@ import { useGetUserPlace } from '@/api/hooks/useGetUserPlace';
 import { Text } from '@/components/common/typography/Text';
 import { useGetUserReview } from '@/api/hooks/useGetUserReview';
 import MyReview from '@/components/My/UserReview';
-import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
 import InfiniteBaseLayout from '@/components/My/infiniteBaseLayout';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 
 export default function MyPage() {
-  const { data: nickname } = useGetUserInfo();
-
   const influencerRef = useRef<HTMLDivElement>(null);
   const {
     data: influencers,
@@ -47,12 +44,13 @@ export default function MyPage() {
     isFetchingNextPage,
   });
 
+  const userNickname = localStorage.getItem('nickname');
   return (
     <Wrapper>
       <TitleWrapper>
         <Text size="l" weight="bold" variant="white">
           <Text size="xl" weight="bold" variant="mint">
-            {nickname.nickname}
+            {userNickname}
           </Text>
           님, 안녕하세요!
         </Text>

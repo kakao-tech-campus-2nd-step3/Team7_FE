@@ -9,6 +9,7 @@ const initInstance = (config: AxiosRequestConfig): AxiosInstance => {
     ...config,
     headers: {
       'Content-Type': 'application/json',
+      Origin: 'https://www.inplace.my',
       ...config.headers,
     },
   });

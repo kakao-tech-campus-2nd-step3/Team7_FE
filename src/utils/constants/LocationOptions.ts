@@ -1,6 +1,6 @@
 const locationOptions = [
   {
-    label: '서울특별시',
+    label: '서울',
     lat: 37.5665,
     lng: 126.978,
     subOptions: [
@@ -32,7 +32,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '부산광역시',
+    label: '부산',
     lat: 35.1796,
     lng: 129.0756,
     subOptions: [
@@ -55,7 +55,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '대구광역시',
+    label: '대구',
     lat: 35.8714,
     lng: 128.6014,
     subOptions: [
@@ -71,7 +71,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '인천광역시',
+    label: '인천',
     lat: 37.4563,
     lng: 126.7052,
     subOptions: [
@@ -88,7 +88,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '광주광역시',
+    label: '광주',
     lat: 35.1595,
     lng: 126.8526,
     subOptions: [
@@ -100,7 +100,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '대전광역시',
+    label: '대전',
     lat: 36.3504,
     lng: 127.3845,
     subOptions: [
@@ -112,7 +112,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '울산광역시',
+    label: '울산',
     lat: 35.5396,
     lng: 129.3114,
     subOptions: [
@@ -127,10 +127,9 @@ const locationOptions = [
     label: '세종특별자치시',
     lat: 36.4801,
     lng: 127.2897,
-    subOptions: [{ label: '세종시 전체', lat: 36.4801, lng: 127.2897 }],
   },
   {
-    label: '경기도',
+    label: '경기',
     lat: 37.4138,
     lng: 127.5183,
     subOptions: [
@@ -166,7 +165,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '강원도',
+    label: '강원특별자치도',
     lat: 37.8228,
     lng: 128.1555,
     subOptions: [
@@ -191,7 +190,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '충청북도',
+    label: '충북',
     lat: 36.6359,
     lng: 127.4913,
     subOptions: [
@@ -209,7 +208,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '충청남도',
+    label: '충남',
     lat: 36.5184,
     lng: 126.8,
     subOptions: [
@@ -231,7 +230,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '전라북도',
+    label: '전북특별자치도',
     lat: 35.7175,
     lng: 127.153,
     subOptions: [
@@ -252,7 +251,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '전라남도',
+    label: '전남',
     lat: 34.8679,
     lng: 126.991,
     subOptions: [
@@ -281,7 +280,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '경상북도',
+    label: '경북',
     lat: 36.4919,
     lng: 128.8889,
     subOptions: [
@@ -310,7 +309,7 @@ const locationOptions = [
     ],
   },
   {
-    label: '경상남도',
+    label: '경남',
     lat: 35.2384,
     lng: 128.692,
     subOptions: [
