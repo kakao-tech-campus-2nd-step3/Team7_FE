@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
-import { AxiosError } from 'axios';
 
 interface ApiErrorResponse {
   message: string;
