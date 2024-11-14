@@ -7,9 +7,15 @@ interface InfluencerListProps {
   items: InfluencerData[];
   useBackCard?: boolean;
   useNav?: boolean;
+  totalElement: number;
 }
 
-export default function InfluencerList({ items, useBackCard = true, useNav = true }: InfluencerListProps) {
+export default function InfluencerList({
+  items,
+  totalElement,
+  useBackCard = true,
+  useNav = true,
+}: InfluencerListProps) {
   return items.length === 0 ? (
     <NoItem message="인플루언서 정보가 없어요!" alignItems="center" />
   ) : (
@@ -23,6 +29,7 @@ export default function InfluencerList({ items, useBackCard = true, useNav = tru
             influencerImgUrl={influencer.influencerImgUrl}
             influencerJob={influencer.influencerJob}
             likes={influencer.likes}
+            totalElement={totalElement}
             useBackCard={useBackCard}
             useNav={useNav}
           />
