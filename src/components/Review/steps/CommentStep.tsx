@@ -94,7 +94,11 @@ export default function CommentStep({ isLiked, onBack, onSubmit, placeInfo }: Co
 
 const StepContainer = styled.div`
   animation: fadeIn 0.3s ease-in-out;
-
+  width: min(100%, 500px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin: 0 auto;
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -117,7 +121,6 @@ const PlaceSection = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  justify-content: center;
   gap: 2rem;
   width: 100%;
   margin-top: 3rem;
@@ -140,7 +143,6 @@ const ReviewSection = styled.div`
   display: flex;
   gap: 1rem;
   align-items: flex-start;
-  justify-content: center;
 `;
 
 const RatingDisplay = styled.div<RatingDisplayProps>`
@@ -158,7 +160,7 @@ const ButtonText = styled.span`
 `;
 
 const ReviewTextArea = styled.textarea`
-  width: 22rem;
+  width: 100%;
   height: 6rem;
   background-color: transparent;
   border: 1px solid #333;
