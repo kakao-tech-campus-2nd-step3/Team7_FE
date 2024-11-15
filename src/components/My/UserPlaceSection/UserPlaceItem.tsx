@@ -28,12 +28,10 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
         return;
       }
       const newLikeStatus = !isLike;
-      console.log('New like status:', newLikeStatus);
       postLike(
         { placeId, likes: newLikeStatus },
         {
           onSuccess: () => {
-            console.log('성공');
             setIsLike(newLikeStatus);
           },
           onError: (error) => {

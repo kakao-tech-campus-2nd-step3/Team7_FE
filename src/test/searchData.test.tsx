@@ -61,7 +61,7 @@ test('특정 키워드 검색 시 검색 결과가 잘 나오는 지 확인', as
     </AuthContext.Provider>,
   );
   const searchInput = screen.getByPlaceholderText('인플루언서, 장소를 검색해주세요!');
-  fireEvent.change(searchInput, { target: { value: '풍자' } });
+  fireEvent.change(searchInput, { target: { value: 'Influencer' } });
   fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
 
   await waitFor(() => {

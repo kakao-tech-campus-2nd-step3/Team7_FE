@@ -4,6 +4,7 @@ import { getUserInfoPath } from '@/api/hooks/useGetUserInfo';
 import { getUserInfluencerPath } from '@/api/hooks/useGetUserInfluencer';
 import { getUserPlacePath } from '@/api/hooks/useGetUserPlace';
 import { getUserReviewPath } from '@/api/hooks/useGetUserReview';
+import { postPlaceReviewPath } from '@/api/hooks/usePostPlaceReview';
 import { patchNicknamePath } from '@/api/hooks/usePatchNickname';
 
 const mockInfluencers = [
@@ -470,6 +471,9 @@ export const myHandlers = [
         empty: paginatedContent.length === 0,
       }),
     );
+  }),
+  rest.post(`${BASE_URL}${postPlaceReviewPath('1')}`, async (_, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ message: 'send successfully.' }));
   }),
   rest.patch(`${BASE_URL}${patchNicknamePath()}`, async (req, res, ctx) => {
     const params = req.url.searchParams;

@@ -26,7 +26,6 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, 
   const [moreMenu, setMoreMenu] = useState(false);
   const lat = Number(latitude);
   const lng = Number(longitude);
-  console.log(lat, lng);
 
   return (
     <Wrapper>
@@ -50,7 +49,7 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, 
           </Text>
         </TitleContainer>
         <MenuContainer>
-          {menuInfos.menuImgUrls.length > 0 && <MenuModal images={menuInfos.menuImgUrls} />}
+          {menuInfos.menuImgUrls && <MenuModal images={menuInfos.menuImgUrls} />}
           <MenuList lists={menuInfos.menuList.slice(0, moreMenu ? menuInfos.menuList.length : 4)} />
           {menuInfos.menuList.length > 4 && (
             <MoreMenuBtn onClick={() => setMoreMenu(!moreMenu)}>{moreMenu ? '메뉴 접기' : '메뉴 더보기'}</MoreMenuBtn>

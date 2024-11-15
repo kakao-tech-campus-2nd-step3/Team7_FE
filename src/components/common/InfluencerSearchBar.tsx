@@ -9,7 +9,7 @@ interface SearchBarProps {
 export default function InfluencerSearchBar({
   inputValue,
   setInputValue,
-  placeholder = '키워드를 입력해주세요!',
+  placeholder = '인플루언서 이름을 입력해주세요!',
 }: SearchBarProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newInputValue = event.target.value;
@@ -18,7 +18,7 @@ export default function InfluencerSearchBar({
 
   return (
     <SearchBarContainer>
-      <SearchInputWrapper $isInputValue={inputValue !== ''}>
+      <SearchInputWrapper>
         <SearchInput type="text" value={inputValue} onChange={handleInputChange} placeholder={placeholder} />
         <SearchIconWrapper />
       </SearchInputWrapper>
@@ -31,14 +31,13 @@ const SearchBarContainer = styled.div`
   height: 44px;
 `;
 
-const SearchInputWrapper = styled.div<{ $isInputValue: boolean }>`
+const SearchInputWrapper = styled.div`
   display: flex;
   align-items: center;
   background: #414141;
   padding: 12px 16px;
   border: 1.5px solid #a5a5a5;
-  border-bottom: ${({ $isInputValue }) => ($isInputValue ? 'none' : null)};
-  border-radius: ${({ $isInputValue }) => ($isInputValue ? '16px 16px 0 0' : '16px')};
+  border-radius: 16px;
   z-index: 3;
 `;
 
