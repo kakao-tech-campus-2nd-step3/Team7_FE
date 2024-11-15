@@ -2,7 +2,7 @@ import { ReactElement, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
-import { useGetUserInfo, isAuthorizationError } from '@/api/hooks/useGetUserInfo'; // isAuthorizationError 임포트
+import { useGetUserInfo, isAuthorizationError } from '@/api/hooks/useGetUserInfo';
 
 type PrivateRouteProps = {
   children: ReactElement;
@@ -10,7 +10,7 @@ type PrivateRouteProps = {
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
   const [shouldShowModal, setShouldShowModal] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, handleLoginSuccess } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -25,8 +25,13 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
     enabled: true,
+    onSuccess: (data) => {
+      if (data?.nickname && !isAuthenticated) {
+        handleLoginSuccess(data.nickname);
+      }
+    },
     onError: (error: unknown) => {
-      console.log('Error occurred:', error); // 디버깅용 로그
+      console.log('Error occurred:', error);
 
       if (isAuthorizationError(error)) {
         console.log('[PrivateRoute] Unauthorized access:', {
@@ -65,9 +70,18 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     }
   };
 
-  const handleModalSuccess = () => {
+  const handleModalSuccess = async () => {
     setShouldShowModal(false);
+    if (userInfo?.nickname) {
+      await handleLoginSuccess(userInfo.nickname);
+    }
   };
+
+  useEffect(() => {
+    if (userInfo?.nickname && !isAuthenticated) {
+      handleLoginSuccess(userInfo.nickname);
+    }
+  }, [userInfo, isAuthenticated, handleLoginSuccess]);
 
   if (isLoading) return null;
 

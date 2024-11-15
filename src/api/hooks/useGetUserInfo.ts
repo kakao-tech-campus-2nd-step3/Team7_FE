@@ -28,6 +28,7 @@ interface QueryOptions {
   retry?: boolean | number;
   enabled?: boolean;
   onError?: (error: unknown) => void;
+  onSuccess?: (data: UserInfoData) => void;
 }
 
 export const getUserInfo = async () => {
@@ -47,6 +48,7 @@ export const useGetUserInfo = (options: QueryOptions = {}) => {
     queryKey: ['UserInfo'],
     queryFn: () => getUserInfo(),
     retry: false,
+    staleTime: 5 * 60 * 1000,
     ...options,
   });
 };
