@@ -1,24 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '@/hooks/useAuth';
 import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
 
 export default function AuthPage() {
   const navigate = useNavigate();
-  const [hasRedirected, setHasRedirected] = useState(false); // 리디렉션이 한 번만 실행되도록 상태 변수 추가
-  const { handleLoginSuccess } = useAuth();
+  const { handleLoginSuccess, isAuthenticated } = useAuth();
   const { data: userInfo } = useGetUserInfo();
 
   useEffect(() => {
     const processAuth = async () => {
-      if (!hasRedirected && userInfo?.nickname) {
+      if (!isAuthenticated && userInfo?.nickname) {
         try {
           await handleLoginSuccess(userInfo?.nickname);
 
           const redirectPath = localStorage.getItem('redirectPath');
           if (redirectPath) {
             localStorage.removeItem('redirectPath');
-            setHasRedirected(true);
             navigate(redirectPath, { replace: true });
           }
         } catch (error) {
@@ -27,11 +25,13 @@ export default function AuthPage() {
           localStorage.setItem('isAuthenticated', 'false');
           navigate('/', { replace: true });
         }
+      } else if (isAuthenticated) {
+        navigate('/choice', { replace: true });
       }
     };
 
     processAuth();
-  }, [hasRedirected, navigate, handleLoginSuccess, userInfo]);
+  }, [isAuthenticated, userInfo, handleLoginSuccess, navigate]);
 
   return null;
 }

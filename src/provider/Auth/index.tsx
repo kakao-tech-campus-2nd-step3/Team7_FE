@@ -42,18 +42,15 @@ export default function AuthProvider({ children }: AuthProviderProps) {
 
   const handleLoginSuccess = useCallback(
     async (userNickname: string) => {
-      console.log('[AuthProvider] Setting login success for:', userNickname);
-      localStorage.setItem('nickname', userNickname);
-      localStorage.setItem('isAuthenticated', 'true');
-      setIsAuthenticated(true);
-
-      try {
+      if (!isAuthenticated) {
+        console.log('[AuthProvider] Setting login success for:', userNickname);
+        localStorage.setItem('nickname', userNickname);
+        localStorage.setItem('isAuthenticated', 'true');
+        setIsAuthenticated(true);
         await refreshTokenRegularly();
-      } catch (error) {
-        console.error('Initial token refresh failed:', error);
       }
     },
-    [refreshTokenRegularly],
+    [isAuthenticated, refreshTokenRegularly],
   );
 
   useEffect(() => {

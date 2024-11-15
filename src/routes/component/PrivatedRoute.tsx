@@ -17,8 +17,7 @@ type PrivateRouteProps = {
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
   const [shouldShowModal, setShouldShowModal] = useState(false);
-  const [isProcessingAuth, setIsProcessingAuth] = useState(false);
-  const { isAuthenticated, handleLoginSuccess: authLoginSuccess } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -28,14 +27,9 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   console.log('[PrivateRoute] Current state:', {
     path: location.pathname,
     isAuthenticated,
-    isProcessingAuth,
   });
 
-  const {
-    data: userInfo,
-    isError: userInfoError,
-    isLoading,
-  } = useGetUserInfo({
+  const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
     onError: (error: AxiosError<ApiErrorResponse>) => {
       console.error('사용자 정보 요청 실패:', error);
@@ -54,56 +48,10 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   });
 
   useEffect(() => {
-    const processAuth = async () => {
-      if (isLoading || isProcessingAuth) return;
-      setIsProcessingAuth(true);
-
-      try {
-        console.log('[PrivateRoute] Processing auth:', {
-          isProtectedPath,
-          hasUserInfo: !!userInfo?.nickname,
-          isAuthenticated,
-        });
-
-        if (userInfo?.nickname) {
-          await authLoginSuccess(userInfo.nickname);
-          // Promise executor를 수정하여 타입스크립트 오류 해결
-          await new Promise<void>((resolve) => {
-            setTimeout(() => {
-              resolve();
-            }, 100);
-          });
-        }
-
-        const hasValidAuth = isAuthenticated || !!userInfo?.nickname;
-
-        if (isProtectedPath && !hasValidAuth) {
-          console.log('[PrivateRoute] No valid auth, redirecting to home');
-          navigate('/', { replace: true });
-        }
-      } catch (error) {
-        console.error('인증 처리 실패:', error);
-        if (isProtectedPath) {
-          navigate('/', { replace: true });
-        } else {
-          setShouldShowModal(true);
-        }
-      } finally {
-        setIsProcessingAuth(false);
-      }
-    };
-
-    processAuth();
-  }, [
-    userInfo?.nickname,
-    isAuthenticated,
-    authLoginSuccess,
-    isProtectedPath,
-    navigate,
-    userInfoError,
-    isLoading,
-    isProcessingAuth,
-  ]);
+    if (isProtectedPath && !isAuthenticated && !isLoading && !userInfo?.nickname) {
+      navigate('/', { replace: true });
+    }
+  }, [isProtectedPath, isAuthenticated, userInfo, isLoading, navigate]);
 
   const handleCloseModal = () => {
     if (window.history.length > 2) {
@@ -117,7 +65,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     setShouldShowModal(false);
   };
 
-  if (isLoading || isProcessingAuth) return null;
+  if (isLoading) return null;
 
   if (shouldShowModal) {
     return (
@@ -130,7 +78,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     );
   }
 
-  if (userInfo?.nickname && (isAuthenticated || isProcessingAuth)) {
+  if (userInfo?.nickname || isAuthenticated) {
     return children;
   }
 
