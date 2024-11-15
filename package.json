@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "hompage": "https://www.inplace.my",
   "scripts": {
     "dev:mock": "cross-env REACT_APP_RUN_MSW=true npm run dev",
     "dev": "vite",
