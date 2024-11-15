@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { AiFillDislike, AiFillLike } from 'react-icons/ai';
 import { AddressInfo } from '@/types';
 import { Text } from '@/components/common/typography/Text';
+import FallbackImage from '@/components/common/Items/FallbackImage';
 
 interface CommentStepProps {
   isLiked: boolean | null;
@@ -46,7 +47,9 @@ export default function CommentStep({ isLiked, onBack, onSubmit, placeInfo }: Co
       </TextWrapper>
 
       <PlaceSection>
-        <PlaceImage src={placeInfo.menuInfos.menuImgUrls[0]} alt="Restaurant Menu" />
+        <ImageWrapper>
+          <FallbackImage src={placeInfo.menuInfos.menuImgUrls[0]} alt="Restaurant Menu" />
+        </ImageWrapper>
         <PlaceInfo>
           <TextWrapper className="name">
             <Text size="m" weight="bold" style={{ color: '#c6c6c6' }}>
@@ -122,7 +125,7 @@ const PlaceSection = styled.div`
   position: relative;
 `;
 
-const PlaceImage = styled.img`
+const ImageWrapper = styled.div`
   width: 10rem;
   height: 10rem;
   object-fit: cover;
