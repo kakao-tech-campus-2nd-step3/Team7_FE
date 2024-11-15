@@ -37,7 +37,7 @@ const SearchInputWrapper = styled.div`
   background: #414141;
   padding: 12px 16px;
   border: 1.5px solid #a5a5a5;
-  border-radius: '16px';
+  border-radius: 16px;
   z-index: 3;
 `;
 
