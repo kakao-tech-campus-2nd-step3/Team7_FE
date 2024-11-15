@@ -26,7 +26,6 @@ export default function InfoTap({ facilityInfo, openHour, menuInfos, longitude, 
   const [moreMenu, setMoreMenu] = useState(false);
   const lat = Number(latitude);
   const lng = Number(longitude);
-  console.log(lat, lng);
 
   return (
     <Wrapper>

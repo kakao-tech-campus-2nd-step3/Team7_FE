@@ -9,8 +9,6 @@ interface GetAllInfluencersParams {
 }
 
 export const getAllInfluencers = async ({ page, size }: GetAllInfluencersParams) => {
-  console.log('Fetching with params:', { page, size });
-
   const params = new URLSearchParams({
     page: page.toString(),
     size: size.toString(),

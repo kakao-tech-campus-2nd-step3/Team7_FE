@@ -1,15 +1,8 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
-import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
-
-interface ApiErrorResponse {
-  message: string;
-  code: string;
-  status: number;
-}
+import { useGetUserInfo, isAuthorizationError } from '@/api/hooks/useGetUserInfo';
 
 type PrivateRouteProps = {
   children: ReactElement;
@@ -17,68 +10,57 @@ type PrivateRouteProps = {
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
   const [shouldShowModal, setShouldShowModal] = useState(false);
-  const { isAuthenticated, handleLoginSuccess: authLoginSuccess } = useAuth();
+  const { isAuthenticated, handleLoginSuccess } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const {
-    data: userInfo,
-    isError: userInfoError,
-    isLoading,
-  } = useGetUserInfo({
+  const directRedirectPaths = ['/choice', '/auth'];
+  const isProtectedPath = directRedirectPaths.includes(location.pathname);
+
+  console.log('[PrivateRoute] Current state:', {
+    path: location.pathname,
+    isAuthenticated,
+  });
+
+  const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
-    onError: (error: AxiosError<ApiErrorResponse>) => {
+    enabled: true,
+    onSuccess: (data) => {
+      if (data?.nickname && !isAuthenticated) {
+        handleLoginSuccess(data.nickname);
+      }
+    },
+    onError: (error: unknown) => {
+      console.log('Error occurred:', error);
+
+      if (isAuthorizationError(error)) {
+        console.log('[PrivateRoute] Unauthorized access:', {
+          message: error.response.data.message,
+          status: error.response.status,
+        });
+
+        if (isProtectedPath) {
+          navigate('/', { replace: true });
+        } else {
+          setShouldShowModal(true);
+        }
+        return;
+      }
+
       console.error('사용자 정보 요청 실패:', error);
-      if (directRedirectPaths.includes(location.pathname)) {
-        navigate('/');
+      if (isProtectedPath) {
+        navigate('/', { replace: true });
       } else {
         setShouldShowModal(true);
       }
     },
   });
 
-  const directRedirectPaths = ['/choice', '/auth'];
-
   useEffect(() => {
-    const processAuth = async () => {
-      if (isLoading) return;
-
-      if (directRedirectPaths.includes(location.pathname)) {
-        if (!isAuthenticated || userInfoError || !userInfo?.nickname) {
-          navigate('/');
-          return;
-        }
-      }
-
-      if (userInfo?.nickname) {
-        try {
-          await authLoginSuccess(userInfo.nickname);
-          if (!isAuthenticated) {
-            if (directRedirectPaths.includes(location.pathname)) {
-              navigate('/');
-            } else {
-              setShouldShowModal(true);
-            }
-          }
-        } catch (error) {
-          console.error('인증 처리 실패:', error);
-          if (directRedirectPaths.includes(location.pathname)) {
-            navigate('/');
-          } else {
-            setShouldShowModal(true);
-          }
-        }
-      } else if (!isAuthenticated) {
-        if (directRedirectPaths.includes(location.pathname)) {
-          navigate('/');
-        } else {
-          setShouldShowModal(true);
-        }
-      }
-    };
-
-    processAuth();
-  }, [userInfo?.nickname, isAuthenticated, authLoginSuccess, location.pathname, navigate, userInfoError, isLoading]);
+    if (isProtectedPath && !isAuthenticated && !isLoading && !userInfo?.nickname) {
+      navigate('/', { replace: true });
+    }
+  }, [isProtectedPath, isAuthenticated, userInfo, isLoading, navigate]);
 
   const handleCloseModal = () => {
     if (window.history.length > 2) {
@@ -88,13 +70,22 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     }
   };
 
-  const handleModalSuccess = () => {
+  const handleModalSuccess = async () => {
     setShouldShowModal(false);
+    if (userInfo?.nickname) {
+      await handleLoginSuccess(userInfo.nickname);
+    }
   };
+
+  useEffect(() => {
+    if (userInfo?.nickname && !isAuthenticated) {
+      handleLoginSuccess(userInfo.nickname);
+    }
+  }, [userInfo, isAuthenticated, handleLoginSuccess]);
 
   if (isLoading) return null;
 
-  if (shouldShowModal) {
+  if (shouldShowModal && !isAuthenticated) {
     return (
       <LoginModal
         currentPath={location.pathname}
@@ -104,11 +95,9 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
       />
     );
   }
-
-  if (directRedirectPaths.includes(location.pathname) && (!isAuthenticated || !userInfo?.nickname)) {
-    navigate('/');
-    return null;
+  if (userInfo?.nickname || isAuthenticated) {
+    return children;
   }
 
-  return children;
+  return null;
 }

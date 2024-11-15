@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { RequestPlaceReview } from '@/types';
-import Header from '@/components/common/layouts/Header';
 import RatingStep from '@/components/Review/steps/RatingStep';
 import CommentStep from '@/components/Review/steps/CommentStep';
 import { usePostPlaceReview } from '@/api/hooks/usePostPlaceReview';
@@ -18,6 +17,7 @@ export default function ReviewPage() {
     comments: '',
   });
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [isCompleted, setIsCompleted] = useState(false);
 
   const handleRatingSubmit = (isLiked: boolean) => {
     setReviewData((prev) => ({ ...prev, likes: isLiked }));
@@ -32,7 +32,7 @@ export default function ReviewPage() {
 
     postReview(finalReviewData, {
       onSuccess: () => {
-        console.log('리뷰가 성공적으로 등록되었습니다.');
+        setIsCompleted(true);
       },
       onError: (error) => {
         console.error('리뷰 등록 중 오류가 발생했습니다:', error);
@@ -40,11 +40,21 @@ export default function ReviewPage() {
     });
   };
 
+  if (isCompleted) {
+    return (
+      <Container>
+        <MainContent>
+          <CompletionMessage>
+            <h2>완료되었습니다</h2>
+            <p>리뷰가 성공적으로 등록되었습니다.</p>
+          </CompletionMessage>
+        </MainContent>
+      </Container>
+    );
+  }
+
   return (
     <Container>
-      <HeaderWrapper>
-        <Header />
-      </HeaderWrapper>
       <MainContent>
         {currentStep === 1 && <RatingStep onSubmit={handleRatingSubmit} placeInfo={infoData} />}
         {currentStep === 2 && (
@@ -70,12 +80,27 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const HeaderWrapper = styled.div`
-  margin: 0 1rem;
-`;
-
 const MainContent = styled.main`
   flex: 1;
   padding: 1.5rem;
   padding-bottom: 5rem;
+`;
+
+const CompletionMessage = styled.div`
+  margin-top: 20rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: #9e9e9e;
+  }
 `;
