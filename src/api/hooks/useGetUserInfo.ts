@@ -1,8 +1,22 @@
-import { useSuspenseQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { fetchInstance } from '../instance';
 import { UserInfoData } from '@/types';
 
 export const getUserInfoPath = () => `/users/info`;
+
+interface ApiErrorResponse {
+  message: string;
+  code: string;
+  status: number;
+}
+
+interface QueryOptions {
+  retry?: boolean | number;
+  enabled?: boolean;
+  onError?: (error: AxiosError<ApiErrorResponse>) => void;
+}
+
 export const getUserInfo = async () => {
   try {
     const response = await fetchInstance.get<UserInfoData>(getUserInfoPath(), {
@@ -22,6 +36,12 @@ export const getUserInfo = async () => {
     throw error;
   }
 };
-export const useGetUserInfo = (options = {}) => {
-  return useSuspenseQuery({ queryKey: ['UserInfo'], queryFn: () => getUserInfo(), retry: false, ...options });
+
+export const useGetUserInfo = (options: QueryOptions = {}) => {
+  return useQuery<UserInfoData, AxiosError<ApiErrorResponse>>({
+    queryKey: ['UserInfo'],
+    queryFn: () => getUserInfo(),
+    retry: false,
+    ...options,
+  });
 };

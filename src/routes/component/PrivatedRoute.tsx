@@ -31,10 +31,19 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
 
   const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
+    enabled: !isAuthenticated,
     onError: (error: AxiosError<ApiErrorResponse>) => {
       if (error.response?.status === 401) {
         console.log('[PrivateRoute] Unauthorized access, redirecting to home');
         navigate('/', { replace: true });
+        return;
+      }
+
+      console.error('사용자 정보 요청 실패:', error);
+      if (isProtectedPath) {
+        navigate('/', { replace: true });
+      } else {
+        setShouldShowModal(true);
       }
     },
   });
@@ -59,7 +68,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
 
   if (isLoading) return null;
 
-  if (shouldShowModal) {
+  if (shouldShowModal && !isAuthenticated) {
     return (
       <LoginModal
         currentPath={location.pathname}
