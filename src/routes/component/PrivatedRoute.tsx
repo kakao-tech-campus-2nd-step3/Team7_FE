@@ -1,31 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AxiosError, isAxiosError } from 'axios';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
-import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
-
-interface ApiErrorResponse {
-  message: string;
-  code: string;
-  status: number;
-}
+import { useGetUserInfo, isAuthorizationError } from '@/api/hooks/useGetUserInfo'; // isAuthorizationError 임포트
 
 type PrivateRouteProps = {
   children: ReactElement;
-};
-
-type AxiosErrorWithResponse = AxiosError<ApiErrorResponse> & {
-  response: NonNullable<AxiosError<ApiErrorResponse>['response']>;
-};
-
-const isAuthorizationError = (error: unknown): error is AxiosErrorWithResponse => {
-  if (!isAxiosError(error)) return false;
-  if (!error.response) return false;
-
-  return (
-    error.response.status === 401 && error.response.data !== undefined && typeof error.response.data.code === 'string'
-  );
 };
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
@@ -46,9 +26,14 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     retry: false,
     enabled: true,
     onError: (error: unknown) => {
+      console.log('Error occurred:', error); // 디버깅용 로그
+
       if (isAuthorizationError(error)) {
-        // 이제 error.response는 항상 존재함이 보장됨
-        console.log('[PrivateRoute] Unauthorized access:', error.response.data.message);
+        console.log('[PrivateRoute] Unauthorized access:', {
+          message: error.response.data.message,
+          status: error.response.status,
+        });
+
         if (isProtectedPath) {
           navigate('/', { replace: true });
         } else {
@@ -56,6 +41,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
         }
         return;
       }
+
       console.error('사용자 정보 요청 실패:', error);
       if (isProtectedPath) {
         navigate('/', { replace: true });

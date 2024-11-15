@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import { fetchInstance } from '../instance';
 import { UserInfoData } from '@/types';
 
@@ -11,10 +11,23 @@ interface ApiErrorResponse {
   status: number;
 }
 
+export const isAuthorizationError = (
+  error: unknown,
+): error is AxiosError<ApiErrorResponse> & {
+  response: NonNullable<AxiosError<ApiErrorResponse>['response']>;
+} => {
+  if (!isAxiosError(error)) return false;
+  if (!error.response) return false;
+
+  return (
+    error.response.status === 401 && error.response.data !== undefined && typeof error.response.data.code === 'string'
+  );
+};
+
 interface QueryOptions {
   retry?: boolean | number;
   enabled?: boolean;
-  onError?: (error: AxiosError<ApiErrorResponse>) => void;
+  onError?: (error: unknown) => void;
 }
 
 export const getUserInfo = async () => {
@@ -30,7 +43,7 @@ export const getUserInfo = async () => {
 };
 
 export const useGetUserInfo = (options: QueryOptions = {}) => {
-  return useQuery<UserInfoData, AxiosError<ApiErrorResponse>>({
+  return useQuery<UserInfoData, unknown>({
     queryKey: ['UserInfo'],
     queryFn: () => getUserInfo(),
     retry: false,
