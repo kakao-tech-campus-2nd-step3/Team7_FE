@@ -13,12 +13,10 @@ jest.mock('@/api/hooks/useGetSearchComplete');
     { result: 'Example 2', score: 0, searchType: 'Type2' },
   ],
 });
-jest.mock('@/api/hooks/useGetSearchData', () => {
-  return {
-    ...jest.requireActual('@/api/hooks/useGetSearchData'),
-    useGetSearchData: jest.fn(),
-  };
-});
+jest.mock('@/api/hooks/useGetSearchData', () => ({
+  ...jest.requireActual('@/api/hooks/useGetSearchData'),
+  useGetSearchData: jest.fn(),
+}));
 (api.useGetSearchData as jest.Mock).mockImplementation(() => [
   {
     data: [{ influencerId: 1, influencerName: 'Test Influencer', influencerImgUrl: '', influencerJob: 'Test Infl2' }],
@@ -54,7 +52,7 @@ test('특정 키워드 검색 시 검색 결과가 잘 나오는 지 확인', as
         handleLogout: jest.fn(),
       }}
     >
-      <MemoryRouter future={{ v7_relativeSplatPath: true }}>
+      <MemoryRouter>
         <QueryClientProvider client={queryClient}>
           <SearchPage />
         </QueryClientProvider>
@@ -63,14 +61,11 @@ test('특정 키워드 검색 시 검색 결과가 잘 나오는 지 확인', as
     </AuthContext.Provider>,
   );
   const searchInput = screen.getByPlaceholderText('인플루언서, 장소를 검색해주세요!');
-  fireEvent.change(searchInput, { target: { value: '풍자' } });
+  fireEvent.change(searchInput, { target: { value: 'Influencer' } });
   fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
 
   await waitFor(() => {
     expect(screen.getByText('검색 결과')).toBeInTheDocument();
-  });
-
-  await waitFor(() => {
     expect(screen.getByText('Test Influencer')).toBeInTheDocument();
   });
 });

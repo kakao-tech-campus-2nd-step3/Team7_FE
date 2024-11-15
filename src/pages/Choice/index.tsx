@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import BaseLayout from '@/components/common/BaseLayout';
@@ -6,18 +6,34 @@ import { useGetAllInfluencers } from '@/api/hooks/useGetAllInfluencers';
 import { usePostMultipleInfluencerLike } from '@/api/hooks/usePostMultipleInfluencerLike';
 import Button from '@/components/common/Button';
 import Pagination from '@/components/common/Pagination';
-import SearchBar from '@/components/common/SearchBar';
+import InfluencerSearchBar from '@/components/common/InfluencerSearchBar';
+import { useGetSearchInfluencers } from '@/api/hooks/useGetSearchInfluencers';
+import useDebounce from '@/hooks/useDebounce';
 
 export default function ChoicePage() {
   const navigate = useNavigate();
   const { mutateAsync: postMultipleLikes } = usePostMultipleInfluencerLike();
   const [selectedInfluencers, setSelectedInfluencers] = useState<Set<number>>(new Set());
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputValue, setInputValue] = useState('');
 
-  const { data: PageableData } = useGetAllInfluencers({
+  const debouncedInputValue = useDebounce(inputValue, 300);
+
+  const { data: allInfluencersData } = useGetAllInfluencers({
     page: currentPage - 1,
     size: 10,
   });
+
+  const { data: filteredData } = useGetSearchInfluencers({
+    value: debouncedInputValue,
+    page: currentPage - 1,
+    size: 10,
+  });
+  const pageableData = debouncedInputValue ? filteredData : allInfluencersData;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedInputValue]);
 
   const handlePageChange = (pageNum: number) => {
     setCurrentPage(pageNum);
@@ -58,14 +74,14 @@ export default function ChoicePage() {
     <PageContainer>
       <LayoutWrapper>
         <SearchBarWrapper>
-          <SearchBar />
+          <InfluencerSearchBar inputValue={inputValue} setInputValue={setInputValue} />
         </SearchBarWrapper>
         <BaseLayout
           type="influencer"
           prevSubText="관심 있는 "
           mainText="인플루언서"
           SubText="를 선택하세요!"
-          items={PageableData?.content || []}
+          items={pageableData?.content || []}
           showMoreButton={false}
           isChoice
           onToggleLike={handleToggleLike}
@@ -73,10 +89,10 @@ export default function ChoicePage() {
         />
         <Pagination
           currentPage={currentPage}
-          totalPages={PageableData.totalPages}
-          totalItems={PageableData?.totalElements}
+          totalPages={pageableData?.totalPages || 0}
+          totalItems={pageableData?.totalElements}
           onPageChange={handlePageChange}
-          itemsPerPage={PageableData.pageable.pageSize}
+          itemsPerPage={pageableData?.pageable.pageSize}
         />
       </LayoutWrapper>
       <ButtonWrapper>

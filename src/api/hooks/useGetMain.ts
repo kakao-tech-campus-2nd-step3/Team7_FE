@@ -32,7 +32,7 @@ export const useGetMain = () => {
       {
         queryKey: ['influencers'],
         queryFn: getInfluencer,
-        refetchOnMount: 'always',
+        staleTime: 1000 * 60 * 5,
       },
     ],
   });

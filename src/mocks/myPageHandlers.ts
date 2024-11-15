@@ -5,6 +5,7 @@ import { getUserInfluencerPath } from '@/api/hooks/useGetUserInfluencer';
 import { getUserPlacePath } from '@/api/hooks/useGetUserPlace';
 import { getUserReviewPath } from '@/api/hooks/useGetUserReview';
 import { postPlaceReviewPath } from '@/api/hooks/usePostPlaceReview';
+import { patchNicknamePath } from '@/api/hooks/usePatchNickname';
 
 const mockInfluencers = [
   {
@@ -473,6 +474,12 @@ export const myHandlers = [
   }),
   rest.post(`${BASE_URL}${postPlaceReviewPath('1')}`, async (_, res, ctx) => {
     return res(ctx.status(200), ctx.json({ message: 'send successfully.' }));
+  }),
+  rest.patch(`${BASE_URL}${patchNicknamePath()}`, async (req, res, ctx) => {
+    const params = req.url.searchParams;
+    const nickname = params.get('nickname');
+
+    return res(ctx.status(200), ctx.json({ message: 'Nickname updated successfully.', nickname }));
   }),
 ];
 export default myHandlers;
