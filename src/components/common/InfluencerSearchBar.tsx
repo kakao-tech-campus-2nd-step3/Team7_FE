@@ -9,7 +9,7 @@ interface SearchBarProps {
 export default function InfluencerSearchBar({
   inputValue,
   setInputValue,
-  placeholder = '키워드를 입력해주세요!',
+  placeholder = '인플루언서 이름을 입력해주세요!',
 }: SearchBarProps) {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newInputValue = event.target.value;
