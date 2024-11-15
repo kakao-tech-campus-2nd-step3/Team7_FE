@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
+import { AxiosError, isAxiosError } from 'axios';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 import { useGetUserInfo } from '@/api/hooks/useGetUserInfo';
@@ -13,6 +13,19 @@ interface ApiErrorResponse {
 
 type PrivateRouteProps = {
   children: ReactElement;
+};
+
+type AxiosErrorWithResponse = AxiosError<ApiErrorResponse> & {
+  response: NonNullable<AxiosError<ApiErrorResponse>['response']>;
+};
+
+const isAuthorizationError = (error: unknown): error is AxiosErrorWithResponse => {
+  if (!isAxiosError(error)) return false;
+  if (!error.response) return false;
+
+  return (
+    error.response.status === 401 && error.response.data !== undefined && typeof error.response.data.code === 'string'
+  );
 };
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
@@ -32,13 +45,17 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
     enabled: true,
-    onError: (error: AxiosError<ApiErrorResponse>) => {
-      if (error.response?.status === 401) {
-        console.log('[PrivateRoute] Unauthorized access, redirecting to home');
-        navigate('/', { replace: true });
+    onError: (error: unknown) => {
+      if (isAuthorizationError(error)) {
+        // 이제 error.response는 항상 존재함이 보장됨
+        console.log('[PrivateRoute] Unauthorized access:', error.response.data.message);
+        if (isProtectedPath) {
+          navigate('/', { replace: true });
+        } else {
+          setShouldShowModal(true);
+        }
         return;
       }
-
       console.error('사용자 정보 요청 실패:', error);
       if (isProtectedPath) {
         navigate('/', { replace: true });
