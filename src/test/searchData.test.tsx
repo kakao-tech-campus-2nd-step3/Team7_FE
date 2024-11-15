@@ -49,7 +49,7 @@ test('특정 키워드 검색 시 검색 결과가 잘 나오는 지 확인', as
       value={{
         isAuthenticated: false,
         handleLoginSuccess: jest.fn(),
-        logout: jest.fn(),
+        handleLogout: jest.fn(),
       }}
     >
       <MemoryRouter>

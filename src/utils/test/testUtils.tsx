@@ -13,7 +13,7 @@ export function renderWithQueryClient(children: React.ReactNode) {
       value={{
         isAuthenticated: false,
         handleLoginSuccess: jest.fn(),
-        logout: jest.fn(),
+        handleLogout: jest.fn(),
       }}
     >
       <MemoryRouter future={{ v7_relativeSplatPath: true }}>

@@ -18,7 +18,7 @@ describe('좋아요/취소 기능 테스트', () => {
         value={{
           isAuthenticated: true,
           handleLoginSuccess: jest.fn(),
-          logout: jest.fn(),
+          handleLogout: jest.fn(),
         }}
       >
         <MemoryRouter>

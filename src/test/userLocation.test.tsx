@@ -38,7 +38,7 @@ test('사용자 위치 기반 내주변 비디오 호출 확인', async () => {
       value={{
         isAuthenticated: true,
         handleLoginSuccess: jest.fn(),
-        logout: jest.fn(),
+        handleLogout: jest.fn(),
       }}
     >
       <MemoryRouter>
