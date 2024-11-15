@@ -141,7 +141,7 @@ describe('인플루언서 페이지 페이지네이션 기능 테스트', () => 
         value={{
           isAuthenticated: false,
           handleLoginSuccess: jest.fn(),
-          logout: jest.fn(),
+          handleLogout: jest.fn(),
         }}
       >
         <MemoryRouter future={{ v7_relativeSplatPath: true }}>
