@@ -17,7 +17,6 @@ type Props = {
   items: InfluencerData[] | SpotData[] | UserPlaceData[];
   showMoreButton?: boolean;
   isChoice?: boolean;
-  totalElement?: number;
 } & (
   | {
       isChoice: true;
@@ -41,7 +40,6 @@ export default function BaseLayout({
   isChoice = false,
   onToggleLike,
   selectedInfluencers,
-  totalElement = 0,
 }: Props) {
   const navigate = useNavigate();
 
@@ -56,10 +54,10 @@ export default function BaseLayout({
           />
         );
       }
-      return <InfluencerList items={items as InfluencerData[]} useBackCard={false} totalElement={totalElement} />;
+      return <InfluencerList items={items as InfluencerData[]} useBackCard={false} />;
     }
     if (type === 'influencer') {
-      return <InfluencerSection items={items as InfluencerData[]} totalElement={totalElement} />;
+      return <InfluencerSection items={items as InfluencerData[]} />;
     }
     if (type === 'spot') {
       return <SpotSection items={items as SpotData[]} />;

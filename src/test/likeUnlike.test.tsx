@@ -4,30 +4,6 @@ import { MemoryRouter } from 'react-router-dom';
 import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { AuthContext } from '@/provider/Auth';
 import PlaceItem from '@/components/Map/PlaceSection/PlaceItem';
-import * as api from '@/api/hooks/useGetAllInfluencers';
-
-jest.mock('@/api/hooks/useGetAllInfluencers');
-(api.useGetAllInfluencers as jest.Mock).mockReturnValue({
-  data: {
-    totalElement: 2,
-    content: [
-      {
-        influencerId: 1,
-        influencerName: '성시경',
-        influencerImgUrl: 'https://via.placeholder.com/100',
-        influencerJob: '모델',
-        likes: true,
-      },
-      {
-        influencerId: 2,
-        influencerName: '풍자',
-        influencerImgUrl: 'https://via.placeholder.com/100',
-        influencerJob: '배우',
-        likes: false,
-      },
-    ],
-  },
-});
 
 describe('좋아요/취소 기능 테스트', () => {
   let queryClient: QueryClient;
@@ -36,8 +12,8 @@ describe('좋아요/취소 기능 테스트', () => {
     queryClient = new QueryClient();
   });
 
-  test('인플루언서 좋아요/좋아요 취소가 반영되는지 확인', async () => {
-    render(
+  const renderWithProviders = (ui: React.ReactNode) => {
+    return render(
       <AuthContext.Provider
         value={{
           isAuthenticated: true,
@@ -45,21 +21,13 @@ describe('좋아요/취소 기능 테스트', () => {
           handleLogout: jest.fn(),
         }}
       >
-        <MemoryRouter future={{ v7_relativeSplatPath: true }}>
-          <QueryClientProvider client={queryClient}>
-            <InfluencerItem
-              influencerId={2}
-              influencerName="풍자"
-              influencerImgUrl="https://via.placeholder.com/100"
-              influencerJob="배우"
-              likes={false}
-            />
-          </QueryClientProvider>
+        <MemoryRouter>
+          <QueryClientProvider client={queryClient}>{ui}</QueryClientProvider>
         </MemoryRouter>
       </AuthContext.Provider>,
     );
-
-    const likeButton = screen.getByRole('button', { hidden: true });
+  };
+  const testLikeButtonFunctionality = async (likeButton: HTMLElement) => {
     expect(likeButton).toBeInTheDocument();
     expect(screen.queryByTestId('PiHeartFill')).not.toBeInTheDocument();
 
@@ -74,54 +42,44 @@ describe('좋아요/취소 기능 테스트', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('PiHeartFill')).not.toBeInTheDocument();
     });
+  };
+
+  test('인플루언서 좋아요/좋아요 취소가 반영되는지 확인', async () => {
+    renderWithProviders(
+      <InfluencerItem
+        influencerId={2}
+        influencerName="풍자"
+        influencerImgUrl="https://via.placeholder.com/100"
+        influencerJob="배우"
+        likes={false}
+      />,
+    );
+
+    const likeButton = screen.getByRole('button', { hidden: true });
+    await testLikeButtonFunctionality(likeButton);
   });
 
   test('장소 좋아요/좋아요 취소가 반영되는지 확인', async () => {
-    render(
-      <AuthContext.Provider
-        value={{
-          isAuthenticated: true,
-          handleLoginSuccess: jest.fn(),
-          handleLogout: jest.fn(),
+    renderWithProviders(
+      <PlaceItem
+        placeId={2}
+        placeName="료코"
+        address={{
+          address1: '대구',
+          address2: '북구',
+          address3: '대학로',
         }}
-      >
-        <MemoryRouter future={{ v7_relativeSplatPath: true }}>
-          <QueryClientProvider client={queryClient}>
-            <PlaceItem
-              placeId={2}
-              placeName="료코"
-              address={{
-                address1: '대구',
-                address2: '북구',
-                address3: '대학로',
-              }}
-              category="맛집"
-              influencerName="성시경"
-              longitude="126.570667"
-              latitude="33.450701"
-              likes={false}
-              onClick={() => {}}
-              menuImgUrl="https://via.placeholder.com/500"
-            />
-          </QueryClientProvider>
-        </MemoryRouter>
-      </AuthContext.Provider>,
+        category="맛집"
+        influencerName="성시경"
+        longitude="126.570667"
+        latitude="33.450701"
+        likes={false}
+        onClick={() => {}}
+        menuImgUrl="https://via.placeholder.com/500"
+      />,
     );
 
     const likeButton = screen.getByRole('button', { hidden: true });
-    expect(likeButton).toBeInTheDocument();
-    expect(screen.queryByTestId('PiHeartFill')).not.toBeInTheDocument();
-
-    fireEvent.click(likeButton);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('PiHeartFill')).toBeInTheDocument();
-    });
-
-    fireEvent.click(likeButton);
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('PiHeartFill')).not.toBeInTheDocument();
-    });
+    await testLikeButtonFunctionality(likeButton);
   });
 });

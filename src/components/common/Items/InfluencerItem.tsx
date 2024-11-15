@@ -12,12 +12,10 @@ import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
 import FallbackImage from './FallbackImage';
-import { useGetAllInfluencers } from '@/api/hooks/useGetAllInfluencers';
 
 interface InfluencerItemProps extends InfluencerData {
   useBackCard?: boolean;
   useNav?: boolean;
-  totalElement?: number;
 }
 
 export default function InfluencerItem({
@@ -26,7 +24,6 @@ export default function InfluencerItem({
   influencerImgUrl,
   influencerJob,
   likes,
-  totalElement = 0,
   useBackCard = true,
   useNav = true,
 }: InfluencerItemProps) {
@@ -35,16 +32,6 @@ export default function InfluencerItem({
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostInfluencerLike();
-  const { data: influencersData } = useGetAllInfluencers({ page: 0, size: totalElement });
-
-  useEffect(() => {
-    if (influencersData) {
-      const influencer = influencersData.content.find((item) => item.influencerId === influencerId);
-      if (influencer) {
-        setIsLike(influencer.likes);
-      }
-    }
-  }, [influencersData, influencerId]);
 
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {

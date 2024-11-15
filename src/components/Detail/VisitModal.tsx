@@ -32,7 +32,7 @@ export default function VisitModal({ id, placeName, onClose }: { id: number; pla
     try {
       const { status } = await refetch();
       if (status === 'success') {
-        setMessage('완료되었습니다.');
+        setMessage('카카오톡을 확인해주세요!');
       } else {
         setMessage('에러가 발생했습니다. 다시 시도해주세요.');
       }
