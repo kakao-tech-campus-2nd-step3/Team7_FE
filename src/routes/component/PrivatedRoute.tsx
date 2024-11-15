@@ -31,7 +31,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
 
   const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
-    enabled: !isAuthenticated,
+    enabled: true,
     onError: (error: AxiosError<ApiErrorResponse>) => {
       if (error.response?.status === 401) {
         console.log('[PrivateRoute] Unauthorized access, redirecting to home');
