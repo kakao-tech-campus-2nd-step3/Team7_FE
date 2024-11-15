@@ -10,6 +10,7 @@ import Loading from '@/components/common/layouts/Loading';
 import Error from '@/components/common/layouts/Error';
 import MainSkeleton from '@/components/Main/MainSkeleton';
 import DetailSkeleton from '@/components/Detail/DetailSkeleton';
+import useScrollToTop from '@/hooks/useScrollToTop';
 
 export default function MainLayout() {
   const location = useLocation();
@@ -22,6 +23,7 @@ export default function MainLayout() {
     }
     return <Loading size={50} />;
   };
+  useScrollToTop();
   return (
     <Wrapper>
       <Header />

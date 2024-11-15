@@ -114,6 +114,7 @@ export type FacilityInfo = {
   forDisabled?: string;
   nursery?: string;
   smokingRoom?: string;
+  message?: string;
 };
 
 export type Menu = {
