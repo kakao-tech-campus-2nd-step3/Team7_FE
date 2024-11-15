@@ -3,67 +3,86 @@ import { FcInfo } from 'react-icons/fc';
 import styled from 'styled-components';
 
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Button from '@/components/common/Button';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { useGetSendInfo } from '@/api/hooks/useGetSendInfo';
+import useAuth from '@/hooks/useAuth';
+import LoginModal from '../common/modals/LoginModal';
 
 export default function VisitModal({ id, placeName, onClose }: { id: number; placeName: string; onClose: () => void }) {
-  const { refetch } = useGetSendInfo(String(id));
+  const isAuthenticated = useAuth();
+  const location = useLocation();
+  const [isSend, setIsSend] = useState(false);
+  const { refetch } = useGetSendInfo(String(id), false);
   const [message, setMessage] = useState<string>('');
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const handleModalClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
   const handleSendInfo = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
+    if (!isAuthenticated) {
+      setMessage('로그인이 필요합니다.');
+      return;
+    }
+    setIsSend(true);
     try {
-      const response = await refetch();
-      if (response.data.success) {
-        setMessage('완료되었습니다.');
+      const { status } = await refetch();
+      if (status === 'success' && isSend) {
+        setMessage('카카오톡을 확인해주세요!');
+      } else {
+        setMessage('에러가 발생했습니다. 다시 시도해주세요.');
       }
     } catch (error) {
-      console.error('실패: 정보를 보내는 데 실패했습니다.');
+      setMessage('에러가 발생했습니다. 관리자에게 문의하세요.');
+    } finally {
+      setIsSend(false);
     }
   };
   return (
-    <Overlay onClick={() => onClose()}>
-      <Wrapper onClick={handleModalClick}>
-        <DescriptionSection>
-          <FcInfo size={180} />
-          <Paragraph size="l" weight="normal">
-            {message || `${placeName}에 대한 정보를\n 카카오톡으로 보내드릴까요?`}
-          </Paragraph>
-        </DescriptionSection>
-        <BtnContainer hasMessage={message === '완료되었습니다.'}>
-          {message === '완료되었습니다.' ? (
-            <Button
-              variant="kakao"
-              style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-              onClick={() => onClose()}
-            >
-              완료
-            </Button>
-          ) : (
-            <>
-              <Button
-                variant="blackOutline"
-                style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-                onClick={() => onClose()}
-              >
-                취소
-              </Button>
+    <>
+      <Overlay onClick={() => onClose()}>
+        <Wrapper onClick={handleModalClick}>
+          <DescriptionSection>
+            <FcInfo size={180} />
+            <Paragraph size="l" weight="normal">
+              {message || `${placeName}에 대한 정보를\n 카카오톡으로 보내드릴까요?`}
+            </Paragraph>
+          </DescriptionSection>
+          <BtnContainer $hasMessage={!!message}>
+            {message ? (
               <Button
                 variant="kakao"
                 style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
-                onClick={handleSendInfo}
+                onClick={() => onClose()}
               >
-                확인
+                완료
               </Button>
-            </>
-          )}
-        </BtnContainer>
-      </Wrapper>
-    </Overlay>
+            ) : (
+              <>
+                <Button
+                  variant="blackOutline"
+                  style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+                  onClick={() => onClose()}
+                >
+                  취소
+                </Button>
+                <Button
+                  variant="kakao"
+                  style={{ fontWeight: 'bold', width: '170px', height: '46px', fontSize: '18px' }}
+                  onClick={handleSendInfo}
+                >
+                  확인
+                </Button>
+              </>
+            )}
+          </BtnContainer>
+        </Wrapper>
+      </Overlay>
+      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+    </>
   );
 }
 const Overlay = styled.div`
@@ -104,8 +123,8 @@ const DescriptionSection = styled.div`
     white-space: pre-line;
   }
 `;
-const BtnContainer = styled.div<{ hasMessage: boolean }>`
+const BtnContainer = styled.div<{ $hasMessage: boolean }>`
   display: flex;
-  justify-content: ${({ hasMessage }) => (hasMessage ? 'center' : 'space-between')};
+  justify-content: ${({ $hasMessage }) => ($hasMessage ? 'center' : 'space-between')};
   width: 382px;
 `;

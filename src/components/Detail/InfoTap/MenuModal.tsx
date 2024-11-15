@@ -40,7 +40,7 @@ export default function MenuModal({ images }: { images: string[] }) {
           />
         ))}
       </ImageWrapper>
-      <Modal blockScrollOnMount={false} isOpen={isOpen} onClose={closeModal} isCentered>
+      <Modal blockScrollOnMount isOpen={isOpen} onClose={closeModal} isCentered>
         <ModalOverlay />
         <ModalContent
           maxWidth="800px"
@@ -48,7 +48,7 @@ export default function MenuModal({ images }: { images: string[] }) {
           backgroundColor="white"
           height="700px"
           margin="50px auto"
-          position="relative"
+          zIndex={20000}
         >
           <ModalHeader padding="20px 0px" fontSize="20px">
             Menu {currentImageIndex + 1}/{images.length}
@@ -86,7 +86,7 @@ export default function MenuModal({ images }: { images: string[] }) {
                   src={src}
                   alt={`Thumbnail ${index + 1}`}
                   onClick={() => setCurrentImageIndex(index)}
-                  isActive={currentImageIndex === index}
+                  $isActive={currentImageIndex === index}
                 />
               ))}
             </ThumbnailContainer>
@@ -137,12 +137,12 @@ const ThumbnailContainer = styled.div`
   gap: 10px;
 `;
 
-const Thumbnail = styled.img<{ isActive: boolean }>`
+const Thumbnail = styled.img<{ $isActive: boolean }>`
   width: 80px;
   aspect-ratio: 2/1.8;
   cursor: pointer;
-  border: ${({ isActive }) => (isActive ? '2px solid #55ebff' : '2px solid transparent')};
-  opacity: ${({ isActive }) => (isActive ? 1 : 0.6)};
+  border: ${({ $isActive }) => ($isActive ? '2px solid #55ebff' : '2px solid transparent')};
+  opacity: ${({ $isActive }) => ($isActive ? 1 : 0.6)};
   transition:
     border 0.3s ease,
     opacity 0.3s ease;

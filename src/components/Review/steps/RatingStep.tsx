@@ -3,6 +3,7 @@ import { AiFillLike, AiFillDislike } from 'react-icons/ai';
 import { AddressInfo } from '@/types';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import { Text } from '@/components/common/typography/Text';
+import FallbackImage from '@/components/common/Items/FallbackImage';
 
 interface RatingStepProps {
   onSubmit: (isLiked: boolean) => void;
@@ -37,7 +38,9 @@ export default function RatingStep({ onSubmit, placeInfo }: RatingStepProps) {
 
       <PlaceSection>
         <ImageFrame>
-          <PlaceImage src={placeInfo.menuInfos.menuImgUrls[0]} alt="Restaurant Menu" />
+          <ImageWrapper>
+            <FallbackImage src={placeInfo.menuInfos.menuImgUrls[0]} alt="Restaurant Menu" />
+          </ImageWrapper>
         </ImageFrame>
         <PlaceInfo>
           <TextWrapper className="name">
@@ -131,7 +134,7 @@ const ImageFrame = styled.div`
   }
 `;
 
-const PlaceImage = styled.img`
+const ImageWrapper = styled.div`
   width: 12rem;
   height: 12rem;
   object-fit: cover;

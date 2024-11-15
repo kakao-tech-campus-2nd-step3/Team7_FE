@@ -4,13 +4,14 @@ import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
 import styled from 'styled-components';
 
 import { MdLocationOn } from 'react-icons/md';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Paragraph } from '@/components/common/typography/Paragraph';
 import backCard from '@/assets/images/back-card.png';
 import { InfluencerData } from '@/types';
 import { usePostInfluencerLike } from '@/api/hooks/usePostInfluencerLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import FallbackImage from './FallbackImage';
 
 interface InfluencerItemProps extends InfluencerData {
   useBackCard?: boolean;
@@ -26,7 +27,7 @@ export default function InfluencerItem({
   useBackCard = true,
   useNav = true,
 }: InfluencerItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -36,7 +37,7 @@ export default function InfluencerItem({
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
@@ -56,14 +57,22 @@ export default function InfluencerItem({
     [isLike, influencerId, postLike],
   );
 
+  useEffect(() => {
+    setIsLike(likes);
+  }, [likes]);
+
   return (
     <>
       <Wrapper as={useNav ? Link : 'div'} to={useNav ? `/map?influencer=${encodeURIComponent(influencerName)}` : ''}>
         <ImageContainer>
-          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          <LikeIcon role="button" onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? (
+              <PiHeartFill color="#fe7373" size={32} data-testid="PiHeartFill" />
+            ) : (
+              <PiHeartLight color="white" size={32} data-testid="PiHeartLight" />
+            )}
           </LikeIcon>
-          <FrontImage src={influencerImgUrl} alt={influencerName} />
+          <FallbackImage src={influencerImgUrl} alt={influencerName} />
           {useBackCard && useNav && (
             <BackImageWrapper>
               <MdLocationOn size={50} color="#55EBFF" />
@@ -73,26 +82,30 @@ export default function InfluencerItem({
             </BackImageWrapper>
           )}
         </ImageContainer>
-        <Paragraph size="m" weight="bold" variant="white">
-          {influencerName}
-        </Paragraph>
-        <Paragraph size="xs" weight="normal" variant="white">
-          {influencerJob}
-        </Paragraph>
+        <TextWrapper>
+          <Paragraph size="m" weight="bold" variant="white">
+            {influencerName}
+          </Paragraph>
+          <Paragraph size="xs" weight="normal" variant="white">
+            {influencerJob}
+          </Paragraph>
+        </TextWrapper>
       </Wrapper>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }
 
 const Wrapper = styled(Link)`
   width: 170px;
-  height: 278px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   text-decoration: none;
+  gap: 10px;
 `;
 
 const ImageContainer = styled.div`
@@ -101,7 +114,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: auto;
+  margin-bottom: 4px;
 
   &:hover {
     & > div:nth-child(2) {
@@ -112,18 +125,6 @@ const ImageContainer = styled.div`
       opacity: 1;
     }
   }
-`;
-
-const FrontImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin-bottom: 8px;
-  border-radius: 6px;
-  transition: opacity 0.6s ease-in-out;
 `;
 
 const BackImageWrapper = styled.div`
@@ -150,4 +151,10 @@ const LikeIcon = styled.div`
   top: 12px;
   z-index: 100;
   cursor: pointer;
+`;
+
+const TextWrapper = styled.div`
+  > *:not(:first-child) {
+    margin-top: 6px;
+  }
 `;

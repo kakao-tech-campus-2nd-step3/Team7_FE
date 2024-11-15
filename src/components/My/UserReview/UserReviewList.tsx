@@ -3,7 +3,7 @@ import { UserReviewData } from '@/types';
 import UserReviewItem from './UserReviewItem';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function UserReviewList({ items }: { items: UserReviewData[] }) {
+export default function UserReviewList({ items = [] }: { items: UserReviewData[] }) {
   return (
     <ListContainer>
       {items.length === 0 ? (
@@ -15,7 +15,6 @@ export default function UserReviewList({ items }: { items: UserReviewData[] }) {
               <UserReviewItem
                 key={review.reviewId}
                 reviewId={review.reviewId}
-                userNickname={review.userNickname}
                 place={review.place}
                 likes={review.likes}
                 comment={review.comment}
@@ -35,4 +34,26 @@ const ListContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 30px;
+  overflow-y: auto;
+  padding-right: 10px;
+  box-sizing: content-box;
+  &::-webkit-scrollbar {
+    width: 6px;
+    color: #1f1f1f;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #1f1f1f;
+    border-radius: 4px;
+    border: none;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #1f1f1f;
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 `;

@@ -4,10 +4,14 @@ import { fetchInstance } from '../instance';
 import { MultipleLikeRequest } from '@/types';
 
 export const postMultipleInfluencerLike = async ({ influencerIds, likes }: MultipleLikeRequest) => {
-  const response = await fetchInstance.post('/influencers/multiple/likes', {
-    influencerIds,
-    likes,
-  });
+  const response = await fetchInstance.post(
+    '/influencers/multiple/likes',
+    {
+      influencerIds,
+      likes,
+    },
+    { withCredentials: true },
+  );
   return response.data;
 };
 

@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Text } from '@/components/common/typography/Text';
 import { PlaceData } from '@/types';
 import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
-import BasicImage from '@/assets/images/basic-image.png';
+import FallbackImage from '@/components/common/Items/FallbackImage';
 
 interface PlaceItemProps extends PlaceData {
   onClick: () => void;
@@ -25,26 +25,21 @@ export default function PlaceItem({
   menuImgUrl,
   onClick,
 }: PlaceItemProps) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { mutate: postLike } = usePostPlaceLike();
 
-  const handleBasicImg = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-    e.currentTarget.src = BasicImage;
-  };
-
   const handleClickLike = useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
       const newLikeStatus = !isLike;
-      console.log('New like status:', newLikeStatus);
       postLike(
         { placeId, likes: newLikeStatus },
         {
@@ -59,10 +54,16 @@ export default function PlaceItem({
     },
     [isLike, placeId, postLike],
   );
+  useEffect(() => {
+    setIsLike(likes);
+  }, [likes]);
+
   return (
     <>
       <PlaceCard key={placeId} onClick={onClick}>
-        <PlaceImage src={menuImgUrl} onError={handleBasicImg} alt={placeName} />
+        <ImageContainer>
+          <FallbackImage src={menuImgUrl} alt={placeName} />
+        </ImageContainer>
         <CardContent>
           <PlaceDetails>
             <Text size="l" weight="bold" variant="white">
@@ -79,12 +80,18 @@ export default function PlaceItem({
               </Text>
             </InfluencerName>
           </PlaceDetails>
-          <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
-            {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
+          <LikeIcon role="button" onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
+            {isLike ? (
+              <PiHeartFill color="#fe7373" size={32} data-testid="PiHeartFill" />
+            ) : (
+              <PiHeartLight color="white" size={32} data-testid="PiHeartLight" />
+            )}
           </LikeIcon>
         </CardContent>
       </PlaceCard>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }
@@ -97,14 +104,14 @@ const PlaceCard = styled.div`
   box-sizing: border-box;
 `;
 
-const PlaceImage = styled.img`
+const ImageContainer = styled.div`
   position: absolute;
   width: 100px;
   height: 100px;
   left: 10px;
   top: 30px;
-  border-radius: 30px;
   object-fit: cover;
+  border-radius: 30px;
 `;
 
 const CardContent = styled.div`

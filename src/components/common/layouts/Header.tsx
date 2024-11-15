@@ -1,25 +1,16 @@
-import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
-import Cookies from 'js-cookie';
 import styled from 'styled-components';
 
 import LoginModal from '@/components/common/modals/LoginModal';
 import { Text } from '@/components/common/typography/Text';
 
 import Logo from '@/assets/images/Logo.svg';
+import useAuth from '@/hooks/useAuth';
 
 export default function Header() {
-  const [isLoggedIn, setIsLoggedIn] = useState(() => Cookies.get('access_token'));
+  const { isAuthenticated, handleLogout } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    setIsLoggedIn(undefined);
-    navigate('/');
-  };
 
   return (
     <HeaderContainer>
@@ -32,7 +23,7 @@ export default function Header() {
         </LogoContainer>
       </LogoLink>
       <Nav>
-        {isLoggedIn ? (
+        {isAuthenticated ? (
           <>
             <DesktopOnlyNavItem to="/map">
               <Text size="xs" variant="white" weight="normal">

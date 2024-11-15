@@ -26,7 +26,7 @@ export default function MenuList({ lists }: { lists: Menu[] }) {
                   </Text>
                 )}
                 <Paragraph size="xs" weight="bold" variant="white">
-                  {Number(list.price).toLocaleString()}
+                  {list.price}
                 </Paragraph>
                 <Paragraph size="xs" weight="normal" variant="white">
                   {list.description}

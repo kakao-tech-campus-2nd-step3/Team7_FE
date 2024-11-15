@@ -7,12 +7,13 @@ import PlaceSection from '@/components/Map/PlaceSection';
 import ToggleButton from '@/components/Map/ToggleButton';
 import { Text } from '@/components/common/typography/Text';
 import locationOptions from '@/utils/constants/LocationOptions';
-import influencerOptions from '@/utils/constants/InfluencerOptions';
 import { LocationData, PlaceData } from '@/types';
+import useGetDropdownName from '@/api/hooks/useGetDropdownName';
 
 export default function MapPage() {
   const [searchParams] = useSearchParams();
   const influencerParam = searchParams.get('influencer');
+  const { data: influencerOptions } = useGetDropdownName();
 
   const [selectedInfluencer, setSelectedInfluencer] = useState<string>(influencerParam || '');
   const [selectedLocation, setSelectedLocation] = useState<{ main: string; sub?: string; lat?: number; lng?: number }>({
@@ -109,7 +110,7 @@ export default function MapPage() {
           defaultValue={influencerParam ? { main: influencerParam } : undefined}
         />
       </DropdownContainer>
-      <ToggleButton options={['맛집', '카페', '팝업']} onSelect={handleCategorySelect} />
+      <ToggleButton options={['CAFE', 'JAPANESE', 'KOREAN', 'RESTAURANT', 'WESTERN']} onSelect={handleCategorySelect} />
       <MapWindow
         onBoundsChange={handleBoundsChange}
         onCenterChange={handleCenterChange}

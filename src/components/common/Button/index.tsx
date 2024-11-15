@@ -75,7 +75,7 @@ const variantStyles = (variant: Props['variant'] = 'mint') => {
       backgroundColor: '#fff',
 
       '&:hover': {
-        backgroundColor: '#f8f8f8',
+        backgroundColor: '#959595',
       },
     };
   }

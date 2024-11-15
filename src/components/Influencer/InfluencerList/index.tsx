@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import InfluencerItem from '@/components/common/Items/InfluencerItem';
 import { InfluencerData } from '@/types';
+import NoItem from '@/components/common/layouts/NoItem';
 
 interface InfluencerListProps {
   items: InfluencerData[];
@@ -9,7 +10,9 @@ interface InfluencerListProps {
 }
 
 export default function InfluencerList({ items, useBackCard = true, useNav = true }: InfluencerListProps) {
-  return (
+  return items.length === 0 ? (
+    <NoItem message="인플루언서 정보가 없어요!" alignItems="center" />
+  ) : (
     <GridContainer>
       {items.map((influencer) => {
         return (

@@ -3,6 +3,18 @@
 <p align="center">
   <img src="https://i.ibb.co/CVBQHPg/image-2.png" alt="메인 이미지">
 </p>
+### Repository Info
+![GitHub language count](https://img.shields.io/github/languages/count/kakao-tech-campus-2nd-step3/Team7_FE)
+![GitHub top language](https://img.shields.io/github/languages/top/kakao-tech-campus-2nd-step3/Team7_FE)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kakao-tech-campus-2nd-step3/Team7_FE)
+![GitHub repo size](https://img.shields.io/github/repo-size/kakao-tech-campus-2nd-step3/Team7_FE)
+![GitHub open issues](https://img.shields.io/github/issues/kakao-tech-campus-2nd-step3/Team7_FE)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/kakao-tech-campus-2nd-step3/Team7_FE)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/w/kakao-tech-campus-2nd-step3/Team7_FE)
+
+### Installation
+현재 프로젝트는 Kakao 지도 API를 사용해서 환경 변수 설정이 필요합니다. 아래 명령어를 실행하고, 키값을 입력해야 합니다.<br/>
+`cp .env.example .env`
 
 # 목차
 
@@ -128,7 +140,6 @@
 └── └── 📜 utils           // 공통함수, 상수 등
 
 ```
-
 ## 🖼️ 프로그램 구조도
 
 ## 📊 API & ERD

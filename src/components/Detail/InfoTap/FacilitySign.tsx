@@ -40,7 +40,7 @@ const facilities = {
 export default function FacilitySign({ facilityInfo }: { facilityInfo: FacilityInfo }) {
   return (
     <Wrapper>
-      {Object.keys(facilityInfo).length === 0 ? (
+      {Object.keys(facilityInfo).includes('message') ? (
         <NoItem message="정보가 없습니다." height={0} logo={false} alignItems="start" />
       ) : (
         <>

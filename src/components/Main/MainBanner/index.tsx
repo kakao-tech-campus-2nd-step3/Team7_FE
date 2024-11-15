@@ -8,7 +8,7 @@ import BannerItem from '@/components/Main/MainBanner/BannerItem';
 import { BannerData } from '@/types';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function MainBanner({ items }: { items: BannerData[] }) {
+export default function MainBanner({ items = [] }: { items: BannerData[] }) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
@@ -38,16 +38,9 @@ export default function MainBanner({ items }: { items: BannerData[] }) {
             <GrNext size={40} />
           </NextBtn>
           <CarouselWrapper>
-            <CarouselContainer currentIndex={currentIndex}>
+            <CarouselContainer $currentIndex={currentIndex}>
               {items.map((item) => (
-                <BannerItem
-                  key={item.bannerId}
-                  bannerId={item.bannerId}
-                  placeId={item.placeId}
-                  description={item.description}
-                  bannerImg={item.bannerImg}
-                  title={item.title}
-                />
+                <BannerItem key={item.id} id={item.id} imageUrl={item.imageUrl} />
               ))}
             </CarouselContainer>
           </CarouselWrapper>
@@ -90,9 +83,9 @@ const CarouselWrapper = styled.div`
   overflow: hidden;
 `;
 
-const CarouselContainer = styled.div<{ currentIndex: number }>`
+const CarouselContainer = styled.div<{ $currentIndex: number }>`
   display: flex;
   transition: transform 0.5s ease-in-out;
-  transform: ${({ currentIndex }) => `translateX(-${currentIndex * 100}%)`};
+  transform: ${({ $currentIndex }) => `translateX(-${$currentIndex * 100}%)`};
   width: 100%;
 `;
