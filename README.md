@@ -4,6 +4,7 @@
   <img src="https://i.ibb.co/CVBQHPg/image-2.png" alt="메인 이미지">
 </p>
 ### Repository Info
+
 ![GitHub language count](https://img.shields.io/github/languages/count/kakao-tech-campus-2nd-step3/Team7_FE)
 ![GitHub top language](https://img.shields.io/github/languages/top/kakao-tech-campus-2nd-step3/Team7_FE)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kakao-tech-campus-2nd-step3/Team7_FE)
