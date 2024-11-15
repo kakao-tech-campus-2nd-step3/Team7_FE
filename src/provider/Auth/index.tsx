@@ -17,7 +17,9 @@ interface AuthProviderProps {
 const ACCESS_TOKEN_REFRESH_INTERVAL = 9 * 60 * 1000;
 
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    () => localStorage.getItem('isAuthenticated') === 'true',
+  );
   const [isInitialized, setIsInitialized] = useState<boolean>(false);
   const { mutate: logout } = useDeleteToken();
 
@@ -26,7 +28,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
     localStorage.removeItem('nickname');
-  }, []);
+  }, [logout]);
 
   const refreshTokenRegularly = useCallback(async () => {
     try {
@@ -34,27 +36,42 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       setTimeout(refreshTokenRegularly, ACCESS_TOKEN_REFRESH_INTERVAL);
     } catch (error) {
       console.error('Token refresh failed:', error);
-      logout();
+      handleLogout();
     }
   }, [handleLogout]);
 
-  const handleLoginSuccess = useCallback(async (userNickname: string) => {
-    setIsAuthenticated(true);
-    localStorage.setItem('nickname', userNickname);
-    localStorage.setItem('isAuthenticated', 'true');
-  }, []);
+  const handleLoginSuccess = useCallback(
+    async (userNickname: string) => {
+      console.log('[AuthProvider] Setting login success for:', userNickname);
+      localStorage.setItem('nickname', userNickname);
+      localStorage.setItem('isAuthenticated', 'true');
+      setIsAuthenticated(true);
+
+      try {
+        await refreshTokenRegularly();
+      } catch (error) {
+        console.error('Initial token refresh failed:', error);
+      }
+    },
+    [refreshTokenRegularly],
+  );
 
   useEffect(() => {
-    const savedAuthStatus = localStorage.getItem('isAuthenticated') === 'true';
-    setIsAuthenticated(savedAuthStatus);
-    setIsInitialized(true);
+    const initialize = async () => {
+      const savedAuthStatus = localStorage.getItem('isAuthenticated') === 'true';
+      if (savedAuthStatus) {
+        try {
+          await refreshTokenRegularly();
+        } catch (error) {
+          console.error('Failed to refresh token during initialization:', error);
+          handleLogout();
+        }
+      }
+      setIsInitialized(true);
+    };
 
-    if (savedAuthStatus) {
-      const timer = setTimeout(refreshTokenRegularly, ACCESS_TOKEN_REFRESH_INTERVAL);
-      return () => clearTimeout(timer);
-    }
-    return undefined;
-  }, [refreshTokenRegularly]);
+    initialize();
+  }, [refreshTokenRegularly, handleLogout]);
 
   const value = useMemo(
     () => (isInitialized ? { isAuthenticated, handleLoginSuccess, handleLogout } : undefined),

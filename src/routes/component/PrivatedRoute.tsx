@@ -17,13 +17,18 @@ type PrivateRouteProps = {
 
 export default function PrivateRoute({ children }: PrivateRouteProps) {
   const [shouldShowModal, setShouldShowModal] = useState(false);
+  const [isProcessingAuth, setIsProcessingAuth] = useState(false);
   const { isAuthenticated, handleLoginSuccess: authLoginSuccess } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const directRedirectPaths = ['/choice', '/auth'];
+  const isProtectedPath = directRedirectPaths.includes(location.pathname);
+
   console.log('[PrivateRoute] Current state:', {
     path: location.pathname,
     isAuthenticated,
+    isProcessingAuth,
   });
 
   const {
@@ -38,8 +43,8 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
       const isHtmlResponse = contentType?.includes('text/html');
 
       if (isHtmlResponse || error.response?.status === 401) {
-        if (directRedirectPaths.includes(location.pathname)) {
-          console.log('[PrivateRoute] Protected path, redirecting to home');
+        if (isProtectedPath) {
+          console.log('[PrivateRoute] Protected path with API error, redirecting to home');
           navigate('/', { replace: true });
         } else {
           setShouldShowModal(true);
@@ -48,42 +53,57 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     },
   });
 
-  const directRedirectPaths = ['/choice', '/auth'];
-
   useEffect(() => {
     const processAuth = async () => {
-      if (isLoading) return;
+      if (isLoading || isProcessingAuth) return;
+      setIsProcessingAuth(true);
 
-      const isProtectedPath = directRedirectPaths.includes(location.pathname);
-      const hasValidAuth = isAuthenticated && userInfo?.nickname;
+      try {
+        console.log('[PrivateRoute] Processing auth:', {
+          isProtectedPath,
+          hasUserInfo: !!userInfo?.nickname,
+          isAuthenticated,
+        });
 
-      console.log('[PrivateRoute] Processing auth:', {
-        isProtectedPath,
-        hasValidAuth,
-        hasUserInfo: !!userInfo?.nickname,
-      });
-
-      if (isProtectedPath && !hasValidAuth) {
-        navigate('/', { replace: true });
-        return;
-      }
-
-      if (userInfo?.nickname && !isAuthenticated) {
-        try {
+        if (userInfo?.nickname) {
           await authLoginSuccess(userInfo.nickname);
-        } catch (error) {
-          console.error('인증 처리 실패:', error);
-          if (isProtectedPath) {
-            navigate('/', { replace: true });
-          } else {
-            setShouldShowModal(true);
-          }
+          // Promise executor를 수정하여 타입스크립트 오류 해결
+          await new Promise<void>((resolve) => {
+            setTimeout(() => {
+              resolve();
+            }, 100);
+          });
         }
+
+        const hasValidAuth = isAuthenticated || !!userInfo?.nickname;
+
+        if (isProtectedPath && !hasValidAuth) {
+          console.log('[PrivateRoute] No valid auth, redirecting to home');
+          navigate('/', { replace: true });
+        }
+      } catch (error) {
+        console.error('인증 처리 실패:', error);
+        if (isProtectedPath) {
+          navigate('/', { replace: true });
+        } else {
+          setShouldShowModal(true);
+        }
+      } finally {
+        setIsProcessingAuth(false);
       }
     };
 
     processAuth();
-  }, [userInfo?.nickname, isAuthenticated, authLoginSuccess, location.pathname, navigate, userInfoError, isLoading]);
+  }, [
+    userInfo?.nickname,
+    isAuthenticated,
+    authLoginSuccess,
+    isProtectedPath,
+    navigate,
+    userInfoError,
+    isLoading,
+    isProcessingAuth,
+  ]);
 
   const handleCloseModal = () => {
     if (window.history.length > 2) {
@@ -97,7 +117,7 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     setShouldShowModal(false);
   };
 
-  if (isLoading) return null;
+  if (isLoading || isProcessingAuth) return null;
 
   if (shouldShowModal) {
     return (
@@ -110,10 +130,9 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
     );
   }
 
-  if (directRedirectPaths.includes(location.pathname) && (!isAuthenticated || !userInfo?.nickname)) {
-    navigate('/');
-    return null;
+  if (userInfo?.nickname && (isAuthenticated || isProcessingAuth)) {
+    return children;
   }
 
-  return children;
+  return null;
 }
