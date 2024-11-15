@@ -1,10 +1,9 @@
 import styled from 'styled-components';
-
 import ReviewItem from './ReviewItem';
 import { ReviewData } from '@/types';
 import NoItem from '@/components/common/layouts/NoItem';
 
-export default function Review({ items }: { items: ReviewData[] }) {
+export default function Review({ items, onDelete }: { items: ReviewData[]; onDelete: (id: number) => void }) {
   return (
     <ListContainer>
       {items.length === 0 ? (
@@ -21,6 +20,7 @@ export default function Review({ items }: { items: ReviewData[] }) {
                 userNickname={review.userNickname}
                 createdDate={review.createdDate}
                 mine={review.mine}
+                handleDelete={() => onDelete(review.reviewId)}
               />
             );
           })}

@@ -1,12 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchInstance } from '../instance';
-import { LocationData, FilterParams, PlaceData, PlaceList } from '@/types';
+import { LocationData, FilterParams, PlaceData, PageableData } from '@/types';
 
 export const getPlaceList = async (
   location: LocationData,
   filters: FilterParams,
   center: { lat: number; lng: number },
-): Promise<PlaceData[]> => {
+  page: number,
+  size: number,
+): Promise<PageableData<PlaceData>> => {
   const { topLeftLongitude, topLeftLatitude, bottomRightLongitude, bottomRightLatitude } = location;
   const { categories, influencers } = filters;
 
@@ -17,25 +19,27 @@ export const getPlaceList = async (
     bottomRightLatitude: bottomRightLatitude.toString(),
     longitude: center.lng.toString(),
     latitude: center.lat.toString(),
-    page: '0',
+    page: page.toString(),
+    size: size.toString(),
     categories: categories.join(','),
     influencers: influencers.join(','),
   });
 
-  const response = await fetchInstance.get<PlaceList>(`/places?${params}`);
-
-  return response.data.places;
+  const response = await fetchInstance.get<PageableData<PlaceData>>(`/places?${params}`, { withCredentials: true });
+  return response.data;
 };
 
 export const useGetPlaceList = (
   location: LocationData,
   filters: FilterParams,
   center: { lat: number; lng: number },
+  page: number,
+  size: number,
   enabled: boolean,
 ) => {
-  return useQuery<PlaceData[], Error>({
-    queryKey: ['placeList', location, filters, center],
-    queryFn: () => getPlaceList(location, filters, center),
+  return useQuery<PageableData<PlaceData>, Error>({
+    queryKey: ['placeList', location, filters, center, page, size],
+    queryFn: () => getPlaceList(location, filters, center, page, size),
     staleTime: 1000 * 60 * 5,
     enabled,
   });

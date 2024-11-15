@@ -1,13 +1,11 @@
-import { createContext, useEffect, useMemo, useState } from 'react';
-import Cookies from 'js-cookie';
-import { useNavigate } from 'react-router-dom';
-import { fetchInstance } from '@/api/instance';
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
+import { getRefreshToken } from '@/api/hooks/useGetRefreshToken';
+import { useDeleteToken } from '@/api/hooks/useDeleteToken';
 
 type AuthInfo = {
-  accessToken: string | null;
-  refreshToken: string | null;
-  tokensRefresh: () => Promise<void>;
-  logout: () => void;
+  isAuthenticated: boolean;
+  handleLoginSuccess: (userNickname: string) => Promise<void>;
+  handleLogout: () => void;
 };
 
 export const AuthContext = createContext<AuthInfo | undefined>(undefined);
@@ -16,61 +14,66 @@ interface AuthProviderProps {
   children: React.ReactNode;
 }
 
+const ACCESS_TOKEN_REFRESH_INTERVAL = 9 * 60 * 1000;
+
 export default function AuthProvider({ children }: AuthProviderProps) {
-  const [accessToken, setAccessToken] = useState<string | null>(Cookies.get('access_token') || null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(Cookies.get('refresh_token') || null);
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
+    () => localStorage.getItem('isAuthenticated') === 'true',
+  );
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  const { mutate: logout } = useDeleteToken();
 
-  const tokensRefresh = async () => {
-    if (!refreshToken) return;
+  const handleLogout = useCallback(() => {
+    logout();
+    setIsAuthenticated(false);
+    localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('nickname');
+  }, [logout]);
 
+  const refreshTokenRegularly = useCallback(async () => {
     try {
-      const response = await fetchInstance.get('/refresh-token', {
-        headers: {
-          Cookie: `refresh_token=${refreshToken}`,
-        },
-      });
-
-      if (response.status === 200) {
-        const { accessToken: newAccessToken, refreshToken: newRefreshToken } = response.data;
-        setAccessToken(newAccessToken);
-        setRefreshToken(newRefreshToken);
-
-        // 브라우저 쿠키에 저장
-        Cookies.set('access_token', newAccessToken, { secure: true, sameSite: 'strict' });
-        Cookies.set('refresh_token', newRefreshToken, { secure: true, sameSite: 'strict' });
-      } else {
-        throw new Error('토큰 갱신 실패');
-      }
+      await getRefreshToken();
+      setTimeout(refreshTokenRegularly, ACCESS_TOKEN_REFRESH_INTERVAL);
     } catch (error) {
-      console.error('토큰 갱신 오류:', error);
-      logout();
+      console.error('Token refresh failed:', error);
+      handleLogout();
     }
-  };
+  }, [handleLogout]);
 
-  const logout = () => {
-    Cookies.remove('access_token');
-    Cookies.remove('refresh_token');
-    setAccessToken(null);
-    setRefreshToken(null);
-    navigate('/');
-  };
-
-  useEffect(() => {
-    if (!accessToken && refreshToken) {
-      tokensRefresh();
-    }
-  }, [accessToken, refreshToken]);
-
-  const value = useMemo(
-    () => ({
-      accessToken,
-      refreshToken,
-      tokensRefresh,
-      logout,
-    }),
-    [accessToken, refreshToken],
+  const handleLoginSuccess = useCallback(
+    async (userNickname: string) => {
+      if (!isAuthenticated) {
+        console.log('[AuthProvider] Setting login success for:', userNickname);
+        localStorage.setItem('nickname', userNickname);
+        localStorage.setItem('isAuthenticated', 'true');
+        setIsAuthenticated(true);
+        await refreshTokenRegularly();
+      }
+    },
+    [isAuthenticated, refreshTokenRegularly],
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  useEffect(() => {
+    const initialize = async () => {
+      const savedAuthStatus = localStorage.getItem('isAuthenticated') === 'true';
+      if (savedAuthStatus) {
+        try {
+          await refreshTokenRegularly();
+        } catch (error) {
+          console.error('Failed to refresh token during initialization:', error);
+          handleLogout();
+        }
+      }
+      setIsInitialized(true);
+    };
+
+    initialize();
+  }, [refreshTokenRegularly, handleLogout]);
+
+  const value = useMemo(
+    () => (isInitialized ? { isAuthenticated, handleLoginSuccess, handleLogout } : undefined),
+    [isInitialized, isAuthenticated, handleLoginSuccess, handleLogout],
+  );
+
+  return <AuthContext.Provider value={value}>{isInitialized && children}</AuthContext.Provider>;
 }

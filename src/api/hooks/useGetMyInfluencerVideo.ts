@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchInstance } from '../instance';
-import { PageableData } from '@/types';
+import { SpotData } from '@/types';
 
 export const getMyInfluencerVideoPath = () => `/videos/my`;
 
 export const getMyInfluencerVideo = async () => {
-  const response = await fetchInstance.get<PageableData>(getMyInfluencerVideoPath());
+  const response = await fetchInstance.get<SpotData[]>(getMyInfluencerVideoPath(), { withCredentials: true });
   return response.data;
 };
 export const useGetMyInfluencerVideo = (enabled: boolean) => {

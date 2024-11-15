@@ -17,19 +17,24 @@ import useExtractYoutubeVideoId from '@/libs/youtube/useExtractYoutube';
 import { useGetPlaceInfo } from '@/api/hooks/useGetPlaceInfo';
 import Loading from '@/components/common/layouts/Loading';
 import Error from '@/components/common/layouts/Error';
+import FallbackImage from '@/components/common/Items/FallbackImage';
+import BasicThumb from '@/assets/images/basic-thumb.png';
 
 export default function DetailPage() {
   const [activeTab, setActiveTab] = useState<'info' | 'review'>('info');
   const [visitModal, setVisitModal] = useState(false);
   const { id } = useParams() as { id: string };
   const { data: infoData } = useGetPlaceInfo(id);
+  const extractedVideoId = useExtractYoutubeVideoId(infoData.videoUrl || '');
+  const thumbnailUrl = infoData.videoUrl
+    ? `https://img.youtube.com/vi/${extractedVideoId}/maxresdefault.jpg`
+    : BasicThumb;
   return (
     <Wrapper>
       <ImageContainer>
-        <Image
-          src={`https://img.youtube.com/vi/${useExtractYoutubeVideoId(infoData.videoUrl)}/maxresdefault.jpg`}
-          alt="장소사진"
-        />
+        <ImageWrapper>
+          <FallbackImage src={thumbnailUrl} alt="장소 사진" />
+        </ImageWrapper>
         <GradientOverlay />
         <TitleContainer>
           <Text size="26px" weight="bold" variant="white">
@@ -85,11 +90,9 @@ export default function DetailPage() {
           </QueryErrorResetBoundary>
         )}
       </InfoContainer>
-      <Suspense fallback={<Loading size={50} />}>
-        {visitModal ? (
-          <VisitModal id={infoData.placeId} placeName={infoData.placeName} onClose={() => setVisitModal(false)} />
-        ) : null}
-      </Suspense>
+      {visitModal && (
+        <VisitModal id={infoData.placeId} placeName={infoData.placeName} onClose={() => setVisitModal(false)} />
+      )}
     </Wrapper>
   );
 }
@@ -97,12 +100,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
-  position: relative;
 `;
 const ImageContainer = styled.div`
   position: relative;
 `;
-const Image = styled.img`
+const ImageWrapper = styled.div`
   width: 100%;
   aspect-ratio: 3 / 1;
   object-fit: cover;
@@ -118,7 +120,7 @@ const TitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 10;
+  z-index: 1;
 `;
 const Tap = styled.button<{ $active: boolean }>`
   width: 100%;
@@ -153,6 +155,6 @@ const GradientOverlay = styled.div`
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0.9) 100%);
-  z-index: 9;
+  z-index: 0;
   pointer-events: none;
 `;

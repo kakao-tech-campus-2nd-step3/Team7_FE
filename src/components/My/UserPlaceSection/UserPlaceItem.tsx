@@ -10,9 +10,10 @@ import { UserPlaceData } from '@/types';
 import { usePostPlaceLike } from '@/api/hooks/usePostPlaceLike';
 import useAuth from '@/hooks/useAuth';
 import LoginModal from '@/components/common/modals/LoginModal';
+import FallbackImage from '@/components/common/Items/FallbackImage';
 
 export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer, likes }: UserPlaceData) {
-  const authInfo = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   const [isLike, setIsLike] = useState(likes);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -22,17 +23,15 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
     (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       event.preventDefault();
-      if (!authInfo.accessToken) {
+      if (!isAuthenticated) {
         setShowLoginModal(true);
         return;
       }
       const newLikeStatus = !isLike;
-      console.log('New like status:', newLikeStatus);
       postLike(
         { placeId, likes: newLikeStatus },
         {
           onSuccess: () => {
-            console.log('성공');
             setIsLike(newLikeStatus);
           },
           onError: (error) => {
@@ -50,27 +49,31 @@ export default function UserPlaceItem({ placeId, placeName, imageUrl, influencer
           <LikeIcon onClick={(e: React.MouseEvent<HTMLDivElement>) => handleClickLike(e)}>
             {isLike ? <PiHeartFill color="#fe7373" size={32} /> : <PiHeartLight color="white" size={32} />}
           </LikeIcon>
-          <Image src={imageUrl} alt={String(placeId)} />
+          <FallbackImage src={imageUrl} alt={String(placeId)} />
         </ImageContainer>
-        <Paragraph size="m" weight="bold" variant="white">
-          {placeName}
-        </Paragraph>
-        <Paragraph size="xs" weight="normal" variant="white">
-          {influencer}
-        </Paragraph>
+        <TextWrapper>
+          <Paragraph size="m" weight="bold" variant="white">
+            {placeName}
+          </Paragraph>
+          <Paragraph size="xs" weight="normal" variant="white">
+            {influencer}
+          </Paragraph>
+        </TextWrapper>
       </Wrapper>
-      {showLoginModal && <LoginModal currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />}
+      {showLoginModal && (
+        <LoginModal immediateOpen currentPath={location.pathname} onClose={() => setShowLoginModal(false)} />
+      )}
     </>
   );
 }
 const Wrapper = styled(Link)`
   width: 170px;
-  height: 278px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  line-height: 30px;
+  text-decoration: none;
+  gap: 10px;
 `;
 const ImageContainer = styled.div`
   width: 168px;
@@ -78,16 +81,7 @@ const ImageContainer = styled.div`
   position: relative;
   border-radius: 6px;
   overflow: hidden;
-`;
-const Image = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  margin-bottom: 8px;
-  border-radius: 6px;
+  margin-bottom: 4px;
 `;
 const LikeIcon = styled.div`
   position: absolute;
@@ -97,4 +91,9 @@ const LikeIcon = styled.div`
   top: 12px;
   z-index: 100;
   cursor: pointer;
+`;
+const TextWrapper = styled.div`
+  > *:not(:first-child) {
+    margin-top: 6px;
+  }
 `;
