@@ -144,6 +144,14 @@
 ```
 ## 🖼️ 프로그램 구조도
 
+### CI CD
+
+![Backend_CICD](https://github.com/user-attachments/assets/f7db576e-5150-443c-8d2f-ab232294c296)
+
+### System Architecture
+
+![Architecture](https://github.com/user-attachments/assets/b21a697a-003e-4371-bdde-e12db6dbc1d9)
+
 ## 📊 API & ERD
 
 ![image](https://github.com/user-attachments/assets/ce11ff39-8294-4eda-aa58-7b5bd0ac1620)
