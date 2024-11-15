@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { PiHeartFill, PiHeartLight } from 'react-icons/pi';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Text } from '@/components/common/typography/Text';
 import { PlaceData } from '@/types';
@@ -54,6 +54,10 @@ export default function PlaceItem({
     },
     [isLike, placeId, postLike],
   );
+  useEffect(() => {
+    setIsLike(likes);
+  }, [likes]);
+
   return (
     <>
       <PlaceCard key={placeId} onClick={onClick}>
