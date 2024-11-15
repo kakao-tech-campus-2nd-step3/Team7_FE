@@ -32,17 +32,9 @@ export default function PrivateRoute({ children }: PrivateRouteProps) {
   const { data: userInfo, isLoading } = useGetUserInfo({
     retry: false,
     onError: (error: AxiosError<ApiErrorResponse>) => {
-      console.error('사용자 정보 요청 실패:', error);
-      const contentType = error.response?.headers?.['content-type'];
-      const isHtmlResponse = contentType?.includes('text/html');
-
-      if (isHtmlResponse || error.response?.status === 401) {
-        if (isProtectedPath) {
-          console.log('[PrivateRoute] Protected path with API error, redirecting to home');
-          navigate('/', { replace: true });
-        } else {
-          setShouldShowModal(true);
-        }
+      if (error.response?.status === 401) {
+        console.log('[PrivateRoute] Unauthorized access, redirecting to home');
+        navigate('/', { replace: true });
       }
     },
   });
