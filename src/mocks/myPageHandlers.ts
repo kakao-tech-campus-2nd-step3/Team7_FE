@@ -4,6 +4,7 @@ import { getUserInfoPath } from '@/api/hooks/useGetUserInfo';
 import { getUserInfluencerPath } from '@/api/hooks/useGetUserInfluencer';
 import { getUserPlacePath } from '@/api/hooks/useGetUserPlace';
 import { getUserReviewPath } from '@/api/hooks/useGetUserReview';
+import { patchNicknamePath } from '@/api/hooks/usePatchNickname';
 
 const mockInfluencers = [
   {
@@ -469,6 +470,12 @@ export const myHandlers = [
         empty: paginatedContent.length === 0,
       }),
     );
+  }),
+  rest.patch(`${BASE_URL}${patchNicknamePath()}`, async (req, res, ctx) => {
+    const params = req.url.searchParams;
+    const nickname = params.get('nickname');
+
+    return res(ctx.status(200), ctx.json({ message: 'Nickname updated successfully.', nickname }));
   }),
 ];
 export default myHandlers;
