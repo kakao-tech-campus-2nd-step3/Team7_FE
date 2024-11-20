@@ -3,6 +3,7 @@
 <p align="center">
   <img src="https://i.ibb.co/CVBQHPg/image-2.png" alt="메인 이미지">
 </p>
+
 ### Repository Info
 ![GitHub language count](https://img.shields.io/github/languages/count/kakao-tech-campus-2nd-step3/Team7_FE)
 ![GitHub top language](https://img.shields.io/github/languages/top/kakao-tech-campus-2nd-step3/Team7_FE)
@@ -51,7 +52,6 @@
 7. [**기능 및 사용 예시**](#-기능-및-사용-예시)
    > 6.1 [**세부 기능 흐름**](#-세부-기능-흐름)
    >
-   > 6.2 [**사용 예시**](#-사용-예시)
 
 ---
 
@@ -141,6 +141,9 @@
 
 ```
 ## 🖼️ 프로그램 구조도
+
+### CI CD
+![Frame_1](https://github.com/user-attachments/assets/67e83f11-5e1c-4bea-ac01-2bc38c16e37c)
 
 ## 📊 API & ERD
 
@@ -291,8 +294,4 @@
 5. 장소 아이템을 클릭하면 장소 상세 페이지로 넘어갑니다.
 6. 해당 장소의 세부 정보와 리뷰를 볼 수 있습니다.
 7. 관심이 있는 장소라면, 방문할래요 버튼을 눌러 카카오톡으로 정보를 전송할 수 있습니다.
-8. 방문하기 버튼을 누르면, 3일 후 리뷰를 작성할 수 있습니다.
-
-## 📱 사용 예시
-
-> 실제 유저 사용 페이지 흐름 보여주기 ( 영상 x )
+8. 방문하기 버튼을 누르면, 3일 후 리뷰를 작성할 수 있습니다. (평가를 위해 1분 뒤로 설정해둔 상태입니다.)
